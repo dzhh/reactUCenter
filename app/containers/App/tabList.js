@@ -27,8 +27,10 @@ export default class TabList extends Component {
   }
   onChange(activeKey) {
     const { actions } = this.props;
+    // 切换tab 标签
     this.props.dispatch(updateTabChecked({ activeKey: activeKey }))
-    actions.push(activeKey)
+      // 切换页面
+     actions.push(activeKey)
   }
   onEdit(targetKey, action) {
     this[action](targetKey);
