@@ -13,6 +13,7 @@ import { Cascader, Select, Row, Col, Checkbox, Button } from 'antd'
 
 import Sub from './sub'
 
+//react 和 redux 绑定
 @connect(
     (state, props) => ({
       config: state.config,

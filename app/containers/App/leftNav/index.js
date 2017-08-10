@@ -6,7 +6,7 @@ import { Menu, Icon, Spin } from 'antd'
 import { updateTabList } from 'actions/tabList'
 
 const SubMenu = Menu.SubMenu
-
+//connect 感知redux
 @connect(
     (state, props) => ({ config: state.config }),
     (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
@@ -43,6 +43,7 @@ export default class LeftNav extends Component {
   }
 
   _handleClick(e) {
+    //this.props.push('')  实现跳转 更新对应的store
     const { actions } = this.props
     // console.log('click ', e)
     this.setState({

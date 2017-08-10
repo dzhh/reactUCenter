@@ -46,10 +46,12 @@ function isLogin(nextState, replaceState) {
     //用于替换当前的 URL，并且会将被替换的 URL 在浏览器历史中删除。
      // 函数的第一个参数是 state 对象，第二个是路径 replaceState(null,url);
     replaceState('/login')
-    // hashHistory.push('/login')
+      // hashHistory.push('/login')
   }
 }
 
+//children（以路由的包涵关系为区分的组件）
+//location（包括地址，参数，地址切换方式，key值，hash值）
 const routes = (
   <Route>
      /*onEnter当路由进入即触发 子路由进入父路由不会触发*/

@@ -20,7 +20,7 @@ export default function configure(initialState) {
     logger,
     router
   )(create)
-   //创建store
+   //创建store 第一个参数reducers
   const store = createStoreWithMiddleware(rootReducer, initialState)
 
 

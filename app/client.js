@@ -19,7 +19,11 @@ const history = syncHistoryWithStore(myhistory, store)
 history.listen(function (location) { return location })
 
 
+// Route则对路由地址和组件进行绑定，Route具有嵌套功能，表示路由地址的包涵关系，
+// 这和组件之间的嵌套并没有直接联系。Route可以向绑定的组件传递7个属性：
+// children，history，location，params，route，routeParams，routes，每个属性都包涵路由的相关的信息。
 ReactDOM.render(
+    //react 和 redux 绑定
   <Provider store={store}>
     <Router history={history} >
         {routes}

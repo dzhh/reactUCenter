@@ -14,9 +14,11 @@ const TabPane = Tabs.TabPane
       dispatch: dispatch })
 )
 export default class TabList extends Component {
-    //只有一个理由需要传递props作为super()的参数，那就是你需要在构造函数内使用this.props
+  //只有一个理由需要传递props作为super()的参数，那就是你需要在构造函数内使用this.props
   constructor(props) {
     super(props)
+      //对事件方法的绑定 绑定到统一的事件监听器
+      // ES6 必须手动绑定
     this.onChange = this.onChange.bind(this);
     this.onEdit = this.onEdit.bind(this);
   }
