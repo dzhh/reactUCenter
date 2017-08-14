@@ -18,11 +18,11 @@ export default class Header extends Component {
         onlineCount: '',
         monthCount: '',
         usertable: {
-          gxdwqc: '',
+          gxdwqc: 'china',
           longmobile: '',
           post: '',
           shortmobile: '',
-          username: '',
+          username: 'kwx',
           userid: '',
         },
       },

@@ -5,6 +5,10 @@ import {
 } from 'react-router'
 import App from './containers/App'
 import Welcome from './pages/welcome'
+import Homepage from './pages/homepage/index'
+import UpdateUserMseeage from './pages/homepage/update_user_message'
+import UpdateUserPassword from './pages/homepage/update_password'
+import MyPermissions from './pages/homepage/my_permissions'
 // import Login from './containers/App/login'
 
 // import {
@@ -39,6 +43,26 @@ const test = (location, cb) => {
   }, 'test')
 }
 
+const homePage = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/homepage/index').default)
+    }, 'homePage')
+}
+const updateUserMessage = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/homepage/update_user_message').default)
+    }, 'update_user_message')
+}
+const updatePassword = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/homepage/update_password').default)
+    }, 'update_password')
+}
+const myPermissions = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/homepage/my_permissions').default)
+    }, 'my_permissions')
+}
 /* 进入路由的判断*/
 function isLogin(nextState, replaceState) {
   const token = sessionStorage.getItem('token')
@@ -59,6 +83,10 @@ const routes = (
       <IndexRoute component={Welcome} />
       <Route path="/houseManage" getComponent={houseManage} />
       <Route path="/test" getComponent={test} query={{'name': 'dupi'}} />
+      <Route path="/homePage" getComponent={homePage} />
+      <Route path="/updateUserMessage" getComponent={updateUserMessage} />
+      <Route path="/updatePassword" getComponent={updatePassword} />
+        <Route path="/myPermissions" getComponent={myPermissions} />
     </Route>
     <Route path="/login" getComponent={Login}></Route>
   </Route>

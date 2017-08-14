@@ -104,7 +104,8 @@ export default class LeftNav extends Component {
             <span>
               <Icon type="caret-down" title={item.name} />
               <span className="menu-name">{item.name}</span>
-            </span>}>
+            </span>}
+          >
             {
               item.url ?
                 <Menu.Item key={item.url} name={item.name}>

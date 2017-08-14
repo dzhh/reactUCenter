@@ -9,11 +9,14 @@ const nextReducer = require('../reducers')
 export default function configure(initialState) {
   // console.log('initialState', initialState)
     //createStore 创建一个state用来存储状态树
+    //在chrome浏览器中安装了DevTools插件，方便调试
   const create = window.devToolsExtension
     ? window.devToolsExtension()(createStore)
     : createStore
 
   //applyMiddleware:  调度中间件来增强store，例如中间件redux-thunk等
+    //将它放在applyMiddleware方法之中，
+    // 传入createStore方法，就完成了store.dispatch()的功能增强。
   const createStoreWithMiddleware = applyMiddleware(
     reduxRouterMiddleware,
     thunkMiddleware,

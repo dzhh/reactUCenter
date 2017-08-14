@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd'
 
 
-
 @connect(
     (state, props) => ({
       config: state.config,

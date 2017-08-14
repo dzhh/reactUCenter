@@ -17,18 +17,54 @@
         code: 'admin',
         name: '黄焖鸡',
       };
+        global.USERMESSAGE = {
+            nickname: 'kwx',
+            e_amil: '孔维轩@163.com',
+            creattime:"2011-11-11 11:11:11",
+            lasttime:"2017-11-11 11:11:11"
+        };
+        global.PERMISSIONS = [
+          {
+              id:1,
+              value:'权限列表'
+          },
+          {
+              id:2,
+              value:'权限添加'
+          },
+          {
+              id:3,
+              value:'权限删除'
+          },
+            {
+                id:4,
+                value:'用户列表'
+            },
+            {
+                id:5,
+                value:'在线用户'
+            },
+            {
+                id:6,
+                value:'用户删除'
+            },
+
+        ]
       
       // 系统一二级菜单
       global.NAVIGATION = [
         {
           "id":600110230,
-          "name":"一级菜单1",
-          "icon": "book",
+          "name":"个人中心",
+          "icon": "user",
           "url":"",
           "children":[
             { "id": 600110232, "name":"二级菜单11", "url":"houseManage", "icon": "user"},
-              { "id": 600110233, "name":"二级菜单12", "url":"test", "icon": "user"},
-
+            { "id": 600110233, "name":"二级菜单12", "url":"test", "icon": "like"},
+            { "id": 600110234, "name":"个人资料", "url":"homePage", "icon": "home"},
+            { "id": 600110235, "name":"资料修改", "url":"updateUserMessage", "icon": "tags"},
+            { "id": 600110236, "name":"密码修改", "url":"updatePassword", "icon": "save"},
+            { "id": 600110237, "name":"我的权限", "url":"myPermissions", "icon": "user"},
 
           ]
         },
@@ -49,7 +85,7 @@
               "icon": "other",
               "url":"",
               "children":[
-                  { "id": 600110638, "name":"二级菜单31", "url":"houseManage", "icon": "user"},
+                  { "id": 600110638, "name":"二级菜单31", "url":"houseManage", "icon": "api"},
               ]
           },
       ];

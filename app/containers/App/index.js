@@ -12,7 +12,9 @@ import TabList from './tabList'
 import Extra from './extra'
 import 'antd/dist/antd.less'
 import '../../style/base.less'
-
+//connect 会把State和dispatch转换成props传递给子组件
+//bindActionCreators的作用是将一个或多个action和dispatch
+// 组合起来生成mapDispatchToProps需要生成的内容
 @connect(
     (state, props) => ({}),
     (dispatch) => ({ actions: bindActionCreators({}, dispatch) })
