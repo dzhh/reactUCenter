@@ -13,9 +13,10 @@ import {
   houseCheckSearchQuery,
   houseDetailResult,
 } from './house'
+
 import {
   loginResponse,
-} from './common'
+} from './login'
 
 //其实也是一个reducer，它接受整个state和一个action，
 // 然后将整个state拆分发送给对应的reducer进行处理，所有的reducer会收到相同的action

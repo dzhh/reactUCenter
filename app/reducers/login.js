@@ -1,11 +1,14 @@
 import { handleActions } from 'redux-actions'
-import { hasResponseError } from 'utils'
+import { hasResponseError } from '../utils'
 import { message } from 'antd'
 
 // 登陆返回结果
 const loginState = () => ({ })
+
 export const loginResponse = handleActions({
   'request login'(state, action) {
+    const data = action.payload
+
     return { ...state, loading: true }
   },
   'receive login'(state, action) {

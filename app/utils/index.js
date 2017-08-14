@@ -21,6 +21,12 @@ const logOut = () => {
   hashHistory.push('/login')
 }
 
+/**
+ *
+ * @param api
+ * @param startAction
+ * @param endAction
+ */
 export const createAjaxAction = (api, startAction, endAction) => (data, cb, reject) =>
   (dispatch) => {
     let respon
@@ -60,7 +66,7 @@ export const createAjaxAction = (api, startAction, endAction) => (data, cb, reje
       .catch(catchError) // eslint-disable-line no-use-before-define
   }
 
-/*export const createAjax = (url, param, callback) => {
+export const createAjax = (url, param, callback) => {
   let respon;
   ajax.fetchJSONByPost(url)(param)
     .then(checkStatus) // eslint-disable-line no-use-before-define
@@ -74,7 +80,7 @@ export const createAjaxAction = (api, startAction, endAction) => (data, cb, reje
       }
     })
     .catch(catchError) // eslint-disable-line no-use-before-define
-}*/
+}
 
 export const hasResponseError = (data, errorHandler) => {
   // 101  表示非法获取数据 跳转到登陆页面

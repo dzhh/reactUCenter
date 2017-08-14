@@ -11,7 +11,7 @@ import { Button, Spin } from 'antd'
 import {
   fetchHouseCheckList,
   updateHouseCheckListQuery,
-  resetHouseCheckListQuery } from 'actions/house'
+  resetHouseCheckListQuery } from '../../actions/house'
 import { resetAmList } from 'actions/common'
 import SearchTable from 'components/searchTable'
 

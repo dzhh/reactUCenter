@@ -3,18 +3,18 @@ import {
 } from 'redux-actions'
 import {
   house,
-} from 'api'
+} from '../api'
 import {
   createAjaxAction,
-} from 'utils'
+} from '../utils'
 
 
 export const requestHouseCheckList = createAction('request houseCheck list');
 export const recevieHouseCheckList = createAction('receive houseCheck list');
 export const fetchHouseCheckList = createAjaxAction(
 	house.houseCheckList,
-	requestHouseCheckList,
-	recevieHouseCheckList
+    requestHouseCheckList,
+    recevieHouseCheckList
 );
 
 export const updateHouseCheckListQuery = createAction('update houseCheck search query', payload => payload);

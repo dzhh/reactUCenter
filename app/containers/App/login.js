@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
 import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
-import { fetchLogin } from './../../actions/fetchLogin'
+import { fetchLogin } from '../../actions/login'
 const FormItem = Form.Item
 
 //连接 Redux 的组件 不可复用
@@ -47,26 +47,26 @@ export default class Login extends Component {
          this.setState({loading: true})
         const re={} ;
         Object.keys(values).map((key) => values[key] = (values[key] && values[key].trim()))
-        // this.props.dispatch(fetchLogin(values,re,(res) => {
-        //   if (res.status == 1) {
-        //     const query = this.props.form.getFieldsValue()
-        //     global.$GLOBALCONFIG.staff = res.data.user
-        //     sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
-        //     sessionStorage.setItem('username', query.username)
-        //     // sessionStorage.setItem('userName', res.data.user.userName)
-        //     // sessionStorage.setItem('userpwd', query.password)
-        //     sessionStorage.setItem('token', res.data.token)
-        //     sessionStorage.setItem('isLeftNavMini', false)
-        //     hashHistory.push('/')
-        //   }
-        // }, (res) => {
-        //   message.warning(res.msg)
-        //   this.setState({
-        //     loading: false
-        //   })
-        // }))
-       sessionStorage.setItem('token', 'kwx')
-        hashHistory.push('/')
+        this.props.dispatch(fetchLogin(values, (res) => {
+          if (res.status == 1) {
+            const query = this.props.form.getFieldsValue()
+            global.$GLOBALCONFIG.staff = res.data.user
+            sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
+            sessionStorage.setItem('username', query.username)
+            // sessionStorage.setItem('userName', res.data.user.userName)
+            // sessionStorage.setItem('userpwd', query.password)
+            sessionStorage.setItem('token', res.data.token)
+            sessionStorage.setItem('isLeftNavMini', false)
+            hashHistory.push('/')
+          }
+        }, (res) => {
+          message.warning(res.msg)
+          this.setState({
+            loading: false
+          })
+        }))
+        // sessionStorage.setItem('token', 'kwx')
+        // hashHistory.push('/')
       }
     })
   }
