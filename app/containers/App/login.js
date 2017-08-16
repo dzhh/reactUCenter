@@ -9,7 +9,7 @@ import imgUrlWeb from '../../images/leftBg.jpg'
 const FormItem = Form.Item
 var webStyle = {
    // backgroundImage: `url(${imgUrlWeb})`
-    background: "url('../../images/leftBg.jpg') no-repeat 0px 0px"
+    background: "url('"+imgUrlWeb+"') no-repeat 0px 0px"
 };
 //连接 Redux 的组件 不可复用
 @connect(
@@ -111,7 +111,7 @@ export default class Login extends Component {
     const { loginResponse } = this.props.loginResponse
     const { getFieldDecorator } = this.props.form
     return (
-        <body style={{webStyle}}>
+        <body style={webStyle}>
       <div className="login">
 
         <div className="btmLogin">
