@@ -54,11 +54,11 @@ export default class Login extends Component {
           //请求后台数据  派发事件 放到回调里面
         fetchLogin(values, (res) => {
             // this.props.dispatch(fetchLogin(values, (res) => {
-            if (res.status == 1) {
+            if (res.ospState == 200) {
                 const query = this.props.form.getFieldsValue()
-                sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
+                sessionStorage.setItem('staff', JSON.stringify({ ...res.data.danwei }))//单位
                 sessionStorage.setItem('username', query.username)
-                sessionStorage.setItem('token', res.data.token)
+                sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
                 // this.props.dispatch(receiveLogin({ req: data, res: resp }))
                 hashHistory.push('/')
