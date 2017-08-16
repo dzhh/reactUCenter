@@ -86,7 +86,7 @@ const routes = (
       <Route path="/homePage" getComponent={homePage} />
       <Route path="/updateUserMessage" getComponent={updateUserMessage} />
       <Route path="/updatePassword" getComponent={updatePassword} />
-        <Route path="/myPermissions" getComponent={myPermissions} />
+      <Route path="/myPermissions" getComponent={myPermissions} />
     </Route>
     <Route path="/login" getComponent={Login}></Route>
   </Route>

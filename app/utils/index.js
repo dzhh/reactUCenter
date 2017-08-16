@@ -27,7 +27,14 @@ const logOut = () => {
  * @param startAction
  * @param endAction
  */
-export const createAjaxAction = (api, startAction, endAction) => (data, cb, reject) =>
+// export const createAjaxAction = function(api, startAction, endAction) = {
+//    return function(data, cb, reject) = {
+//          return function(dispatch) = {
+//             return ...
+//          }
+//     }
+// }
+export const createAjaxAction = (api, startAction, endAction) => (data, callback, reject) =>
   (dispatch) => {
     let respon
     startAction && dispatch(startAction())
@@ -50,7 +57,7 @@ export const createAjaxAction = (api, startAction, endAction) => (data, cb, reje
       })
       .then(() => {
         if (respon.status === 1) {
-          cb && cb(respon)
+            callback && callback(respon)
         } else {
           if (respon.errorCode == '101') {
             logOut()

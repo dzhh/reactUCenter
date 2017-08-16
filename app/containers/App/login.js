@@ -40,17 +40,18 @@ export default class Login extends Component {
   handleSubmit(e) {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-        alert("username="+values.username);
-        alert("password="+values.password);
+        // alert("username="+values.username);
+        // alert("password="+values.password);
       if (!err) {
         this.state.loading = true
          this.setState({loading: true})
         const re={} ;
         Object.keys(values).map((key) => values[key] = (values[key] && values[key].trim()))
+          //请求后台数据
         this.props.dispatch(fetchLogin(values, (res) => {
           if (res.status == 1) {
             const query = this.props.form.getFieldsValue()
-            global.$GLOBALCONFIG.staff = res.data.user
+            // global.$GLOBALCONFIG.staff = res.data.user
             sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
             sessionStorage.setItem('username', query.username)
             // sessionStorage.setItem('userName', res.data.user.userName)
@@ -122,7 +123,6 @@ export default class Login extends Component {
                           { validator: this.checkName },
                           // { pattern: regExpConfig.IDcardTrim, message: '身份证号格式不正确' }
                              { pattern: "[A-Za-z0-9]{5,8}", message: '用户名只能为5-8位字符或数字' }
-
                         ],
                          //validateTrigger: 'onBlur',
                       })(
