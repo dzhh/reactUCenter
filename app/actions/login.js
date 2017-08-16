@@ -14,8 +14,8 @@ import {
 export const requestLogin = createAction('request login')
 export const receiveLogin = createAction('receive login')
 
-export const fetchLogin = createAjaxAction(login.login, requestLogin, receiveLogin);
-
+// export const fetchLogin = createAjaxAction(login.login, receiveLogin);
+export const fetchLogin = createAjaxAction(login.login);
 
 export const requestAmList = createAction('request am list')
 export const recevieAmList = createAction('receive am list')

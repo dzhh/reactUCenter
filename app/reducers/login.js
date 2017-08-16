@@ -8,7 +8,6 @@ const loginState = () => ({ })
 export const loginResponse = handleActions({
   'request login'(state, action) {
     const data = action.payload
-
     return { ...state, loading: true }
   },
   'receive login'(state, action) {

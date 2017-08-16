@@ -4,12 +4,12 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
 import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
-import { fetchLogin } from '../../actions/login'
+import { fetchLogin, receiveLogin } from '../../actions/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
 const FormItem = Form.Item
 var webStyle = {
    // backgroundImage: `url(${imgUrlWeb})`
-    background: "url('"+imgUrlWeb+"') no-repeat 0px 0px"
+     background: "url('"+imgUrlWeb+"') no-repeat 0px 0px"
 };
 //连接 Redux 的组件 不可复用
 @connect(
@@ -51,27 +51,24 @@ export default class Login extends Component {
          this.setState({loading: true})
         const re={} ;
         Object.keys(values).map((key) => values[key] = (values[key] && values[key].trim()))
-          //请求后台数据
-        this.props.dispatch(fetchLogin(values, (res) => {
-          if (res.status == 1) {
-            const query = this.props.form.getFieldsValue()
-            // global.$GLOBALCONFIG.staff = res.data.user
-            sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
-            sessionStorage.setItem('username', query.username)
-            // sessionStorage.setItem('userName', res.data.user.userName)
-            // sessionStorage.setItem('userpwd', query.password)
-            sessionStorage.setItem('token', res.data.token)
-            sessionStorage.setItem('isLeftNavMini', false)
-            hashHistory.push('/')
-          }
-        }, (res) => {
-          message.warning(res.msg)
-          this.setState({
-            loading: false
-          })
-        }))
-        // sessionStorage.setItem('token', 'kwx')
-        // hashHistory.push('/')
+          //请求后台数据  派发事件 放到回调里面
+        fetchLogin(values, (res) => {
+            // this.props.dispatch(fetchLogin(values, (res) => {
+            if (res.status == 1) {
+                const query = this.props.form.getFieldsValue()
+                sessionStorage.setItem('staff', JSON.stringify({ ...res.data.user }))
+                sessionStorage.setItem('username', query.username)
+                sessionStorage.setItem('token', res.data.token)
+                sessionStorage.setItem('isLeftNavMini', false)
+                // this.props.dispatch(receiveLogin({ req: data, res: resp }))
+                hashHistory.push('/')
+            } else {
+                message.warning(res.msg)
+                this.setState({
+                    loading: false
+                })
+            }
+        })
       }
     })
   }
@@ -111,7 +108,6 @@ export default class Login extends Component {
     const { loginResponse } = this.props.loginResponse
     const { getFieldDecorator } = this.props.form
     return (
-        <body style={webStyle}>
       <div className="login">
 
         <div className="btmLogin">
@@ -166,7 +162,6 @@ export default class Login extends Component {
         </div>
         <div id="companyName" className="companyName">XX股份有限公司</div>
       </div>
-        </body>
     )
   }
 }
