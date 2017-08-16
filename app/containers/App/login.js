@@ -5,8 +5,12 @@ import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
 import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
 import { fetchLogin } from '../../actions/login'
+import imgUrlWeb from '../../images/leftBg.jpg'
 const FormItem = Form.Item
-
+var webStyle = {
+   // backgroundImage: `url(${imgUrlWeb})`
+    background: "url('../../images/leftBg.jpg') no-repeat 0px 0px"
+};
 //连接 Redux 的组件 不可复用
 @connect(
   (state, props) => ({
@@ -107,8 +111,9 @@ export default class Login extends Component {
     const { loginResponse } = this.props.loginResponse
     const { getFieldDecorator } = this.props.form
     return (
+        <body style={{webStyle}}>
       <div className="login">
-        <div className="sy_top"></div>
+
         <div className="btmLogin">
           <div className="sy_bottom">
             <h1 id="PerformName">欢迎登陆</h1>
@@ -161,6 +166,7 @@ export default class Login extends Component {
         </div>
         <div id="companyName" className="companyName">XX股份有限公司</div>
       </div>
+        </body>
     )
   }
 }

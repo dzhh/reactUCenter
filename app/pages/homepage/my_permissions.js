@@ -25,43 +25,69 @@ export default class my_permissions extends Component {
             confirmDirty: false,
         }
         this.getPermissions = this.getPermissions.bind(this);
+        this.allPermiession = this.allPermiession.bind(this);
     }
 
     componentDidMount() {
         console.log(this.props)
     }
 
-     getPermissions(){
-
-         return this.props.config.PERMISSIONS.map((item, index) => {
-
-             <Menu.Item key={item.id}>item.value</Menu.Item>
+     getPermissions(children){
+             children.map((item, index) => {
+             return <Menu.Item style={{textAlign:'center'}} key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
          })
+
+     }
+     allPermiession(all) {
+         //return all.map((item, index) => {
+
+             let menu = (
+                 <Menu>
+                     {all.children.map((item_chileren, index_1) => {
+                         return <Menu.Item style={{textAlign:'center'}} key={item_chileren.id}> <Icon type="user" />{item_chileren.value}</Menu.Item>
+                     })
+                     }
+                 </Menu>
+
+             );
+
+
+
+             return (
+                 <Dropdown overlay={menu} trigger={['click']}>
+                     <h1 className="ant-dropdown-link" href="#" style={{textAlign: 'center'}}>
+                         <Icon type="user"/>{all.name} <Icon type="down"/>
+                         <Badge count={all.count}
+                                style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
+                     </h1>
+                 </Dropdown>
+
+             )
+
+
+        // })
      }
     render() {
 
       // console.log(this.getPermissions());
-        const menu = (
+      //   const menu = (
+      //
+      //       <Menu>
+      //           {this.props.config.PERMISSIONS.map((item, index) => {
+      //              return <Menu.Item style={{textAlign:'center'}} key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
+      //            })
+      //           }
+      //       </Menu>
+      //
+      //   );
+      //   {console.log("00000"+menu);}
 
-            <Menu>
-                {this.props.config.PERMISSIONS.map((item, index) => {
-                   return <Menu.Item key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
-                 })
-                }
-            </Menu>
-
-        );
-        {console.log("00000"+menu);}
         return (
 
-            <Dropdown overlay={menu} trigger={['click']} >
-                <h3 className="ant-dropdown-link" href="#">
-                    <Icon type="user" />系统管理员 <Icon type="down" />
-                    <Badge count={6} style={{ backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset' }} />
-                </h3>
-            </Dropdown>
+            this.allPermiession(this.props.config.PERMISSIONS||[])
 
-        );
+
+        )
     }
 
 }
