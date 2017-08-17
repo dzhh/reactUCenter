@@ -12,6 +12,7 @@
         // 本地开发打开的路径以及端口
         global.$ctx = "http://localhost:8080";
 
+
         global.USERMESSAGE = {
             nickname: 'kwx',
             e_amil: '孔维轩@163.com',
@@ -60,7 +61,16 @@
             {key:6,name:'test6',url:'baidu',icon:'user'},
 
         ];
+        global.USER = [
 
+            {key:1,name:'pawn',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:2,name:'smeb',email:'b@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:3,name:'deft',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:4,name:'nickname',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:5,name:'marin',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:6,name:'faker',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+            {key:7,name:'bang',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
+        ];
 
         // 系统一二级菜单
         global.NAVIGATION = [
@@ -106,7 +116,7 @@
                 "icon": "other",
                 "url":"",
                 "children":[
-                    { "id": 600110831, "name":"角色列表", "url":"test", "icon": "api"},
+                    { "id": 600110831, "name":"用户列表", "url":"userList", "icon": "api"},
                     { "id": 600110832, "name":"角色分配", "url":"houseManage", "icon": "api"},
                     { "id": 600110833, "name":"权限列表", "url":"homePage", "icon": "api"},
                     { "id": 600110834, "name":"权限分配", "url":"updateUserMessage", "icon": "api"},

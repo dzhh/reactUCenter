@@ -68,6 +68,11 @@ const menuList = (location, cb) => {
         cb(null, require('./pages/menu/menu_list').default)
     }, 'menu_list')
 }
+const userList = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/user/user_list').default)
+    }, 'user_list')
+}
 /* 进入路由的判断*/
 function isLogin(nextState, replaceState) {
     const token = sessionStorage.getItem('token')
@@ -93,6 +98,7 @@ const routes = (
             <Route path="/updatePassword" getComponent={updatePassword} />
             <Route path="/myPermissions" getComponent={myPermissions} />
             <Route path="/menuList" getComponent={menuList} />
+            <Route path="/userList" getComponent={userList} />
         </Route>
         <Route path="/login" getComponent={Login}></Route>
     </Route>

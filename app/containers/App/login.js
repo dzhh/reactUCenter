@@ -8,8 +8,10 @@ import { fetchLogin, receiveLogin } from '../../actions/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
 const FormItem = Form.Item
 var webStyle = {
-   // backgroundImage: `url(${imgUrlWeb})`
-     background: "url('"+imgUrlWeb+"') no-repeat 0px 0px"
+    // backgroundImage: `url(${imgUrlWeb})`
+    width: "100%",
+    height: "100%",
+    backgroundImage: "url('"+imgUrlWeb+"')"
 };
 //连接 Redux 的组件 不可复用
 @connect(
@@ -108,7 +110,7 @@ export default class Login extends Component {
     const { loginResponse } = this.props.loginResponse
     const { getFieldDecorator } = this.props.form
     return (
-      <div className="login">
+      <div className="login" style={webStyle}>
 
         <div className="btmLogin">
           <div className="sy_bottom">
