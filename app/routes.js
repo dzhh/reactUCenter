@@ -9,7 +9,8 @@ import Homepage from './pages/homepage/index'
 import UpdateUserMseeage from './pages/homepage/update_user_message'
 import UpdateUserPassword from './pages/homepage/update_password'
 import MyPermissions from './pages/homepage/my_permissions'
-// import Login from './containers/App/login'
+import Register from './pages/register/register'
+//import Login from './containers/App/login'
 
 // import {
 //   houseCheck,
@@ -73,15 +74,31 @@ const userList = (location, cb) => {
         cb(null, require('./pages/user/user_list').default)
     }, 'user_list')
 }
+
+// const Register = (location, cb) => {
+//     require.ensure([], require => {
+//         cb(null, require('./pages/register/register').default)
+//     }, 'registe')
+// }
 /* 进入路由的判断*/
 function isLogin(nextState, replaceState) {
     const token = sessionStorage.getItem('token')
     if (!token) {
         //用于替换当前的 URL，并且会将被替换的 URL 在浏览器历史中删除。
         // 函数的第一个参数是 state 对象，第二个是路径 replaceState(null,url);
-        replaceState('/login')
+       // console.log(nextState)
+        console.log("前缀是"+nextState.location.pathname);
+        if(nextState.location.pathname == "/") {
+            replaceState('/login')
+        }
+        if(nextState.location.pathname == "/register") {
+            replaceState('/register')
+        }
+
+
         // hashHistory.push('/login')
     }
+
 }
 
 //children（以路由的包涵关系为区分的组件）
@@ -99,8 +116,10 @@ const routes = (
             <Route path="/myPermissions" getComponent={myPermissions} />
             <Route path="/menuList" getComponent={menuList} />
             <Route path="/userList" getComponent={userList} />
+
         </Route>
         <Route path="/login" getComponent={Login}></Route>
+        <Route path="/register" component={Register}></Route>
     </Route>
 );
 

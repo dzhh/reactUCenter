@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
-import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
+import { Checkbox,Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
 // import { fetchLogin, receiveLogin } from '../../actions/login'
 import { fetchLogin } from '../../ajax/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
-
+import '../../style/login.less'
 const FormItem = Form.Item
 var webStyle = {
     // backgroundImage: `url(${imgUrlWeb})`
@@ -109,62 +109,67 @@ export default class Login extends Component {
   render() {
     const { loginResponse } = this.props.loginResponse
     const { getFieldDecorator } = this.props.form
-    return (
-      <div className="login" style={webStyle}>
+      return (
+          <div className="login" style={webStyle}>
+              <div className="login-form">
 
-        <div className="btmLogin">
-          <div className="sy_bottom">
-            <h1 id="PerformName">欢迎登陆</h1>
-            <Row className="ul-wrap">
-              <Col span={24}>
-                <Spin spinning={this.state.loading}>
-                  <Form layout="vertical" onSubmit={this.handleSubmit}>
-                    <FormItem hasFeedback>
-                      {getFieldDecorator('userName', {
-                        rules: [
-                          { required: true, message: '请输入用户名' },
-                          { validator: this.checkName },
-                          // { pattern: regExpConfig.IDcardTrim, message: '身份证号格式不正确' }
-                             { pattern: "[A-Za-z0-9]{5,8}", message: '用户名只能为5-8位字符或数字' }
-                        ],
-                         //validateTrigger: 'onBlur',
-                      })(
-                        <Input
-                          addonBefore={<Icon type="user" />}
-                          placeholder="请输入用户名"
-                          type="text"
-                        />
-                        )}
-                    </FormItem>
-                    <FormItem hasFeedback>
-                      {getFieldDecorator('userPwd', {
-                        rules: [
-                          { required: true, message: '请输入密码' },
-                          //{ pattern: regExpConfig.pwd, message: '密码只能是6-16个数字或者字母组成' }
-                            { pattern: "[A-Za-z0-9]{6,10}", message: '密码只能为6-10位字符' }
-                        ],
-                        // validateTrigger: 'onBlur',
-                      })(
-                        <Input
-                          addonBefore={<Icon type="lock" />}
-                          placeholder="请输入密码"
-                          type="password"
-                        />
-                        )}
+                  <div className="login-logo">
+                      <span>欢迎登陆</span>
+                  </div>
+                  <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
+                      <FormItem hasFeedback>
+                          {getFieldDecorator('userName', {
+                              rules: [
+                                  { required: true, message: '请输入用户名' },
+                                  { validator: this.checkName },
+                                  // { pattern: regExpConfig.IDcardTrim, message: '身份证号格式不正确' }
+                                  { pattern: "[A-Za-z0-9]{5,8}", message: '用户名只能为5-8位字符或数字' }
+                              ],
+                              //validateTrigger: 'onBlur',
+                          })(
+                              <Input
+                                  prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+                                  placeholder="请输入用户名"
+                                  type="text"
+                              />
+                          )}
+                      </FormItem>
+                      <FormItem hasFeedback>
+                          {getFieldDecorator('userPwd', {
+                              rules: [
+                                  { required: true, message: '请输入密码' },
+                                  //{ pattern: regExpConfig.pwd, message: '密码只能是6-16个数字或者字母组成' }
+                                  { pattern: "[A-Za-z0-9]{6,10}", message: '密码只能为6-10位字符' }
+                              ],
+                              // validateTrigger: 'onBlur',
+                          })(
+                              <Input
+                                  prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+                                  placeholder="请输入密码"
+                                  type="password"
+                              />
+                          )}
+                      </FormItem>
+                      <FormItem>
+                          {getFieldDecorator('remember', {
+                              valuePropName: 'checked',
+                              initialValue: true,
+                          })(
+                              <Checkbox>记住我</Checkbox>
+                          )}
+                          <a className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</a>
+                          <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '100%'}}>
+                              登录
+                          </Button>
+                          或 <a href="/#/register" >现在就去注册!</a>
 
-                    </FormItem>
-                    <FormItem>
-                      <Button type="primary" htmlType="submit">登录</Button>
-                    </FormItem>
+                      </FormItem>
                   </Form>
-                </Spin>
-              </Col>
-            </Row>
-          </div>
-        </div>
-        <div id="companyName" className="companyName">XX股份有限公司</div>
-      </div>
-    )
+                  </div>
+              </div>
+
+
+      );
   }
 }
 
