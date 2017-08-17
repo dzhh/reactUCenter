@@ -59,7 +59,7 @@ export default class Login extends Component {
             if (res.ospState == 200) {
                 const query = this.props.form.getFieldsValue()
                 sessionStorage.setItem('staff', JSON.stringify({ ...res.data.danwei }))//单位
-                sessionStorage.setItem('username', query.username)
+                sessionStorage.setItem('username', query.userName)
                 sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
                 // this.props.dispatch(receiveLogin({ req: data, res: resp }))
@@ -120,7 +120,7 @@ export default class Login extends Component {
                 <Spin spinning={this.state.loading}>
                   <Form layout="vertical" onSubmit={this.handleSubmit}>
                     <FormItem hasFeedback>
-                      {getFieldDecorator('username', {
+                      {getFieldDecorator('userName', {
                         rules: [
                           { required: true, message: '请输入用户名' },
                           { validator: this.checkName },
@@ -137,7 +137,7 @@ export default class Login extends Component {
                         )}
                     </FormItem>
                     <FormItem hasFeedback>
-                      {getFieldDecorator('password', {
+                      {getFieldDecorator('userPwd', {
                         rules: [
                           { required: true, message: '请输入密码' },
                           //{ pattern: regExpConfig.pwd, message: '密码只能是6-16个数字或者字母组成' }

@@ -31,10 +31,12 @@ function buildParams(obj) {
 }*/
 
 export function fetchJSON(url, params, target) {
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
   let data = {
-    'method': 'POST',
-    'Content-Type': 'application/json',
-    'body': JSON.stringify(params)
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify(params)
   }
 
   if(target){
