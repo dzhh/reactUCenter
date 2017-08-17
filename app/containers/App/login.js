@@ -4,8 +4,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
 import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
-import { fetchLogin, receiveLogin } from '../../actions/login'
+// import { fetchLogin, receiveLogin } from '../../actions/login'
+import { fetchLogin } from '../../ajax/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
+
 const FormItem = Form.Item
 var webStyle = {
     // backgroundImage: `url(${imgUrlWeb})`
@@ -46,8 +48,6 @@ export default class Login extends Component {
   handleSubmit(e) {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-        // alert("username="+values.username);
-        // alert("password="+values.password);
       if (!err) {
         this.state.loading = true
          this.setState({loading: true})
