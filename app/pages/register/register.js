@@ -41,8 +41,14 @@ export default class register extends Component {
     }
 
     handleSubmit(e) {
+
+
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
+
+            if(!values.agreement) {
+                message.warning('请阅读协议');
+            } else
             if (!err) {
                 console.log('Received values of form: ', values);
             }
@@ -69,6 +75,7 @@ export default class register extends Component {
     }
 
     render() {
+
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -92,6 +99,7 @@ export default class register extends Component {
                 },
             },
         };
+        //addonBefore={prefixSelector}
         const prefixSelector = getFieldDecorator('prefix', {
             initialValue: '86',
         })(
@@ -100,7 +108,11 @@ export default class register extends Component {
             </Select>
         );
         return (
-                <div style={{verticalAlign: "middle" }}>
+
+                <div style={{verticalAlign: "middle", justifyContent: "center", alignItems: "center",
+                    height: "100%", background: "#f3f3f3",
+                    display: "flex"
+                }}>
                 <Card title="新用户注册" bordered={false} style={{textAlign:"center", width: "60%" }}>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
@@ -152,12 +164,12 @@ export default class register extends Component {
 
                 <FormItem
                     {...formItemLayout}
-                    label="Phone Number"
+                    label="手机号码"
                 >
                     {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: '请输入你的电话号码!' }],
+                        rules: [{ required: true, message: '请输入你的手机号码!' }],
                     })(
-                        <Input addonBefore={prefixSelector} />
+                        <Input />
                     )}
                 </FormItem>
                 <FormItem
@@ -173,7 +185,7 @@ export default class register extends Component {
                             )}
                         </Col>
                         <Col span={12}>
-                            <Button size="large">获取验证码</Button>
+                            <Button size="large" style={{textAlign:"right"}}>获取验证码</Button>
                         </Col>
                     </Row>
                 </FormItem>

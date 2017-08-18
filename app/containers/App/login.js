@@ -52,7 +52,9 @@ export default class Login extends Component {
         this.state.loading = true
          this.setState({loading: true})
         const re={} ;
-        Object.keys(values).map((key) => values[key] = (values[key] && values[key].trim()))
+        Object.keys(values).map((key) => values[key] = (
+            values[key] && typeof(values[key]) =='string'&&values[key].trim()
+        ))
           //请求后台数据  派发事件 放到回调里面
         fetchLogin(values, (res) => {
             // this.props.dispatch(fetchLogin(values, (res) => {
