@@ -74,7 +74,11 @@ const userList = (location, cb) => {
         cb(null, require('./pages/user/user_list').default)
     }, 'user_list')
 }
-
+const roleList = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/permission/role_list').default)
+    }, 'role_list')
+}
 // const Register = (location, cb) => {
 //     require.ensure([], require => {
 //         cb(null, require('./pages/register/register').default)
@@ -116,6 +120,7 @@ const routes = (
             <Route path="/myPermissions" getComponent={myPermissions} />
             <Route path="/menuList" getComponent={menuList} />
             <Route path="/userList" getComponent={userList} />
+            <Route path="/roleList" getComponent={roleList} />
 
         </Route>
         <Route path="/login" getComponent={Login}></Route>

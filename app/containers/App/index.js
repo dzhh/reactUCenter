@@ -12,6 +12,7 @@ import TabList from './tabList'
 import Extra from './extra'
 import 'antd/dist/antd.less'
 import '../../style/base.less'
+import { getUserMessage } from '../../ajax/user'
 //connect 会把State和dispatch转换成props传递给子组件
 //bindActionCreators的作用是将一个或多个action和dispatch
 // 组合起来生成mapDispatchToProps需要生成的内容
@@ -28,6 +29,7 @@ export default class App extends Component {
     this.state = {
       pageHeight: 0,
       isLeftNavMini: false,   // 左侧导航菜单是否mini模式
+      ucUser:{}
     }
     let test = this.props
     //
@@ -54,6 +56,20 @@ export default class App extends Component {
         isLeftNavMini: true,
       })
     }
+    //新增 第一次加载时获取用户信息
+      const user={};
+      user.userName = sessionStorage.getItem('userName')
+      user.userId = sessionStorage.getItem('userId')
+      console.log(user.userName+"加载之前----------"+user.userId);
+
+      getUserMessage(user, (res) => {
+          console.log("++++++"+res);
+          if (res.ospState == 200) {
+              this.setState({ucUser: res.data.ucUser})
+          } else {
+              message.warning(res.msg)
+          }
+      })
   }
 
   // 左侧是否mini
