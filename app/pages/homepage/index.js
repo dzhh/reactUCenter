@@ -48,22 +48,21 @@ export default class homepage extends Component {
     }
 
 
-onclickTest() {
-    const user={};
-   // user.token = sessionStorage.getItem("token");
-    user.userName = sessionStorage.getItem('userName')
-    user.userId = sessionStorage.getItem('userId')
-    console.log(user.userName+"加载之前----------"+user.userId);
+    onclickTest() {
+        const user={};
+       // user.token = sessionStorage.getItem("token");
+        user.userName = sessionStorage.getItem('userName')
+        user.userId = sessionStorage.getItem('userId')
+        console.log(user.userName+"加载之前----------"+user.userId);
 
-    getUserMessage(user, (res) => {
-        console.log("++++++"+res);
-        if (res.ospState == 200) {
-
-        } else {
-            message.warning(res.msg)
-        }
-    })
-}
+        getUserMessage(user, (res) => {
+            console.log("++++++"+res);
+            if (res.ospState == 200) {
+            } else {
+                message.warning(res.msg)
+            }
+        })
+    }
 
     render(){
         const formItemLayout = {

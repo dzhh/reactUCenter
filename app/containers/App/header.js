@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import { Link, hashHistory } from 'react-router'
 import { Menu, Dropdown, Button, Modal, message } from 'antd'
 
+import {
+    createAjaxAction, logOut,
+} from '../../utils'
+
 const confirm = Modal.confirm
 
 @connect(
@@ -47,7 +51,8 @@ export default class Header extends Component {
         //     message.error(result.msg)
         //   }
         // }))
-        hashHistory.push('/login')
+          logOut()
+        // hashHistory.push('/login')
       },
     })
   }

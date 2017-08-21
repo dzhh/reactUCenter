@@ -29,6 +29,7 @@ export default class App extends Component {
       pageHeight: 0,
       isLeftNavMini: false,   // 左侧导航菜单是否mini模式
     }
+    let test = this.props
     //
     this.isLeftNavMini = this.isLeftNavMini.bind(this)
   }

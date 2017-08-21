@@ -9,7 +9,7 @@ export function isArray(arr) {
   return Object.prototype.toString.call(arr) === '[object Array]'
 }
 
-const logOut = () => {
+export const logOut = () => {
   sessionStorage.removeItem('usercode')
   sessionStorage.removeItem('userpwd')
   sessionStorage.removeItem('token')
@@ -36,12 +36,15 @@ const logOut = () => {
 // }
 export const createAjaxAction = (api) => (data, callback) => {
     // 每个请求带上token
-    const token = sessionStorage.getItem('token')
-    if (token) {
-      if (!data) {
+    // const token = sessionStorage.getItem('token')
+    // if (token) {
+    //   if (!data) {
+    //     data = {}
+    //   }
+    //   data.token = token || null
+    // }
+    if (!data) {
         data = {}
-      }
-      data.token = token || null
     }
     data = isArray(data) ? data : [data]
     api(...data)

@@ -5,10 +5,7 @@ import {
     createAjaxAction,
 } from '../utils'
 
-import { ajax } from '../utils'
+import * as ajaxFun from '../utils/ajax'
 
-export const getUserMessage = createAjaxAction(ajax.fetchJSONByPost('/user/userInfo'));
-
-
-
+export const getUserMessage = createAjaxAction(ajaxFun.fetchJSONByPost('/user/userInfo'));
 

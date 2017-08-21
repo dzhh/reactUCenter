@@ -33,9 +33,11 @@ function buildParams(obj) {
 export function fetchJSON(url, params, target) {
   let myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  // if(sessionStorage.getItem('token')) {
-  //     myHeaders.append = ("osptoken",sessionStorage.getItem('token'));
-  // }
+  let token = sessionStorage.getItem('token')
+  if(token) {
+      myHeaders.append("token", token);
+  }
+    // if (token) {
   let data = {
     method: 'POST',
     headers: myHeaders,
