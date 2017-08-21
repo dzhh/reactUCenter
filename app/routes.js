@@ -109,7 +109,7 @@ const routes = (
         <Route path="/" component={App} onEnter={isLogin}>
             <IndexRoute component={Welcome} />
             <Route path="/houseManage" getComponent={houseManage} />
-            <Route path="/test" getComponent={test} query={{'name': 'dupi'}} />
+            <Route path="/test" getComponent={test}  />
             <Route path="/homePage" getComponent={homePage} />
             <Route path="/updateUserMessage" getComponent={updateUserMessage} />
             <Route path="/updatePassword" getComponent={updatePassword} />

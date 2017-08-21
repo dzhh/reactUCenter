@@ -4,7 +4,8 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
+import {message, Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
+import { getUserMessage } from '../../ajax/user'
 const FormItem = Form.Item
 @connect(
     (state, props) => ({
@@ -14,13 +15,32 @@ const FormItem = Form.Item
 
 
 export default class homepage extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
             show: true,
             confirmDirty: false,
+            user:{},
         }
 
+    }
+    componentWillMount(){
+        const user={};
+       // user.token = sessionStorage.getItem("token");
+        user.userName = sessionStorage.getItem('userName')
+        user.userId = sessionStorage.getItem('userId')
+        console.log(user.userName+"加载之前----------"+user.userId);
+
+        getUserMessage(user, (res) => {
+            console.log("++++++"+res);
+            if (res.ospState == 200) {
+
+                this.setState({ user: res.user})
+            } else {
+                message.warning(res.msg)
+            }
+        })
     }
 
     componentDidMount() {
@@ -28,7 +48,22 @@ export default class homepage extends Component {
     }
 
 
+onclickTest() {
+    const user={};
+   // user.token = sessionStorage.getItem("token");
+    user.userName = sessionStorage.getItem('userName')
+    user.userId = sessionStorage.getItem('userId')
+    console.log(user.userName+"加载之前----------"+user.userId);
 
+    getUserMessage(user, (res) => {
+        console.log("++++++"+res);
+        if (res.ospState == 200) {
+
+        } else {
+            message.warning(res.msg)
+        }
+    })
+}
 
     render(){
         const formItemLayout = {
@@ -74,10 +109,9 @@ export default class homepage extends Component {
                     label="最后登陆时间"
                     hasFeedback
                 >
-                    <Input value={this.props.config.USERMESSAGE.lasttime}  />
+                    <Input value={this.props.config.USERMESSAGE.lasttime} />
 
                 </FormItem>
-
 
             </Form>
         );
