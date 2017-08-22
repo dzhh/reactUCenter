@@ -8,4 +8,5 @@ import {
 import * as ajaxFun from '../utils/ajax'
 
 export const getUserMessage = createAjaxAction(ajaxFun.fetchJSONByPost('/user/userInfo'));
+export const updateUserMessage = createAjaxAction(ajaxFun.fetchJSONByPost('/user/updateUserInfo'));
 

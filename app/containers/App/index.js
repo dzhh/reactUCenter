@@ -17,7 +17,7 @@ import { getUserMessage } from '../../ajax/user'
 //bindActionCreators的作用是将一个或多个action和dispatch
 // 组合起来生成mapDispatchToProps需要生成的内容
 @connect(
-    (state, props) => ({}),
+    (state, props) => ({ucUser:state.ucUser}),
     (dispatch) => ({ actions: bindActionCreators({}, dispatch) })
 )
 //react class
@@ -29,12 +29,29 @@ export default class App extends Component {
     this.state = {
       pageHeight: 0,
       isLeftNavMini: false,   // 左侧导航菜单是否mini模式
-      ucUser:{}
+
     }
     let test = this.props
     //
     this.isLeftNavMini = this.isLeftNavMini.bind(this)
   }
+    // getInitialState() {
+    //     let user={};
+    //     const ucUser = {};
+    //     user.userName = sessionStorage.getItem('userName')
+    //     user.userId = sessionStorage.getItem('userId')
+    //     console.log(user.userName+"加载之前----------"+user.userId);
+    //
+    //     getUserMessage(user, (res) => {
+    //
+    //         if (res.ospState == 200) {
+    //             ucUser = res.data.ucUser
+    //         } else {
+    //             message.warning(res.msg)
+    //         }
+    //     })
+    //     return ucUser;
+    // }
 
   // 组件已经加载到dom中
     //组件渲染之后调用，可以通过this.getDOMNode()获取和操作dom节点，只调用一次。
@@ -56,20 +73,20 @@ export default class App extends Component {
         isLeftNavMini: true,
       })
     }
-    //新增 第一次加载时获取用户信息
-    //   const user={};
-      //   user.userName = sessionStorage.getItem('userName')
-      //   user.userId = sessionStorage.getItem('userId')
-      //   console.log(user.userName+"加载之前----------"+user.userId);
-      //
-      //   getUserMessage(user, (res) => {
-      //       console.log("++++++"+res);
-      //       if (res.ospState == 200) {
-      //           this.setState({ucUser: res.data.ucUser})
-      //       } else {
-      //           message.warning(res.msg)
-      //       }
-      //   })
+   // 新增 第一次加载时获取用户信息
+   //     const user={};
+   //      user.userName = sessionStorage.getItem('userName')
+   //      user.userId = sessionStorage.getItem('userId')
+   //      console.log(user.userName+"加载之前----------"+user.userId);
+   //
+   //      getUserMessage(user, (res) => {
+   //          console.log("++++++"+res);
+   //          if (res.ospState == 200) {
+   //              this.props.ucUser =  res.data.ucUser
+   //          } else {
+   //              message.warning(res.msg)
+   //          }
+   //      })
   }
 
   // 左侧是否mini

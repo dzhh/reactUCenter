@@ -111,7 +111,7 @@ export default class update_password extends Component {
                             pattern: "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]){5,10}$", message: '密码错误!',
                         }],
                     })(
-                        <Input type="password" />
+                        <Input type="password" placeholder="请输入旧密码"/>
                     )}
                 </FormItem>
                 <FormItem
@@ -128,7 +128,7 @@ export default class update_password extends Component {
                             validator: this.checkConfirm,
                         }],
                     })(
-                        <Input type="password" />
+                        <Input type="password"  placeholder="请输入新密码" />
                     )}
 
                 </FormItem>
@@ -147,7 +147,7 @@ export default class update_password extends Component {
                             validator: this.checkPassword,
                         }],
                     })(
-                        <Input type="password" onBlur={this.handleConfirmBlur} />
+                        <Input type="password" onBlur={this.handleConfirmBlur}  placeholder="请再输入一次新密码"/>
                     )}
 
                 </FormItem>

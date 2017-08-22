@@ -3,12 +3,12 @@
  */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd'
+import { Form, Input,message, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd'
 import moment from 'moment';
 import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
-
+import { getUserMessage,updateUserMessage } from '../../ajax/user'
 const FormItem = Form.Item
 @connect(
     (state, props) => ({
@@ -30,6 +30,7 @@ export default class update_user_message extends Component {
         this.state = {
             show: true,
             confirmDirty: false,
+            user:{}
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -43,13 +44,42 @@ export default class update_user_message extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('输入: ', values);
+                let user ={};
+                user.userId = this.state.user.userId;
+                user.userName = values.userName;
+                updateUserMessage(user, (res) => {
+                    console.log("++++++"+res);
+                    if (res.ospState == 200) {
+                        //this.setState({ user: res.data.ucUser})
+                        hashHistory.push('/updateUserMessage')
+                        message.success("修改成功")
+
+                    } else {
+                        message.warning(res.msg)
+                    }
+                })
                 //hashHistory.push('/homePage')
 
             }
         });
     }
 
+    componentWillMount(){
+        const user={};
+        // user.token = sessionStorage.getItem("token");
+        user.userName = sessionStorage.getItem('userName')
+        user.userId = sessionStorage.getItem('userId')
+        console.log(user.userName+"加载之前----------"+user.userId);
 
+        getUserMessage(user, (res) => {
+            console.log("++++++"+res);
+            if (res.ospState == 200) {
+                this.setState({ user: res.data.ucUser})
+            } else {
+                message.warning(res.msg)
+            }
+        })
+    }
     render(){
         const {getFieldDecorator} = this.props.form;
 
@@ -79,56 +109,66 @@ export default class update_user_message extends Component {
         const config = {
             rules: [{ type: 'object', required: true, message: '请选择时间' }],
         };
+        const user = this.state.user;
         return (
             <Form onSubmit={this.handleSubmit}>
+
                 <FormItem
                     {...formItemLayout}
                     label="昵称"
                     hasFeedback
                 >
 
-                    {getFieldDecorator('nickname', {
+                    {getFieldDecorator('userName', {
                         rules: [ {
                             required: true, message: '昵称不能为空!',
                         }],
                     })(
-                        <Input placeholder="请输入昵称" defaultValue={this.props.config.USERMESSAGE.nickname} />
+                        <Input placeholder="请输入新的昵称" defaultValue={user.userName} />
                     )}
                 </FormItem>
+                {/*<FormItem*/}
+                    {/*{...formItemLayout}*/}
+                     {/*label="e-mail"*/}
+                     {/*hasFeedback>*/}
+                    {/*{getFieldDecorator('userEmail', {*/}
+                        {/*rules: [{*/}
+                            {/*type: 'email', message: '请输入正确的email!',*/}
+                        {/*}, {*/}
+                            {/*required: true, message: 'E-mail不能为空!',*/}
+                        {/*}],*/}
+                    {/*})(*/}
+                        {/*<Input placeholder="请输入新的e-mail" defaultValue={user.userEmail} />*/}
+                    {/*)}*/}
+
+                {/*</FormItem>*/}
                 <FormItem
                     {...formItemLayout}
-                     label="e-mail"
-                     hasFeedback>
-                    {getFieldDecorator('email', {
-                        rules: [{
-                            type: 'email', message: '请输入正确的email!',
-                        }, {
-                            required: true, message: 'E-mail不能为空!',
-                        }],
-                    })(
-                        <Input placeholder="请输入e-mail" defaultValue={this.props.config.USERMESSAGE.e_amil} />
-                    )}
-
-                </FormItem>
-
-
-
-                    <FormItem
-                        {...formItemLayout}
-                        label="创建时间"
-                    >
-                    <DatePicker defaultValue={moment(this.props.config.USERMESSAGE.creattime, 'YYYY/MM/DD HH:mm:ss')} showTime format="YYYY-MM-DD HH:mm:ss" disabled />
-                    </FormItem>
-
-                <FormItem
-                    {...formItemLayout}
-                    label="最后登录时间"
+                    label="e-mail/账号(不可修改)"
                     hasFeedback
                 >
-
-                 <DatePicker defaultValue={moment(this.props.config.USERMESSAGE.lasttime, 'YYYY/MM/DD HH:mm:ss')} showTime format="YYYY-MM-DD HH:mm:ss" disabled />
+                    <Input value={user.userEmail}  />
 
                 </FormItem>
+
+
+
+                    {/*<FormItem*/}
+                        {/*{...formItemLayout}*/}
+                        {/*label="创建时间"*/}
+                    {/*>*/}
+                        {/*<Input value={user.createTime} disabled />*/}
+                    {/*</FormItem>*/}
+
+                {/*<FormItem*/}
+                    {/*{...formItemLayout}*/}
+                    {/*label="最后登录时间"*/}
+                    {/*hasFeedback*/}
+                {/*>*/}
+                    {/*<Input value={user.lastLoginTime} disabled/>*/}
+
+
+                {/*</FormItem>*/}
 
 
 

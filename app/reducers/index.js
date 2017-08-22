@@ -23,6 +23,7 @@ import {
 const rootReducer = combineReducers({
   routing,
   config: (state = {}) => state,
+  //ucUser: (state = {}) => state,
   tabListResult,
 
   loginResponse,

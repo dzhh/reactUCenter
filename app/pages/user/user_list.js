@@ -170,11 +170,12 @@ export default class user_list extends Component {
                         style={{width: '20%',
                             marginRight: '8px'}}
                     />
-                    <Button type="primary" onClick={this.onSearch}>搜索</Button>
+                    <Button type="primary" onClick={this.onSearch} >搜索</Button>
                     {/*---------------*/}
 
                     <Button type="primary" onClick={this.onDelete}
                             disabled={!hasSelected} loading={loading}
+                            style={{marginLeft:"10px"}}
                     >
                         删除</Button>
 

@@ -176,11 +176,11 @@ export default class role_list extends Component {
                     />
                     <Button type="primary" onClick={this.onSearch} >搜索</Button>
                     {/*---------------*/}
-                    <Button type="primary" onClick={this.showModal} style={{marginLeft:"15px"}}>
+                    <Button type="primary" onClick={this.showModal} style={{marginLeft:"10px"}}>
                         添加
                     </Button>
                     <Button type="primary" onClick={this.onDelete}
-                            disabled={!hasSelected} loading={loading} style={{marginLeft:"15px"}}
+                            disabled={!hasSelected} loading={loading} style={{marginLeft:"10px"}}
                     >
                         删除</Button>
                     {/******************/}

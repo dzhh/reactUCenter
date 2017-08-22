@@ -10,6 +10,7 @@ const FormItem = Form.Item
 @connect(
     (state, props) => ({
         config: state.config,
+        ucUser: state.ucUser,
     })
 )
 
@@ -62,6 +63,7 @@ export default class homepage extends Component {
         };
 
          const user = this.state.user;
+         //const ucUser = this.props.ucUser;
         return (
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
