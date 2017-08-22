@@ -57,19 +57,19 @@ export default class App extends Component {
       })
     }
     //新增 第一次加载时获取用户信息
-      const user={};
-      user.userName = sessionStorage.getItem('userName')
-      user.userId = sessionStorage.getItem('userId')
-      console.log(user.userName+"加载之前----------"+user.userId);
-
-      getUserMessage(user, (res) => {
-          console.log("++++++"+res);
-          if (res.ospState == 200) {
-              this.setState({ucUser: res.data.ucUser})
-          } else {
-              message.warning(res.msg)
-          }
-      })
+    //   const user={};
+      //   user.userName = sessionStorage.getItem('userName')
+      //   user.userId = sessionStorage.getItem('userId')
+      //   console.log(user.userName+"加载之前----------"+user.userId);
+      //
+      //   getUserMessage(user, (res) => {
+      //       console.log("++++++"+res);
+      //       if (res.ospState == 200) {
+      //           this.setState({ucUser: res.data.ucUser})
+      //       } else {
+      //           message.warning(res.msg)
+      //       }
+      //   })
   }
 
   // 左侧是否mini

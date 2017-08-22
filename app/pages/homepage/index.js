@@ -35,8 +35,7 @@ export default class homepage extends Component {
         getUserMessage(user, (res) => {
             console.log("++++++"+res);
             if (res.ospState == 200) {
-
-                this.setState({ user: res.user})
+                this.setState({ user: res.data.ucUser})
             } else {
                 message.warning(res.msg)
             }
@@ -48,21 +47,7 @@ export default class homepage extends Component {
     }
 
 
-    onclickTest() {
-        const user={};
-       // user.token = sessionStorage.getItem("token");
-        user.userName = sessionStorage.getItem('userName')
-        user.userId = sessionStorage.getItem('userId')
-        console.log(user.userName+"加载之前----------"+user.userId);
 
-        getUserMessage(user, (res) => {
-            console.log("++++++"+res);
-            if (res.ospState == 200) {
-            } else {
-                message.warning(res.msg)
-            }
-        })
-    }
 
     render(){
         const formItemLayout = {
@@ -76,7 +61,7 @@ export default class homepage extends Component {
             },
         };
 
-
+         const user = this.state.user;
         return (
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
@@ -84,14 +69,14 @@ export default class homepage extends Component {
                     label="昵称"
                     hasFeedback
                 >
-                    <Input value={this.props.config.USERMESSAGE.nickname} />
+                    <Input value={user.userName} />
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
                     label="e-mail/账号"
                     hasFeedback
                 >
-                <Input value={this.props.config.USERMESSAGE.e_amil}  />
+                <Input value={user.userEmail}  />
 
                 </FormItem>
                 <FormItem
@@ -99,7 +84,7 @@ export default class homepage extends Component {
                     label="创建时间"
                     hasFeedback
                 >
-                    <Input value={this.props.config.USERMESSAGE.creattime}  />
+                    <Input value={user.createTime}  />
 
                 </FormItem>
 
@@ -108,7 +93,7 @@ export default class homepage extends Component {
                     label="最后登陆时间"
                     hasFeedback
                 >
-                    <Input value={this.props.config.USERMESSAGE.lasttime} />
+                    <Input value={user.lastLoginTime} />
 
                 </FormItem>
 
