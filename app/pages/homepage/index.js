@@ -27,14 +27,13 @@ export default class homepage extends Component {
 
     }
     componentWillMount(){
+        console.log("===============index  componentWillMount=================================")
         const user={};
        // user.token = sessionStorage.getItem("token");
         user.userName = sessionStorage.getItem('userName')
         user.userId = sessionStorage.getItem('userId')
-        console.log(user.userName+"加载之前----------"+user.userId);
 
         getUserMessage(user, (res) => {
-            console.log("++++++"+res);
             if (res.ospState == 200) {
                 this.setState({ user: res.data.ucUser})
             } else {
@@ -44,10 +43,12 @@ export default class homepage extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        console.log("===============index  componentDidMount=================================")
     }
 
-
+    componentWillUnmount() {
+        console.log("===============index  componentWillUnmount=================================")
+    }
 
 
     render(){

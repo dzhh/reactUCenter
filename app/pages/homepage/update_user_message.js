@@ -68,8 +68,7 @@ export default class update_user_message extends Component {
         // user.token = sessionStorage.getItem("token");
         user.userName = sessionStorage.getItem('userName')
         user.userId = sessionStorage.getItem('userId')
-        console.log(user.userName+"加载之前----------"+user.userId);
-
+        console.log("===============update_user_message  componentWillMount=================================")
         getUserMessage(user, (res) => {
             console.log("++++++"+res);
             if (res.ospState == 200) {
@@ -79,6 +78,17 @@ export default class update_user_message extends Component {
             }
         })
     }
+
+
+    componentDidMount() {
+        console.log("===============update_user_message  componentDidMount=================================")
+    }
+
+    componentWillUnmount() {
+        console.log("===============update_user_message  componentWillUnmount=================================")
+    }
+
+
     render(){
         const {getFieldDecorator} = this.props.form;
         const formItemLayout = {
