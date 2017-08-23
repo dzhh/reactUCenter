@@ -46,7 +46,7 @@ export default class update_user_message extends Component {
                 console.log('输入: ', values);
                 let user ={};
                 user.userId = this.state.user.userId;
-                user.userName = values.userName;
+                user.userEmail = values.userEmail;
                 updateUserMessage(user, (res) => {
                     console.log("++++++"+res);
                     if (res.ospState == 200) {
@@ -112,44 +112,50 @@ export default class update_user_message extends Component {
         const user = this.state.user;
         return (
             <Form onSubmit={this.handleSubmit}>
-
                 <FormItem
-                    {...formItemLayout}
-                    label="昵称"
-                    hasFeedback
+                {...formItemLayout}
+                label="账号(不可修改)"
                 >
-
-                    {getFieldDecorator('userName', {
-                        rules: [ {
-                            required: true, message: '昵称不能为空!',
-                        }],
-                    })(
-                        <Input placeholder="请输入新的昵称" defaultValue={user.userName} />
-                    )}
+                <Input value={user.userName} disabled />
                 </FormItem>
+
                 {/*<FormItem*/}
                     {/*{...formItemLayout}*/}
-                     {/*label="e-mail"*/}
-                     {/*hasFeedback>*/}
-                    {/*{getFieldDecorator('userEmail', {*/}
-                        {/*rules: [{*/}
-                            {/*type: 'email', message: '请输入正确的email!',*/}
-                        {/*}, {*/}
-                            {/*required: true, message: 'E-mail不能为空!',*/}
+                    {/*label="账号(不可修改)"*/}
+                    {/*hasFeedback*/}
+                {/*>*/}
+
+                    {/*{getFieldDecorator('userName', {*/}
+                        {/*rules: [ {*/}
+                            {/*required: true, message: '昵称不能为空!',*/}
                         {/*}],*/}
                     {/*})(*/}
-                        {/*<Input placeholder="请输入新的e-mail" defaultValue={user.userEmail} />*/}
+                        {/*<Input placeholder="请输入新的昵称" defaultValue={user.userName} />*/}
                     {/*)}*/}
-
                 {/*</FormItem>*/}
                 <FormItem
                     {...formItemLayout}
-                    label="e-mail/账号(不可修改)"
-                    hasFeedback
-                >
-                    <Input value={user.userEmail}  />
+                     label="e-mail"
+                     hasFeedback>
+                    {getFieldDecorator('userEmail', {
+                        rules: [{
+                            type: 'email', message: '请输入正确的email!',
+                        }, {
+                            required: true, message: 'E-mail不能为空!',
+                        }],
+                    })(
+                        <Input placeholder="请输入新的e-mail" defaultValue={user.userEmail} />
+                    )}
 
                 </FormItem>
+                {/*<FormItem*/}
+                    {/*{...formItemLayout}*/}
+                    {/*label="e-mail"*/}
+                    {/*hasFeedback*/}
+                {/*>*/}
+                    {/*<Input value={user.userEmail}  />*/}
+
+                {/*</FormItem>*/}
 
 
 
