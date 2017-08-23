@@ -1,10 +1,6 @@
 /**
  * Created by kwx on 2017/8/22.
  */
-/**
- * Created by kwx on 2017/8/21.
- */
-
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -16,12 +12,7 @@ const FormItem = Form.Item
     }),
 
 )
-@Form.create({
-    onFieldsChange(props, items) {
-        // console.log(items)
-        // props.cacheSearch(items);
-    },
-})
+
 
 export default class online_user extends Component {
     constructor(props) {
@@ -31,43 +22,27 @@ export default class online_user extends Component {
             loading: false,
             data:this.props.config.ONLINEUSER,
             visible: false,
+            auser:{}
 
         }
 
-
-        //this.onDelete  = this.onDelete .bind(this);
+        this.showModal  = this.showModal.bind(this);
 
     }
 
     //展示弹出框
-    showModal = () => {
+    showModal = (record) => {
+
         this.setState({
+            auser:record,
             visible: true,
+
         });
     }
-    //弹出框点击ok
-    handleOk = () => {
-        this.props.form.validateFields((err, values) => {
-            if(!err) {
-                // values.key=values.name;
-                //console.log(values);
-                console.log("验证成功"+values.roleName+values.systemcode)
-                // this.props.config.DATA.push(values);
-                // this.setState({data:this.props.config.DATA}) ;
-                //  console.log(this.props.config.DATA);
-                this.setState({loading: true});
-                //this.setState({ loading: false, visible: false });
-                setTimeout(() => {
-                    this.setState({loading: false, visible: false});
-                }, 3000);
-            }
-        })
 
-
-    }
     //弹出框点击离开
     handleCancel = () => {
-        this.setState({ visible: false });
+        this.setState({ visible: false ,auser:{}});
     }
 
     allowLogin  = (index) => {
@@ -77,26 +52,6 @@ export default class online_user extends Component {
     deleteLogin  = (index) => {
         this.props.config.ONLINEUSER[index].status = 0;
         this.setState({data:this.props.config.ONLINEUSER}) ;
-    }
-    onDelete  = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            console.log('删除的IDs: ', this.state.selectedRowRoleIds);
-            // const data = [...this.state.data];
-            //
-            // this.setState({ dataSource });
-            // this.state.selectedRowKeys.map((item,index)=>{
-            //     console.log(index+"--"+item);
-            //     console.log(dataSource.splice(item,1));
-            // });
-            //this.setState({ selectedRowKeys });
-            this.setState({
-                selectedRowRoleIds: [],
-                loading: false,
-                //searchText: '',
-            });
-        }, 1000);
     }
 
 
@@ -140,14 +95,18 @@ export default class online_user extends Component {
                                                <a href="#">踢出</a>
                                               </Popconfirm>
                                                    <span className="ant-divider" />
-                                                   <a href="#">详情</a>
+                                                       <a onClick={() => this.showModal(record)}
+                                                       >详情</a>
                                                </div>
                                             ):
                                             (<div> <Popconfirm title={title_action} onConfirm={() => this.allowLogin(index)}>
                                                     <a href="#">激活</a>
                                                 </Popconfirm>
                                                     <span className="ant-divider" />
-                                                    <a href="#">详情</a>
+
+                                                    <a onClick={() => this.showModal(record)}
+                                                       >详情</a>
+
                                                 </div>
                                             )
                                        )
@@ -159,18 +118,43 @@ export default class online_user extends Component {
             }
         ];
 
-
-        // const {loading,selectedRowRoleIds } = this.state;
-        // const rowSelection = {
-        //     selectedRowRoleIds,
-        //     onChange: this.onSelectChange,
-        // };
-
+        const auser = this.state.auser;
         return (
-            <div>
+
                 <div>
+                    <Modal
+                        visible={this.state.visible}
+                        title="Session详情"
+                        onCancel={this.handleCancel}
+                        footer={[
+                            <Button key="back" size="small" onClick={this.handleCancel}>返回</Button>,
+
+                        ]}
+                    >
+                        <Form layout="vertical">
+                            <FormItem label="Session Id">
+                                <Input defaultValue={auser.sessionID} disabled />
+                            </FormItem>
+                            <FormItem label="Session创建时间">
+                                <Input defaultValue={auser.createTime}  disabled />
+                            </FormItem>
+                            <FormItem label="Session最后交互时间">
+                                <Input defaultValue={auser.lastTime}  disabled />
+                            </FormItem>
+                            <FormItem label="Session 状态">
+                                <Input defaultValue={auser.status>0?"有效":"已踢出"}  disabled />
+                            </FormItem>
+                            <FormItem label="昵称">
+                                <Input defaultValue={auser.nickName}  disabled />
+                            </FormItem>
+                            <FormItem label="Email/帐号">
+                                <Input defaultValue={auser.email}  disabled />
+                            </FormItem>
+
+                        </Form>
+                    </Modal>
                     <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
-                </div></div>
+                </div>
         );
     }
 }

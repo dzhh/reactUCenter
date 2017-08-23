@@ -38,12 +38,13 @@ export default class my_permissions extends Component {
          })
 
      }
-     allPermiession(all) {
-         //return all.map((item, index) => {
+     allPermiession=(all)=> {
+
+          all.map((item, index) => {
 
              let menu = (
                  <Menu>
-                     {all.children.map((item_chileren, index_1) => {
+                     {item.children.map((item_chileren, index_1) => {
                          return <Menu.Item style={{textAlign:'center'}} key={item_chileren.id}> <Icon type="user" />{item_chileren.value}</Menu.Item>
                      })
                      }
@@ -52,20 +53,19 @@ export default class my_permissions extends Component {
              );
 
 
-
-             return (
-                 <Dropdown overlay={menu} trigger={['click']}>
+              return  <Dropdown overlay={menu} trigger={['click']}>
                      <h1 className="ant-dropdown-link" href="#" style={{textAlign: 'center'}}>
-                         <Icon type="user"/>{all.name} <Icon type="down"/>
-                         <Badge count={all.count}
+                         <Icon type="user"/>{item.name} <Icon type="down"/>
+                         <Badge count={item.count}
                                 style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
                      </h1>
                  </Dropdown>
 
-             )
 
 
-        // })
+
+         })
+
      }
     render() {
 
@@ -83,9 +83,43 @@ export default class my_permissions extends Component {
       //   {console.log("00000"+menu);}
 
         return (
+                (
+                  <div>
+                      {this.props.config.PERMISSIONS.map((item, index) => {
+                          const menu = (
+                              <Menu>
+                                  {item.children.map((item_chileren, index_1) => {
+                                      return <Menu.Item style={{marginLeft:"2%"}} key={item_chileren.id}> <Icon type="user" />{item_chileren.value}</Menu.Item>
+                                  })
+                                  }
+                              </Menu>
 
-            this.allPermiession(this.props.config.PERMISSIONS||[])
+                          );
+                          return <Dropdown overlay={menu} trigger={['click']}>
+                              <h3 className="ant-dropdown-link" href="#" style={{textAlign: 'left'}}>
+                                  <Icon type="user"/>{item.name} <Icon type="down"/>
+                                  <Badge count={item.count}
+                                         style={{
+                                             backgroundColor: '#fff',
+                                             color: '#999',
+                                             boxShadow: '0 0 0 1px #d9d9d9 inset'
+                                         }}/>
+                              </h3>
+                          </Dropdown>
+                      })
+                      }
+                  </div>
+              )
 
+            // (<div>
+            //     <Dropdown overlay="" trigger={['click']}>
+            //     <h1 className="ant-dropdown-link" href="#" style={{textAlign: 'center'}}>
+            //     <Icon type="user"/>3333 <Icon type="down"/>
+            //         <Badge count={2}
+            //         style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
+            //     </h1>
+            //   </Dropdown>
+            // </div>)
 
         )
     }

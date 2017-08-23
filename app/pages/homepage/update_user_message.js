@@ -29,7 +29,6 @@ export default class update_user_message extends Component {
         super(props)
         this.state = {
             show: true,
-            confirmDirty: false,
             user:{}
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,7 +50,7 @@ export default class update_user_message extends Component {
                     console.log("++++++"+res);
                     if (res.ospState == 200) {
                         //this.setState({ user: res.data.ucUser})
-                        hashHistory.push('/updateUserMessage')
+                        //hashHistory.push('/updateUserMessage')
                         message.success("修改成功")
 
                     } else {
@@ -82,7 +81,6 @@ export default class update_user_message extends Component {
     }
     render(){
         const {getFieldDecorator} = this.props.form;
-
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -106,9 +104,6 @@ export default class update_user_message extends Component {
             },
         };
 
-        const config = {
-            rules: [{ type: 'object', required: true, message: '请选择时间' }],
-        };
         const user = this.state.user;
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -119,20 +114,6 @@ export default class update_user_message extends Component {
                 <Input value={user.userName} disabled />
                 </FormItem>
 
-                {/*<FormItem*/}
-                    {/*{...formItemLayout}*/}
-                    {/*label="账号(不可修改)"*/}
-                    {/*hasFeedback*/}
-                {/*>*/}
-
-                    {/*{getFieldDecorator('userName', {*/}
-                        {/*rules: [ {*/}
-                            {/*required: true, message: '昵称不能为空!',*/}
-                        {/*}],*/}
-                    {/*})(*/}
-                        {/*<Input placeholder="请输入新的昵称" defaultValue={user.userName} />*/}
-                    {/*)}*/}
-                {/*</FormItem>*/}
                 <FormItem
                     {...formItemLayout}
                      label="e-mail"
@@ -148,14 +129,6 @@ export default class update_user_message extends Component {
                     )}
 
                 </FormItem>
-                {/*<FormItem*/}
-                    {/*{...formItemLayout}*/}
-                    {/*label="e-mail"*/}
-                    {/*hasFeedback*/}
-                {/*>*/}
-                    {/*<Input value={user.userEmail}  />*/}
-
-                {/*</FormItem>*/}
 
 
 
