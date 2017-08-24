@@ -24,29 +24,68 @@ export default class homepage extends Component {
             confirmDirty: false,
             user:{},
         }
+        //let data = window.sessionStorage.getItem("index")
+        let data = this.props.config.homeindex
+          if(data){
+              data = JSON.parse(data);
+              this.state = {
+                  show: data.show,
+                  confirmDirty: data.confirmDirty,
+                  user:data.user,
+              }
+        }
 
     }
+    // componentWillReceiveProps(newProps) {
+    //     if (newProps.list.data && newProps.list.data.length > 0) {
+    //         //第一次加载将数据换存在全局变量Glist中;
+    //         if (this.props.list.data && this.props.list.data.length <= 0) {
+    //             let newData = newProps.list.data;
+    //             WEBDATA = newData;
+    //         }
+    //         // 之后数据使用本地缓存即可
+    //         else {
+    //             WEBDATA = WEBDATA;
+    //         }
+    //     }
+    // }
+    // componentDidMount() {
+    //     this.props.list.data && this.props.list.data.length <= 0 && this.props.getList.call(this);
+    // }
     componentWillMount(){
-        console.log("===============index  componentWillMount=================================")
-        const user={};
-       // user.token = sessionStorage.getItem("token");
-        user.userName = sessionStorage.getItem('userName')
-        user.userId = sessionStorage.getItem('userId')
-
-        getUserMessage(user, (res) => {
-            if (res.ospState == 200) {
-                this.setState({ user: res.data.ucUser})
-            } else {
-                message.warning(res.msg)
-            }
-        })
+        console.log(this.state.user+"===============index  componentWillMount=================================")
+        if(!this.state.user.userId) {
+            const user = {};
+            // user.token = sessionStorage.getItem("token");
+            user.userName = sessionStorage.getItem('userName')
+            user.userId = sessionStorage.getItem('userId')
+            getUserMessage(user, (res) => {
+                if (res.ospState == 200) {
+                    this.setState({user: res.data.ucUser})
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+        }
     }
 
-    componentDidMount() {
-        console.log("===============index  componentDidMount=================================")
-    }
+    // componentDidMount() {
+    //     console.log("===============index  componentDidMount=================================")
+    // }
 
     componentWillUnmount() {
+        if (!this.state.isLoading) {
+            let data = {
+                user: this.state.user,
+                show: this.state.show,
+                confirmDirty: this.state.confirmDirty,
+            };
+            this.props.config.WEBDATA.homeindex = JSON.stringify(data);
+           // window.sessionStorage.setItem("index", JSON.stringify(data));
+        } else {
+            this.props.config.WEBDATA.index = '';
+           // window.sessionStorage.removeItem("index");
+        }
         console.log("===============index  componentWillUnmount=================================")
     }
 
@@ -87,7 +126,7 @@ export default class homepage extends Component {
                     label="创建时间"
                     hasFeedback
                 >
-                    <Input value={user.createTime}  />
+                   <Input value={user.createTime}  />
 
                 </FormItem>
 

@@ -133,22 +133,22 @@ export default class online_user extends Component {
                     >
                         <Form layout="vertical">
                             <FormItem label="Session Id">
-                                <Input defaultValue={auser.sessionID} disabled />
+                                <Input value={auser.sessionID} disabled />
                             </FormItem>
                             <FormItem label="Session创建时间">
-                                <Input defaultValue={auser.createTime}  disabled />
+                                <Input value={auser.createTime}  disabled />
                             </FormItem>
                             <FormItem label="Session最后交互时间">
-                                <Input defaultValue={auser.lastTime}  disabled />
+                                <Input value={auser.lastTime}  disabled />
                             </FormItem>
                             <FormItem label="Session 状态">
-                                <Input defaultValue={auser.status>0?"有效":"已踢出"}  disabled />
+                                <Input value={auser.status>0?"有效":"已踢出"}  disabled />
                             </FormItem>
                             <FormItem label="昵称">
-                                <Input defaultValue={auser.nickName}  disabled />
+                                <Input value={auser.nickName}  disabled />
                             </FormItem>
                             <FormItem label="Email/帐号">
-                                <Input defaultValue={auser.email}  disabled />
+                                <Input value={auser.email}  disabled />
                             </FormItem>
 
                         </Form>

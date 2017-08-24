@@ -10,6 +10,7 @@ import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { getUserMessage,updateUserMessage } from '../../ajax/user'
 const FormItem = Form.Item
+var user_EmailTemp=""
 @connect(
     (state, props) => ({
         config: state.config,
@@ -19,7 +20,8 @@ const FormItem = Form.Item
 
 @Form.create({
     onFieldsChange(props, items) {
-        // console.log(items)
+        console.log(items)
+        user_EmailTemp = items.userEmail.value;
         // props.cacheSearch(items);
     },
 })
@@ -29,7 +31,18 @@ export default class update_user_message extends Component {
         super(props)
         this.state = {
             show: true,
+            userEmailTemp:'',
             user:{}
+        }
+       // let data = window.sessionStorage.getItem("update")
+        let data =this.props.config.WEBDATA.updatemessage;
+        if(data){
+            data = JSON.parse(data);
+            this.state = {
+                show: data.show,
+                user:data.user,
+                userEmailTemp:data.emailTemp
+            }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -64,19 +77,21 @@ export default class update_user_message extends Component {
     }
 
     componentWillMount(){
-        const user={};
-        // user.token = sessionStorage.getItem("token");
-        user.userName = sessionStorage.getItem('userName')
-        user.userId = sessionStorage.getItem('userId')
-        console.log("===============update_user_message  componentWillMount=================================")
-        getUserMessage(user, (res) => {
-            console.log("++++++"+res);
-            if (res.ospState == 200) {
-                this.setState({ user: res.data.ucUser})
-            } else {
-                message.warning(res.msg)
-            }
-        })
+        if(!this.state.user.userId) {
+            const user = {};
+            // user.token = sessionStorage.getItem("token");
+            user.userName = sessionStorage.getItem('userName')
+            user.userId = sessionStorage.getItem('userId')
+            console.log("===============update_user_message  componentWillMount=================================")
+            getUserMessage(user, (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+        }
     }
 
 
@@ -85,12 +100,24 @@ export default class update_user_message extends Component {
     }
 
     componentWillUnmount() {
-        console.log("===============update_user_message  componentWillUnmount=================================")
+        if (!this.state.isLoading) {
+            let data = {
+                user: this.state.user,
+                show: this.state.show,
+                emailTemp: user_EmailTemp,
+            };
+            //window.sessionStorage.setItem("update", JSON.stringify(data));
+            this.props.config.WEBDATA.updatemessage = JSON.stringify(data);
+        } else {
+            this.props.config.WEBDATA.updatemessage = '';
+           // window.sessionStorage.removeItem("update");
+        }
+        console.log("===============index  componentWillUnmount=================================")
     }
-
 
     render(){
         const {getFieldDecorator} = this.props.form;
+        const {props} = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -125,21 +152,21 @@ export default class update_user_message extends Component {
                 </FormItem>
 
                 <FormItem
-                    {...formItemLayout}
+                    {...formItemLayout }
                      label="e-mail"
-                     hasFeedback>
+                 >
                     {getFieldDecorator('userEmail', {
+                        initialValue:this.state.userEmailTemp,
                         rules: [{
                             type: 'email', message: '请输入正确的email!',
                         }, {
                             required: true, message: 'E-mail不能为空!',
                         }],
                     })(
-                        <Input placeholder="请输入新的e-mail" defaultValue={user.userEmail} />
+                        <Input placeholder="请输入新的e-mail" Value={this.state.userEmailTemp} />
                     )}
 
                 </FormItem>
-
 
 
                     {/*<FormItem*/}
@@ -158,8 +185,6 @@ export default class update_user_message extends Component {
 
 
                 {/*</FormItem>*/}
-
-
 
 
                 <FormItem {...tailFormItemLayout}>
