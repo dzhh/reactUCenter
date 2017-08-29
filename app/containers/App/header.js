@@ -65,7 +65,7 @@ export default class Header extends Component {
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="1">
-          <span className="label">用户姓名</span><span>{staff.usertable.username}</span>
+          <span className="label">用户姓名</span><span>{sessionStorage.getItem('userName')}</span>
         </Menu.Item>
         <Menu.Item key="5">
           <Button type="primary" size="small" onClick={this.handleLogout}>退出登录</Button>
@@ -76,18 +76,18 @@ export default class Header extends Component {
       <header id="navbar">
         <div id="navbar-container" className="boxed">
           <div className="navbar-header">
-            <Link to={'/'} className="navbar-brand">
+            <div className="navbar-brand">
               <div className="brand-title">
                 <span className="brand-text">LOGO</span>
               </div>
-            </Link>
+            </div>
           </div>
 
           <div className="navbar-content clearfix">
             <ul className="nav navbar-top-links pull-right">
               <li className="login-info">
                 <Dropdown overlay={menu} trigger={['click']}>
-                  <a className="ant-dropdown-link">{staff.usertable.username || '用户'}</a>
+                  <a className="ant-dropdown-link">{ sessionStorage.getItem('userName') || '用户'}</a>
                 </Dropdown>
               </li>
             </ul>

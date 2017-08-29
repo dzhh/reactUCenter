@@ -84,6 +84,21 @@ const onlineUser = (location, cb) => {
         cb(null, require('./pages/user/online_user').default)
     }, 'online_user')
 }
+const roleAllocation = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/permission/role_allocation').default)
+    }, 'role_allocation')
+}
+const permissionList = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/permission/permission_list').default)
+    }, 'permission_list')
+}
+const permissionAllocation = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./pages/permission/permission_allocation').default)
+    }, 'permission_allocation')
+}
 // const Register = (location, cb) => {
 //     require.ensure([], require => {
 //         cb(null, require('./pages/register/register').default)
@@ -127,7 +142,9 @@ const routes = (
             <Route path="/userList" getComponent={userList} />
             <Route path="/roleList" getComponent={roleList} />
             <Route path="/onlineUser" getComponent={onlineUser} />
-
+            <Route path="/roleAllocation" getComponent={roleAllocation} />
+            <Route path="/permissionList" getComponent={permissionList} />
+            <Route path="/permissionAllocation" getComponent={permissionAllocation} />
         </Route>
         <Route path="/login" getComponent={Login}></Route>
         <Route path="/register" component={Register}></Route>

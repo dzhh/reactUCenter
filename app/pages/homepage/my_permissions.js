@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 import moment from 'moment';
 import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
@@ -95,15 +95,19 @@ export default class my_permissions extends Component {
                               </Menu>
 
                           );
+
+
                           return <Dropdown overlay={menu} trigger={['click']}>
                               <h3 className="ant-dropdown-link" href="#" style={{textAlign: 'left'}}>
-                                  <Icon type="user"/>{item.name} <Icon type="down"/>
+                                  <div style={{textAlign:'center'}}><Icon type="user"/>{item.name} <Icon type="down"/>
                                   <Badge count={item.count}
                                          style={{
                                              backgroundColor: '#fff',
                                              color: '#999',
-                                             boxShadow: '0 0 0 1px #d9d9d9 inset'
-                                         }}/>
+                                             marginLeft:'80%',
+                                         }}
+                                  />
+                                  </div>
                               </h3>
                           </Dropdown>
                       })

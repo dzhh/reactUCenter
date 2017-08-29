@@ -1,5 +1,5 @@
 /**
- * Created by kwx on 2017/8/21.
+ * Created by kwx on 2017/8/29.
  */
 
 
@@ -7,6 +7,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 const FormItem = Form.Item
+const permissions = [{key:1,permissionName:'权限1',permissionUrl:'权限url'},
+    {key:2,permissionName:'权限2',permissionUrl:'权限url'},
+    {key:3,permissionName:'权限3',permissionUrl:'权限url'},
+    {key:4,permissionName:'权限4',permissionUrl:'权限url'},
+    {key:5,permissionName:'权限5',permissionUrl:'权限url'}
+]
 @connect(
     (state, props) => ({
         config: state.config,
@@ -20,14 +26,14 @@ const FormItem = Form.Item
     },
 })
 
-export default class role_list extends Component {
+export default class permission_list extends Component {
     constructor(props) {
         super(props)
         this.state = {
             selectedRowKeys: [],
             show: true,
             loading: false,
-            data:this.props.config.ROLE,
+            data:permissions,
             visible: false,
 
         }
@@ -68,9 +74,9 @@ export default class role_list extends Component {
         this.setState({ visible: false });
     }
     deleteRole  = (index) => {
-       // this.props.config.USER[index].status = 0;
+        // this.props.config.USER[index].status = 0;
         console.log("要删除的角色id"+index);
-        this.setState({data:this.props.config.ROLE}) ;
+        this.setState({data:permissions}) ;
     }
 
     onDelete  = () => {
@@ -108,17 +114,17 @@ export default class role_list extends Component {
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             // filterDropdownVisible: false,
-            data: this.props.config.ROLE.map((record) => {
-                const match = record.roleName.match(reg);
+            data: permissions.map((record) => {
+                const match = record.permissionName.match(reg);
 
                 if (!match) {
                     return null;
                 }
                 return {
                     ...record,
-                    roleName: (
+                    permissionName: (
                         <span>
-              {record.roleName.split(reg).map((text, i) => (
+              {record.permissionName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -130,24 +136,24 @@ export default class role_list extends Component {
     render() {
 
         const columns = [{
-            title: '角色名称',
-            dataIndex: 'roleName',
+            title: '权限名称',
+            dataIndex: 'permissionName',
         }, {
-            title: '角色类型',
-            dataIndex: 'systemcode',
+            title: '权限url',
+            dataIndex: 'permissionUrl',
         },,
             {
                 title: '操作',
                 dataIndex: 'operation',
                 render: (text, record, index) => {
-                    let title_action = "删除"+record.roleName
+                    let title_action = "删除"+record.permissionName
                     return (
                         this.state.data.length > 1 ?
                             (
-                                    ( <Popconfirm title={title_action} onConfirm={() => this.deleteRole(record.roleId)}>
-                                            <a href="#">删除</a>
-                                        </Popconfirm>
-                                    )
+                                ( <Popconfirm title={title_action} onConfirm={() => this.deleteRole(record.key)}>
+                                        <a href="#">删除</a>
+                                    </Popconfirm>
+                                )
                             ) : null
                     );
                 },
@@ -167,7 +173,7 @@ export default class role_list extends Component {
             <div>
                 <div className="custom-filter-dropdown">
                     <Input
-                        placeholder="输入角色名称"
+                        placeholder="输入权限名称"
                         value={this.state.searchText}
                         onChange={this.onInputChange}
                         onPressEnter={this.onSearch}
@@ -186,7 +192,7 @@ export default class role_list extends Component {
                     {/******************/}
                     <Modal
                         visible={this.state.visible}
-                        title="角色添加"
+                        title="权限添加"
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
                         footer={[
@@ -197,21 +203,20 @@ export default class role_list extends Component {
                         ]}
                     >
                         <Form layout="vertical">
-                            <FormItem label="角色名称">
-                                {getFieldDecorator('roleName', {
-                                    rules: [{ required: true, message: '请输入角色名称!' }],
+                            <FormItem label="权限名称">
+                                {getFieldDecorator('permissionName', {
+                                    rules: [{ required: true, message: '请输入权限名称!' }],
                                 })(
-                                    <Input placeholder="请输入角色名称!"/>
+                                    <Input placeholder="请输入权限名称!"/>
                                 )}
                             </FormItem>
-                            <FormItem label="角色类型">
-                                {getFieldDecorator('systemcode', {
-                                    rules: [{ required: true, message: '请输入角色类型!' },
-                                { pattern: "[A-Za-z0-9]{6}", message: '角色类型为[字母+数字]6位！' }
+                            <FormItem label="权限url">
+                                {getFieldDecorator('permissionUrl', {
+                                    rules: [{ required: true, message: '请输入权限url!' },
                                     ],
 
                                 })(
-                                    <Input placeholder="请输入角色类型[字母+数字]6位"/>
+                                    <Input placeholder="请输入权限url"/>
                                 )}
                             </FormItem>
 
