@@ -144,7 +144,7 @@ export default class Login extends Component {
                               rules: [
                                   { required: true, message: '请输入密码' },
                                   //{ pattern: regExpConfig.pwd, message: '密码只能是6-16个数字或者字母组成' }
-                                  { pattern: "[A-Za-z0-9]{6,10}", message: '密码只能为6-10位字符' }
+                                  { pattern: "[A-Za-z0-9]{5,10}", message: '密码只能为5-10位字符' }
                               ],
                               // validateTrigger: 'onBlur',
                           })(

@@ -21,7 +21,9 @@ var user_EmailTemp=""
 @Form.create({
     onFieldsChange(props, items) {
         console.log(items)
-        user_EmailTemp = items.userEmail.value;
+        if(items.userEmail) {
+            user_EmailTemp = items.userEmail.value;
+        }
         // props.cacheSearch(items);
     },
 })
@@ -29,11 +31,7 @@ var user_EmailTemp=""
 export default class update_user_message extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            show: true,
-            userEmailTemp:'',
-            user:{}
-        }
+
        // let data = window.sessionStorage.getItem("update")
         let data =this.props.config.WEBDATA.updatemessage;
         if(data){
@@ -42,6 +40,12 @@ export default class update_user_message extends Component {
                 show: data.show,
                 user:data.user,
                 userEmailTemp:data.emailTemp
+            }
+        }else {
+            this.state = {
+                show: true,
+                userEmailTemp:'',
+                user:{}
             }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,6 +66,14 @@ export default class update_user_message extends Component {
                 updateUserMessage(user, (res) => {
                     console.log("++++++"+res);
                     if (res.ospState == 200) {
+
+                        // user_EmailTemp = ''
+                        // let data =this.props.config.WEBDATA.updatemessage;
+                        // if(data){
+                        //     data = JSON.parse(data);
+                        //     data.emailTemp = ''
+                        // }
+                        // this.setState({ userEmailTemp: ''})
                         //this.setState({ user: res.data.ucUser})
                         //hashHistory.push('/updateUserMessage')
                         message.success("修改成功")
@@ -87,6 +99,7 @@ export default class update_user_message extends Component {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
+                    user_EmailTemp = res.data.ucUser.userEmail;
                 } else {
                     message.warning(res.msg)
                 }

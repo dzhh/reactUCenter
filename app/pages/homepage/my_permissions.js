@@ -8,7 +8,7 @@ import moment from 'moment';
 import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
-
+import { selectRoleByUserId } from '../../ajax/userRole'
 @connect(
     (state, props) => ({
         config: state.config,
@@ -27,7 +27,22 @@ export default class my_permissions extends Component {
         this.getPermissions = this.getPermissions.bind(this);
         this.allPermiession = this.allPermiession.bind(this);
     }
+    componentWillMount(){
 
+            const user = {};
+            // user.token = sessionStorage.getItem("token");
+            user.userId = sessionStorage.getItem('userId')
+
+        selectRoleByUserId(user, (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    console.log(res.ucUserRole);
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+
+    }
     componentDidMount() {
         console.log(this.props)
     }
@@ -97,19 +112,19 @@ export default class my_permissions extends Component {
                           );
 
 
-                          return <Dropdown overlay={menu} trigger={['click']}>
+                          return <div style={{marginLeft:"45%",marginRight:"45%"}}><Dropdown overlay={menu} trigger={['click']}>
                               <h3 className="ant-dropdown-link" href="#" style={{textAlign: 'left'}}>
-                                  <div style={{textAlign:'center'}}><Icon type="user"/>{item.name} <Icon type="down"/>
+                                  <div style={{textAlign:'left'}}><Icon type="user"/>{item.name} <Icon type="down"/>
                                   <Badge count={item.count}
                                          style={{
                                              backgroundColor: '#fff',
                                              color: '#999',
-                                             marginLeft:'80%',
+                                             marginLeft:'20%',
                                          }}
                                   />
                                   </div>
                               </h3>
-                          </Dropdown>
+                          </Dropdown></div>
                       })
                       }
                   </div>
