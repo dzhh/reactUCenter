@@ -21,7 +21,8 @@ export const requestAmList = createAction('request am list')
 export const recevieAmList = createAction('receive am list')
 export const fetchAmList = createAjaxAction(common.amList, requestAmList, recevieAmList)
 export const resetAmList = createAction('reset am list')
-
+export const getLogout = createAction('request logout')
+export const changeLogout = createAction('change logout')
 // export function fetchLogin(values,res,res1,res2) {
 //     alert(values.username);
 //     //console.log(values);

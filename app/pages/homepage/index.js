@@ -11,6 +11,7 @@ const FormItem = Form.Item
     (state, props) => ({
         config: state.config,
         ucUser: state.ucUser,
+        logout:state.logout
     })
 )
 
@@ -25,8 +26,8 @@ export default class homepage extends Component {
             user:{},
         }
         //let data = window.sessionStorage.getItem("index")
-        let data = this.props.config.homeindex
-          if(data){
+        let data = this.props.config.WEBDATA.homeindex
+        if(data){
               data = JSON.parse(data);
               this.state = {
                   show: data.show,
@@ -74,7 +75,8 @@ export default class homepage extends Component {
     // }
 
     componentWillUnmount() {
-        if (!this.state.isLoading) {
+        const logoutSign = this.props.logout.logoutSign
+        if (logoutSign) {
             let data = {
                 user: this.state.user,
                 show: this.state.show,
@@ -82,9 +84,8 @@ export default class homepage extends Component {
             };
             this.props.config.WEBDATA.homeindex = JSON.stringify(data);
            // window.sessionStorage.setItem("index", JSON.stringify(data));
-        } else {
-            this.props.config.WEBDATA.index = '';
-           // window.sessionStorage.removeItem("index");
+        }else {
+            this.props.config.WEBDATA.homeindex = '';
         }
         console.log("===============index  componentWillUnmount=================================")
     }

@@ -9,6 +9,7 @@ import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { updateUserPwd } from '../../ajax/user'
+import {getLogout } from '../../actions/login'
 const FormItem = Form.Item
 var old_pas=''
 var new_pas=''
@@ -16,8 +17,9 @@ var new_pas_too=''
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
-    //(dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 )
 
 @Form.create({
@@ -68,7 +70,10 @@ export default class update_password extends Component {
     }
 
     componentWillUnmount() {
-        if (!this.state.isLoading) {
+       // const {logoutSign} = this.props.dispatch(getLogout())
+       // console.log("登录"+logoutSign)
+        const logoutSign = this.props.logout.logoutSign
+        if (logoutSign) {
             let data = {
                 show: this.state.show,
                 confirmDirty: this.state.confirmDirty,
@@ -78,7 +83,10 @@ export default class update_password extends Component {
             };
             this.props.config.WEBDATA.updatePassword = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA.updatePassword = '';
+            this.props.config.WEBDATA.updatePassword='';
+            old_pas=''
+            new_pas=''
+            new_pas_too=''
         }
         console.log("===============index  componentWillUnmount=================================")
     }

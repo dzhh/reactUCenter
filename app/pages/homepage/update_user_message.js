@@ -14,6 +14,7 @@ var user_EmailTemp=""
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
     //(dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 )
@@ -113,7 +114,8 @@ export default class update_user_message extends Component {
     }
 
     componentWillUnmount() {
-        if (!this.state.isLoading) {
+        const logoutSign = this.props.logout.logoutSign
+        if (logoutSign) {
             let data = {
                 user: this.state.user,
                 show: this.state.show,
@@ -121,9 +123,9 @@ export default class update_user_message extends Component {
             };
             //window.sessionStorage.setItem("update", JSON.stringify(data));
             this.props.config.WEBDATA.updatemessage = JSON.stringify(data);
-        } else {
+        }else {
             this.props.config.WEBDATA.updatemessage = '';
-           // window.sessionStorage.removeItem("update");
+            user_EmailTemp='';
         }
         console.log("===============index  componentWillUnmount=================================")
     }

@@ -2,15 +2,22 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, hashHistory } from 'react-router'
 import { Menu, Dropdown, Button, Modal, message } from 'antd'
-
+import { deleteAllTab } from '../../actions/tabList'
+import { bindActionCreators } from 'redux'
+import { routerActions } from 'react-router-redux'
 import {
     createAjaxAction, logOut,
 } from '../../utils'
-
+import {changeLogout } from '../../actions/login'
 const confirm = Modal.confirm
 
 @connect(
-  (state, props) => ({ config: state.config })
+  (state, props) => ({
+      config: state.config,
+      tabList: state.tabListResult,
+      logout:state.logout,}),
+  (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch),
+    dispatch: dispatch })
 )
 export default class Header extends Component {
   // 初始化页面常量 绑定事件方法
@@ -36,7 +43,7 @@ export default class Header extends Component {
 
   // 登出
   handleLogout() {
-    const { config } = this.props
+    const { config,dispatch } = this.props
     const self = this
     confirm({
       title: '提示',
@@ -51,7 +58,11 @@ export default class Header extends Component {
         //     message.error(result.msg)
         //   }
         // }))
-          logOut()
+         //config.WEBDATA = {};
+          dispatch(deleteAllTab());
+          dispatch(changeLogout())
+        //  config.WEBDATA = {};
+         logOut()
         // hashHistory.push('/login')
       },
     })

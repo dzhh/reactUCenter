@@ -54,3 +54,20 @@ export const navResult = handleActions({
     return { data: res, loading: false }
   },
 }, navData())
+
+
+// 是否注销登录
+const isLogout = {
+    logoutSign: false,
+}
+export const logout = handleActions({
+    'request logout'(state, action) {
+       console.log(state)
+        return { ...state, loading: false }
+    },
+    'change logout'(state, action) {
+        state.logoutSign = !state.logoutSign
+        console.log(state)
+        return { ...state, loading: false }
+    },
+}, isLogout)

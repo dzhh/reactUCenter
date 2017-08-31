@@ -16,6 +16,7 @@ import {
 
 import {
   loginResponse,
+   logout,
 } from './login'
 
 //其实也是一个reducer，它接受整个state和一个action，
@@ -25,7 +26,7 @@ const rootReducer = combineReducers({
   config: (state = {}) => state,
   //ucUser: (state = {}) => state,
   tabListResult,
-
+    logout,
   loginResponse,
 
   houseCheckSearchResult,

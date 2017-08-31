@@ -9,6 +9,11 @@ const initialState = {
 }
 
 const tabListResult = handleActions({
+    'delete all tab'(state,action){
+      console.log(state);
+      state.list=[];
+      return { ...state, loading: false }
+    },
   'request tab list'(state, action) {
     return { ...state, loading: false }
   },

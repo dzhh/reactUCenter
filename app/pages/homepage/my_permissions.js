@@ -12,6 +12,7 @@ import { selectRoleByUserId } from '../../ajax/userRole'
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
     //(dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 )
@@ -28,7 +29,6 @@ export default class my_permissions extends Component {
         this.allPermiession = this.allPermiession.bind(this);
     }
     componentWillMount(){
-
             const user = {};
             // user.token = sessionStorage.getItem("token");
             user.userId = sessionStorage.getItem('userId')

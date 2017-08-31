@@ -7,7 +7,9 @@ import { Checkbox,Spin, message, Form, Icon, Input, Button, Row, Col } from 'ant
 // import { fetchLogin, receiveLogin } from '../../actions/login'
 import { fetchLogin } from '../../ajax/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
+import { routerActions } from 'react-router-redux'
 import '../../style/login.less'
+import {changeLogout } from '../../actions/login'
 const FormItem = Form.Item
 var webStyle = {
     // backgroundImage: `url(${imgUrlWeb})`
@@ -20,7 +22,10 @@ var webStyle = {
   (state, props) => ({
     config: state.config,
     loginResponse: state.loginResponse,
-  })
+    logout:state.logout,
+  }),
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch),
+        dispatch: dispatch })
 )
 //测试为 在每输入一个字符时调用
 @Form.create({
@@ -67,10 +72,13 @@ export default class Login extends Component {
                 sessionStorage.setItem('userId', res.data.ucUser.userId)
                 sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
+                //this.props.config.WEBDATA.login=true
+                this.props.dispatch(changeLogout());
                 // this.props.dispatch(receiveLogin({ req: data, res: resp }))
                 hashHistory.push('/')
-            } else {
-                message.warning(res.msg)
+            } else  if (res.ospState == 401){
+
+                message.warning("账号或密码错误")
                 this.setState({
                     loading: false
                 })
