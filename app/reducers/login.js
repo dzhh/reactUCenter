@@ -58,7 +58,7 @@ export const navResult = handleActions({
 
 // 是否注销登录
 const isLogout = {
-    logoutSign: false,
+    logoutSign: sessionStorage.getItem('userId')? true:false,
 }
 export const logout = handleActions({
     'request logout'(state, action) {

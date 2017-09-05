@@ -2,10 +2,10 @@
  * Created by kwx on 2017/8/16.
  */
 
-
+import { getUserList } from '../../ajax/user'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {message,Card,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 const FormItem = Form.Item
 @connect(
     (state, props) => ({
@@ -36,6 +36,12 @@ export default class user_list extends Component {
         this.onDelete  = this.onDelete .bind(this);
 
     }
+    //组件渲染之前
+    componentWillMount() {
+        //if(!this.state.user.userId) {
+           
+       // }
+    }
 
     //展示弹出框
     showModal = () => {
@@ -43,15 +49,22 @@ export default class user_list extends Component {
             visible: true,
         });
     }
+    //允许登陆
     allowLogin  = (index) => {
         this.props.config.USER[index].status = 0;
         this.setState({data:this.props.config.USER}) ;
     }
+    //禁止登陆
     stopLogin  = (index) => {
         this.props.config.USER[index].status = 1;
         this.setState({data:this.props.config.USER}) ;
     }
+    //删除
     onDelete  = () => {
+        if(this.state.selectedRowKeys == '') {
+            message.error('请选择要删除的用户');
+        }else {
+
         this.setState({ loading: true });
         // ajax request after empty completing
         setTimeout(() => {
@@ -69,7 +82,9 @@ export default class user_list extends Component {
                 loading: false,
                 //searchText: '',
             });
-        }, 1000);
+         }, 1000);
+        }
+
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
@@ -173,16 +188,17 @@ export default class user_list extends Component {
                     <Button type="primary" onClick={this.onSearch} >搜索</Button>
                     {/*---------------*/}
 
-                    <Button type="primary" onClick={this.onDelete}
-                            disabled={!hasSelected} loading={loading}
-                            style={{marginLeft:"10px"}}
+                    <Button type="danger" onClick={this.onDelete}
+                             loading={loading}
+                            style={{marginLeft:"10px",backgroundColor:'#EE0000',color:'white'}}
                     >
                         删除</Button>
 
                     {/*---------------*/}
                 </div>
-                <div>
+                <div> <Card style={{marginTop:'5px'}}>
                     <Table  bordered rowSelection={rowSelection} columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
+                </Card>
                 </div></div>
         );
     }

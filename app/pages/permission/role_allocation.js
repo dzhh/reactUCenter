@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
 var ROLE = [
@@ -14,8 +14,9 @@ var ROLE = [
     {key:4,id:33,nickName:'test4',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
     {key:5,id:55,nickName:'test5',userEmail:'baidu@qq.com',status:'0',roles:'系统管理员',defaultValue:['1']},
 ];
-const plainOptions = ['系统管理员', '权限角色', '用户中心'];
-const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'},{label: '用户中心', value: '3'}];
+const plainOptions = ['1', '2', '3'];
+const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'}, {label: '用户中心', value: '3'}];
+
 @connect(
     (state, props) => ({
         config: state.config,
@@ -61,7 +62,6 @@ export default class role_allocation extends Component {
     }
     //弹出框点击ok
     handleOk = () => {
-
 
                 this.state.data[this.state.defaultId].defaultValue = this.state.checkedList;
 
@@ -110,37 +110,41 @@ export default class role_allocation extends Component {
     //     console.log("要删除的角色id"+index);
     //     this.setState({data:ROLE});
     // }
-
+        //删除
     onDelete  = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            console.log('删除的IDs: ', this.state.selectedRowKeys);
-            this.state.selectedRowKeys.map((item,index)=>{
-                this.state.data.map((item1,index)=>{
-                    if(item == item1.key){
-                        this.state.data[index].roles='';
-                        this.state.data[index].defaultValue=[];
-                    }
+        if(this.state.selectedRowKeys == '') {
+            message.error('请选择要清空的用户角色');
+        }else {
+            this.setState({loading: true});
+            // ajax request after empty completing
+            setTimeout(() => {
+                console.log('删除的IDs: ', this.state.selectedRowKeys);
+                this.state.selectedRowKeys.map((item, index) => {
+                    this.state.data.map((item1, index) => {
+                        if (item == item1.key) {
+                            this.state.data[index].roles = '';
+                            this.state.data[index].defaultValue = [];
+                        }
+                    })
+                    console.log(item + "====" + index);
+                    //
+                    //this.state.data[item].defaultValue=[];
                 })
-                console.log(item+"===="+index);
-                //
-                //this.state.data[item].defaultValue=[];
-            })
 
-            // const data = [...this.state.data];
-            //
-            // this.setState({ dataSource });
-            // this.state.selectedRowKeys.map((item,index)=>{
-            //     console.log(index+"--"+item);
-            //     console.log(dataSource.splice(item,1));
-            // });
-            //this.setState({ selectedRowKeys });
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
+                // const data = [...this.state.data];
+                //
+                // this.setState({ dataSource });
+                // this.state.selectedRowKeys.map((item,index)=>{
+                //     console.log(index+"--"+item);
+                //     console.log(dataSource.splice(item,1));
+                // });
+                //this.setState({ selectedRowKeys });
+                this.setState({
+                    selectedRowKeys: [],
+                    loading: false,
+                });
+            }, 1000);
+        }
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
@@ -180,13 +184,13 @@ export default class role_allocation extends Component {
     onChange = (checkedList) => {
         this.setState({
             checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < options.length),
-            checkAll: checkedList.length === options.length,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
         });
     }
     onCheckAllChange = (e) => {
         this.setState({
-            checkedList: e.target.checked ? options : [],
+            checkedList: e.target.checked ? plainOptions : [],
             indeterminate: false,
             checkAll: e.target.checked,
         });
@@ -248,8 +252,9 @@ export default class role_allocation extends Component {
                     <Button type="primary" onClick={this.onSearch} >搜索</Button>
                     {/*---------------*/}
 
-                    <Button type="primary" onClick={this.onDelete}
-                            disabled={!hasSelected} loading={loading} style={{marginLeft:"10px"}}
+                    <Button type="danger" onClick={this.onDelete}
+                            loading={loading}
+                            style={{marginLeft:"10px",backgroundColor:'#EE0000',color:'white'}}
                     >
                         清空用户角色</Button>
                     {/******************/}
@@ -283,8 +288,9 @@ export default class role_allocation extends Component {
                     </Modal>
                     {/*---------------*/}
                 </div>
-                <div>
+                <div> <Card style={{marginTop:'5px'}}>
                     <Table  bordered rowSelection={rowSelection} columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
+                </Card>
                 </div></div>
         );
     }

@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
 var ROLE = [
@@ -14,7 +14,7 @@ var ROLE = [
     {key:3,id:33,roleName:'用户中心',systemcode:'999999',permissions:'权限添加,角色列表删除',defaultValue:['1,3']},
 
 ];
-const plainOptions = ['系统管理员', '权限角色', '用户中心'];
+const plainOptions = ['1', '2', '3'];
 const options = [
                   {label: '权限添加',value: '1'},
                   {label: '角色列表删除', value: '2'},
@@ -183,13 +183,13 @@ export default class permission_allocation extends Component {
     onChange = (checkedList) => {
         this.setState({
             checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < options.length),
-            checkAll: checkedList.length === options.length,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
         });
     }
     onCheckAllChange = (e) => {
         this.setState({
-            checkedList: e.target.checked ? options : [],
+            checkedList: e.target.checked ? plainOptions : [],
             indeterminate: false,
             checkAll: e.target.checked,
         });
@@ -280,9 +280,11 @@ export default class permission_allocation extends Component {
                     </Modal>
                     {/*---------------*/}
                 </div>
-                <div>
+                <div>  <Card style={{marginTop:'5px'}}>
                     <Table  bordered  columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
-                </div></div>
+                </Card>
+                </div>
+            </div>
         );
     }
 }

@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {message,Alert,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const permissions = [{key:1,permissionName:'权限1',permissionUrl:'权限url'},
     {key:2,permissionName:'权限2',permissionUrl:'权限url'},
@@ -35,7 +35,6 @@ export default class permission_list extends Component {
             loading: false,
             data:permissions,
             visible: false,
-
         }
 
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -80,24 +79,29 @@ export default class permission_list extends Component {
     }
 
     onDelete  = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            console.log('删除的IDs: ', this.state.selectedRowKeys);
-            // const data = [...this.state.data];
-            //
-            // this.setState({ dataSource });
-            // this.state.selectedRowKeys.map((item,index)=>{
-            //     console.log(index+"--"+item);
-            //     console.log(dataSource.splice(item,1));
-            // });
-            //this.setState({ selectedRowKeys });
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-                //searchText: '',
-            });
-        }, 1000);
+               if(this.state.selectedRowKeys == '') {
+                   message.error('请选择要删除的权限');
+               }else {
+                   this.setState({loading: true});
+                   // ajax request after empty completing
+                   setTimeout(() => {
+                       console.log('删除的IDs: ', this.state.selectedRowKeys);
+                       // const data = [...this.state.data];
+                       //
+                       // this.setState({ dataSource });
+                       // this.state.selectedRowKeys.map((item,index)=>{
+                       //     console.log(index+"--"+item);
+                       //     console.log(dataSource.splice(item,1));
+                       // });
+                       //this.setState({ selectedRowKeys });
+                       this.setState({
+                           selectedRowKeys: [],
+                           loading: false,
+                           //searchText: '',
+                       });
+                   }, 1000);
+               }
+
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
@@ -185,11 +189,13 @@ export default class permission_list extends Component {
                     <Button type="primary" onClick={this.showModal} style={{marginLeft:"10px"}}>
                         添加
                     </Button>
-                    <Button type="primary" onClick={this.onDelete}
-                            disabled={!hasSelected} loading={loading} style={{marginLeft:"10px"}}
+                    <Button type="danger" onClick={this.onDelete}
+                            loading={loading}
+                            style={{marginLeft:"10px",backgroundColor:'#EE0000',color:'white'}}
                     >
                         删除</Button>
                     {/******************/}
+
                     <Modal
                         visible={this.state.visible}
                         title="权限添加"
@@ -224,8 +230,9 @@ export default class permission_list extends Component {
                     </Modal>
                     {/*---------------*/}
                 </div>
-                <div>
+                <div> <Card style={{marginTop:'5px'}}>
                     <Table  bordered rowSelection={rowSelection} columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
+                </Card>
                 </div></div>
         );
     }

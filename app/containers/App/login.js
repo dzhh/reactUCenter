@@ -67,7 +67,6 @@ export default class Login extends Component {
             // this.props.dispatch(fetchLogin(values, (res) => {
             if (res.ospState == 200) {
                 //const query = this.props.form.getFieldsValue()
-                sessionStorage.setItem('staff', JSON.stringify({ ...res.data.danwei }))//单位
                 sessionStorage.setItem('userName', res.data.ucUser.userName)
                 sessionStorage.setItem('userId', res.data.ucUser.userId)
                 sessionStorage.setItem('token', res.token)

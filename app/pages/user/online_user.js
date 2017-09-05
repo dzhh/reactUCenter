@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {Card,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 const FormItem = Form.Item
 @connect(
     (state, props) => ({
@@ -152,8 +152,9 @@ export default class online_user extends Component {
                             </FormItem>
 
                         </Form>
-                    </Modal>
+                    </Modal> <Card style={{marginTop:'5px'}}>
                     <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
+                </Card>
                 </div>
         );
     }

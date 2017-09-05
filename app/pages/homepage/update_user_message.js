@@ -124,7 +124,7 @@ export default class update_user_message extends Component {
             //window.sessionStorage.setItem("update", JSON.stringify(data));
             this.props.config.WEBDATA.updatemessage = JSON.stringify(data);
         }else {
-            this.props.config.WEBDATA.updatemessage = '';
+            this.props.config.WEBDATA = '';
             user_EmailTemp='';
         }
         console.log("===============index  componentWillUnmount=================================")
