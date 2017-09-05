@@ -5,13 +5,17 @@
 import { getUserList } from '../../ajax/user'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { routerActions } from 'react-router-redux'
 import {message,Card,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 const FormItem = Form.Item
+
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
-
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 )
 @Form.create({
     onFieldsChange(props, items) {
@@ -23,41 +27,116 @@ const FormItem = Form.Item
 export default class user_list extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            selectedRowKeys: [],
-            show: true,
-            loading: false,
-            data:this.props.config.USER,
-            visible: false,
+        let data =this.props.config.WEBDATA.userList;
+        if(data) {
+            data = JSON.parse(data);
+            this.state = {
+                show: data.show,
+                selectedRowKeys:data.selectedRowKeys,
+                staticData:data.staticData,
+                deleteIds:data.deleteIds,
+                data:data.data,
+                searchText:data.searchText
+            }
+        } else {
+            this.state = {
+                selectedRowKeys: [],
+                show: true,
+                loading: false,
+                data: [],
+                staticData: [],
+                deleteIds: [],
+                searchText:''
+            }
 
         }
-
         this.onSelectChange = this.onSelectChange.bind(this);
         this.onDelete  = this.onDelete .bind(this);
 
     }
     //组件渲染之前
     componentWillMount() {
-        //if(!this.state.user.userId) {
-           
-       // }
+        if(this.state.data.length==0) {
+            const pagination={}
+            pagination.pageNo =1;
+            pagination.pageSize = 100000;
+            getUserList(pagination, (res) => {
+                //1  有效 0 禁止
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    res.data.ucUser.map((item,index)=>{
+                        item.status=1;
+                    })
+
+                    this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                    console.log(res);
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+        }
+    }
+    test1() {
+        const pagination={}
+        pagination.pageNo =1;
+        pagination.pageSize = 100000;
+        getUserList(pagination, (res) => {
+            //1  有效 0 禁止
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                res.data.ucUser.map((item,index)=>{
+                    item.status=1;
+                })
+
+                this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                console.log(res);
+            } else {
+                message.warning(res.msg)
+            }
+        })
+    }
+    //组件销毁时
+    componentWillUnmount() {
+        const logoutSign = this.props.logout.logoutSign
+        if (logoutSign) {
+            let data = {
+                show: this.state.show,
+                selectedRowKeys:this.state.selectedRowKeys,
+                data:this.state.data,
+                deleteIds:this.state.deleteIds,
+                staticData:this.state.staticData,
+                searchText:this.state.searchText
+            };
+            this.props.config.WEBDATA.userList = JSON.stringify(data);
+        } else {
+            this.props.config.WEBDATA='';
+        }
+
     }
 
-    //展示弹出框
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
     //允许登陆
     allowLogin  = (index) => {
-        this.props.config.USER[index].status = 0;
-        this.setState({data:this.props.config.USER}) ;
+       // this.state.data[index].status = 1;
+        const dataTemp =this.state.data
+        dataTemp.map((item)=>{
+            if(item.userId == index) {
+                item.status = 1;
+            }
+        })
+        this.setState({data:dataTemp}) ;
+      //  this.setState({data:this.props.config.USER}) ;
     }
     //禁止登陆
     stopLogin  = (index) => {
-        this.props.config.USER[index].status = 1;
-        this.setState({data:this.props.config.USER}) ;
+        //this.state.data[index].status = 0;
+        const dataTemp =this.state.data
+        dataTemp.map((item)=>{
+            if(item.userId == index) {
+                item.status = 0;
+            }
+        })
+        this.setState({data:dataTemp}) ;
+       // this.setState({data:this.props.config.USER}) ;
     }
     //删除
     onDelete  = () => {
@@ -68,19 +147,12 @@ export default class user_list extends Component {
         this.setState({ loading: true });
         // ajax request after empty completing
         setTimeout(() => {
-            console.log('删除的IDs: ', this.state.selectedRowKeys);
-            // const data = [...this.state.data];
-            //
-            // this.setState({ dataSource });
-            // this.state.selectedRowKeys.map((item,index)=>{
-            //     console.log(index+"--"+item);
-            //     console.log(dataSource.splice(item,1));
-            // });
-            //this.setState({ selectedRowKeys });
+            console.log('删除的IDs: ', this.state.deleteIds);
             this.setState({
                 selectedRowKeys: [],
+                deleteIds:[],
                 loading: false,
-                //searchText: '',
+               // searchText: '',
             });
          }, 1000);
         }
@@ -91,9 +163,17 @@ export default class user_list extends Component {
         this.setState({ searchText: e.target.value });
     }
     //选择的table每一行的key值
-    onSelectChange = (selectedRowKeys) => {
+    onSelectChange = (selectedRowKeys,selectedRows) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
+        console.log("每行"+selectedRows)
+        let ids = [];
+        selectedRows.map((item)=>{
+            ids.push(item.userId)
+        })
+
+        this.setState({ selectedRowKeys})
+        this.state.deleteIds = ids;
+        console.log("userid==="+ this.state.deleteIds)
     }
     //查询
     onSearch = () => {
@@ -101,17 +181,16 @@ export default class user_list extends Component {
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             // filterDropdownVisible: false,
-            data: this.props.config.USER.map((record) => {
-                const match = record.email.match(reg);
-
+            data:  this.state.staticData.map((record) => {
+                const match = record.userName.match(reg);
                 if (!match) {
                     return null;
                 }
                 return {
                     ...record,
-                    name: (
+                    userName: (
                         <span>
-              {record.name.split(reg).map((text, i) => (
+              {record.userName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -123,11 +202,11 @@ export default class user_list extends Component {
     render() {
 
         const columns = [{
-            title: '昵称',
-            dataIndex: 'name',
+            title: '账号',
+            dataIndex: 'userName',
         }, {
-            title: 'Email/账号',
-            dataIndex: 'email',
+            title: 'Email',
+            dataIndex: 'userEmail',
         }, {
             title: '登录状态',
             dataIndex: 'status',
@@ -136,26 +215,26 @@ export default class user_list extends Component {
             }
         }, {
             title: '创建时间',
-            dataIndex: 'createtime',
+            dataIndex: 'createTime',
         }, {
             title: '最后登陆时间',
-            dataIndex: 'lasttime',
+            dataIndex: 'lastLoginTime',
         },
             {
                 title: '操作',
                 dataIndex: 'operation',
                 render: (text, record, index) => {
                     let title_action = '';
-                    record.status > 0 ?(title_action = "禁止"+record.name+"登陆?"):(title_action = "允许"+record.name+"登陆?");
+                    record.status > 0 ?(title_action = "禁止"+record.userName+"登陆?"):(title_action = "允许"+record.userName+"登陆?");
                     return (
                         this.state.data.length > 1 ?
                             (
                                 record.status > 0 ?
-                                    ( <Popconfirm title={title_action} onConfirm={() => this.allowLogin(index)}>
+                                    ( <Popconfirm title={title_action} onConfirm={() => this.stopLogin(record.userId)}>
                                             <a href="#">禁止登陆</a>
                                           </Popconfirm>
                                     ):(
-                                    <Popconfirm title={title_action} onConfirm={() => this.stopLogin(index)}>
+                                    <Popconfirm title={title_action} onConfirm={() => this.allowLogin(record.userId)}>
                                         <a href="#">激活登陆</a>
                                     </Popconfirm>
                                 )
@@ -178,7 +257,7 @@ export default class user_list extends Component {
             <div>
                 <div className="custom-filter-dropdown">
                     <Input
-                        placeholder="输入Email/账号"
+                        placeholder="输入账号"
                         value={this.state.searchText}
                         onChange={this.onInputChange}
                         onPressEnter={this.onSearch}

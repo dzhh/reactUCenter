@@ -11,3 +11,4 @@ export const getUserMessage = createAjaxAction(ajaxFun.fetchJSONByPost('/user/us
 export const updateUserMessage = createAjaxAction(ajaxFun.fetchJSONByPost('/user/updateUserInfo'));
 
 export const updateUserPwd = createAjaxAction(ajaxFun.fetchJSONByPost('/user/updateUserPsw'));
+export const getUserList = createAjaxAction(ajaxFun.fetchJSONByPost('/user/userLists'));
