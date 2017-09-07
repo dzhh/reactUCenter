@@ -80,7 +80,7 @@ export default class update_user_message extends Component {
                         message.success("修改成功")
 
                     } else {
-                        message.warning(res.msg)
+                        message.warning("服务器异常"+res.msg)
                     }
                 })
                 //hashHistory.push('/homePage')
@@ -102,7 +102,7 @@ export default class update_user_message extends Component {
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
                     user_EmailTemp = res.data.ucUser.userEmail;
                 } else {
-                    message.warning(res.msg)
+                    message.warning("服务器异常"+res.msg)
                 }
             })
         }

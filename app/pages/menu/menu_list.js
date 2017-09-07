@@ -26,7 +26,7 @@ export default class menu_list extends Component {
             selectedRowKeys: [],
             show: true,
             loading: false,
-            data:this.props.config.DATA,
+            data:[],
             visible: false,
 
         }
@@ -34,6 +34,9 @@ export default class menu_list extends Component {
         this.onSelectChange = this.onSelectChange.bind(this);
         this.onDelete  = this.onDelete .bind(this);
 
+    }
+    componentWillMount(){
+        this.setState({data:this.props.config.DATA})
     }
 
     //展示弹出框

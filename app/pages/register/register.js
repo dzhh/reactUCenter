@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
 import {Card,Checkbox,Select, Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
-import { fetchLogin, receiveLogin } from '../../actions/login'
+import { fetchRegister} from '../../ajax/login'
 import imgUrlWeb from '../../images/leftBg.jpg'
 const FormItem = Form.Item
 
@@ -42,7 +42,6 @@ export default class register extends Component {
 
     handleSubmit(e) {
 
-
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
 
@@ -51,6 +50,21 @@ export default class register extends Component {
             } else
             if (!err) {
                 console.log('Received values of form: ', values);
+                const user = {};
+                user.userName = values.userName
+                user.userEmail = values.userEmail
+                user.userPwd = values.password
+                fetchRegister(user, (res) => {
+                    if (res.ospState == 200) {
+                        message.success("注册成功")
+                        hashHistory.push('/')
+                    } else  {
+                        message.warning(res.message)
+                        this.setState({
+                            loading: false
+                        })
+                    }
+                })
             }
         });
     }
@@ -120,7 +134,7 @@ export default class register extends Component {
                     label="用户名"
                     hasFeedback
                 >
-                    {getFieldDecorator('user', {
+                    {getFieldDecorator('userName', {
                         rules: [
                             {
                                 required: true, message: '请输入用户名!'
@@ -160,35 +174,46 @@ export default class register extends Component {
                         <Input type="password" onBlur={this.handleConfirmBlur} />
                     )}
                 </FormItem>
-
-
                 <FormItem
                     {...formItemLayout}
-                    label="手机号码"
+                    label="邮箱"
                 >
-                    {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: '请输入你的手机号码!' }],
+                    {getFieldDecorator('userEmail', {
+                        rules: [{
+                            type: 'email', message: '请输入正确的email!',
+                        },{ required: true, message: '请输入你的邮箱!' }],
                     })(
                         <Input />
                     )}
                 </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="验证码"
-                >
-                    <Row gutter={8}>
-                        <Col span={12}>
-                            {getFieldDecorator('captcha', {
-                                rules: [{ required: true, message: '请输入你获取的验证码!' }],
-                            })(
-                                <Input size="large" />
-                            )}
-                        </Col>
-                        <Col span={12}>
-                            <Button size="large" style={{textAlign:"right"}}>获取验证码</Button>
-                        </Col>
-                    </Row>
-                </FormItem>
+
+                {/*<FormItem*/}
+                    {/*{...formItemLayout}*/}
+                    {/*label="手机号码"*/}
+                {/*>*/}
+                    {/*{getFieldDecorator('phone', {*/}
+                        {/*rules: [{ required: true, message: '请输入你的手机号码!' }],*/}
+                    {/*})(*/}
+                        {/*<Input />*/}
+                    {/*)}*/}
+                {/*</FormItem>*/}
+                {/*<FormItem*/}
+                    {/*{...formItemLayout}*/}
+                    {/*label="验证码"*/}
+                {/*>*/}
+                    {/*<Row gutter={8}>*/}
+                        {/*<Col span={12}>*/}
+                            {/*{getFieldDecorator('captcha', {*/}
+                                {/*rules: [{ required: true, message: '请输入你获取的验证码!' }],*/}
+                            {/*})(*/}
+                                {/*<Input size="large" />*/}
+                            {/*)}*/}
+                        {/*</Col>*/}
+                        {/*<Col span={12}>*/}
+                            {/*<Button size="large" style={{textAlign:"right"}}>获取验证码</Button>*/}
+                        {/*</Col>*/}
+                    {/*</Row>*/}
+                {/*</FormItem>*/}
                 <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
                     {getFieldDecorator('agreement', {
                         valuePropName: 'checked',

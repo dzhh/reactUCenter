@@ -64,7 +64,7 @@ export default class homepage extends Component {
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser})
                 } else {
-                    message.warning(res.msg)
+                    message.warning("服务器异常"+res.msg)
                 }
             })
         }

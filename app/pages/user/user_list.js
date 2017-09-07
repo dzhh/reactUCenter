@@ -2,7 +2,7 @@
  * Created by kwx on 2017/8/16.
  */
 
-import { getUserList } from '../../ajax/user'
+import { getUserList,deleteUsers ,activeUserById,forbidUserById} from '../../ajax/user'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -27,6 +27,15 @@ const FormItem = Form.Item
 export default class user_list extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            selectedRowKeys: [],
+            show: true,
+            loading: false,
+            data: [],
+            staticData: [],
+            deleteIds: [],
+            searchText:'',
+        }
         let data =this.props.config.WEBDATA.userList;
         if(data) {
             data = JSON.parse(data);
@@ -38,17 +47,6 @@ export default class user_list extends Component {
                 data:data.data,
                 searchText:data.searchText
             }
-        } else {
-            this.state = {
-                selectedRowKeys: [],
-                show: true,
-                loading: false,
-                data: [],
-                staticData: [],
-                deleteIds: [],
-                searchText:''
-            }
-
         }
         this.onSelectChange = this.onSelectChange.bind(this);
         this.onDelete  = this.onDelete .bind(this);
@@ -64,11 +62,11 @@ export default class user_list extends Component {
                 //1  有效 0 禁止
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
-                    res.data.ucUser.map((item,index)=>{
-                        item.status=1;
-                    })
-
-                    this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                    //this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                    this.setState({data:res.data.ucUser})
+                    this.setState({staticData:res.data.ucUser})
+                   // this.state.staticData=res.data.ucUser;
+                   // this.state.data=res.data.ucUser
                     console.log(res);
                 } else {
                     message.warning(res.msg)
@@ -76,25 +74,7 @@ export default class user_list extends Component {
             })
         }
     }
-    test1() {
-        const pagination={}
-        pagination.pageNo =1;
-        pagination.pageSize = 100000;
-        getUserList(pagination, (res) => {
-            //1  有效 0 禁止
-            console.log("++++++" + res);
-            if (res.ospState == 200) {
-                res.data.ucUser.map((item,index)=>{
-                    item.status=1;
-                })
 
-                this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
-                console.log(res);
-            } else {
-                message.warning(res.msg)
-            }
-        })
-    }
     //组件销毁时
     componentWillUnmount() {
         const logoutSign = this.props.logout.logoutSign
@@ -116,45 +96,88 @@ export default class user_list extends Component {
 
     //允许登陆
     allowLogin  = (index) => {
-       // this.state.data[index].status = 1;
-        const dataTemp =this.state.data
-        dataTemp.map((item)=>{
-            if(item.userId == index) {
-                item.status = 1;
+        let data={}
+        data.ids =index;
+        data.status = status;
+        data.pageNo =1;
+        data.pageSize = 100000;
+        activeUserById(data, (res) => {
+            //1  有效 0 禁止
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                console.log(res);
+            } else {
+                message.warning(res.msg)
             }
         })
-        this.setState({data:dataTemp}) ;
+        // const dataTemp =this.state.data
+        // dataTemp.map((item)=>{
+        //     if(item.userId == index) {
+        //         item.status = 1;
+        //     }
+        // })
+        // this.changeUser(index,1)
+        // this.setState({data:dataTemp}) ;
       //  this.setState({data:this.props.config.USER}) ;
     }
     //禁止登陆
     stopLogin  = (index) => {
-        //this.state.data[index].status = 0;
-        const dataTemp =this.state.data
-        dataTemp.map((item)=>{
-            if(item.userId == index) {
-                item.status = 0;
+        let data={}
+        data.ids =index;
+        data.status = status;
+        data.pageNo =1;
+        data.pageSize = 100000;
+        forbidUserById(data, (res) => {
+            //1  有效 0 禁止
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                console.log(res);
+            } else {
+                message.warning(res.msg)
             }
         })
-        this.setState({data:dataTemp}) ;
-       // this.setState({data:this.props.config.USER}) ;
+        // this.state.data[index].status = 0;
+        // const dataTemp =this.state.data
+        // dataTemp.map((item)=>{
+        //     if(item.userId == index) {
+        //         item.status = 0;
+        //     }
+        // })
+        // this.changeUser(index,0)
+        // this.setState({data:dataTemp}) ;
+
     }
     //删除
     onDelete  = () => {
         if(this.state.selectedRowKeys == '') {
             message.error('请选择要删除的用户');
         }else {
+            let pagination={}
+            pagination.pageNo =1;
+            pagination.pageSize = 100000;
+            pagination.ids = this.state.deleteIds.toString()
+            deleteUsers(pagination, (res) => {
+                //1  有效 0 禁止
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    this.setState({ loading: true });
+                    setTimeout(() => {
+                        console.log('删除的IDs: ', this.state.deleteIds);
+                        this.setState({
+                            selectedRowKeys: [],
+                            deleteIds:[],
+                            loading: false,
+                        });
+                    }, 1000);
+                  this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                  console.log(res);
+                } else {
+                    message.warning(res.msg)
+                }
+            })
 
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            console.log('删除的IDs: ', this.state.deleteIds);
-            this.setState({
-                selectedRowKeys: [],
-                deleteIds:[],
-                loading: false,
-               // searchText: '',
-            });
-         }, 1000);
         }
 
     }
@@ -188,7 +211,7 @@ export default class user_list extends Component {
                 }
                 return {
                     ...record,
-                    userName: (
+                    name: (
                         <span>
               {record.userName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
@@ -244,7 +267,6 @@ export default class user_list extends Component {
             }
         ];
 
-
         const {loading,selectedRowKeys } = this.state;
         const rowSelection = {
             selectedRowKeys,
@@ -254,7 +276,7 @@ export default class user_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
+            <div style={{height:'80%'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入账号"
@@ -275,10 +297,10 @@ export default class user_list extends Component {
 
                     {/*---------------*/}
                 </div>
-                <div> <Card style={{marginTop:'5px'}}>
+                      <Card>
                     <Table  bordered rowSelection={rowSelection} columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
-                </Card>
-                </div></div>
+                      </Card>
+                </div>
         );
     }
 }
