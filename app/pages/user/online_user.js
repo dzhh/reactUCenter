@@ -93,7 +93,7 @@ export default class online_user extends Component {
     }
     deleteLogin  = (index) => {
         let data = {}
-            data.jwtToken = index;
+            data.ospToken = index;
         data.pageNo =1;
         data.pageSize = 100000;
         shotOffOnlineUser(data, (res) => {
@@ -104,7 +104,7 @@ export default class online_user extends Component {
                 this.setState({data:res.data.ucUser})
                 console.log(res);
             } else {
-                message.warning('踢出失败'+res.message)
+                message.warning(res.msg)
             }
         })
         // this.props.config.ONLINEUSER[index].status = 0;

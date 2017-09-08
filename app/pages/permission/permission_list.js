@@ -3,6 +3,9 @@
  */
 
 
+import { bindActionCreators } from 'redux'
+import { routerActions } from 'react-router-redux'
+import {permissionList,deletePermission} from '../../ajax/userRole'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {message,Alert,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
@@ -16,7 +19,9 @@ const permissions = [{key:1,permissionName:'权限1',permissionUrl:'权限url'},
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 
 )
 @Form.create({
@@ -33,12 +38,61 @@ export default class permission_list extends Component {
             selectedRowKeys: [],
             show: true,
             loading: false,
-            data:permissions,
+            data:[],
+            staticData:[],
             visible: false,
+            searchText:'',
+            deleteIds:[]
         }
 
+        let data =this.props.config.WEBDATA.permissionList;
+        if(data) {
+            data = JSON.parse(data);
+            this.state = {
+                show: data.show,
+                selectedRowKeys:data.selectedRowKeys,
+                staticData:data.staticData,
+                deleteIds:data.deleteIds,
+                data:data.data,
+                searchText:data.searchText
+            }
+        }
         this.onSelectChange = this.onSelectChange.bind(this);
         this.onDelete  = this.onDelete .bind(this);
+
+    }
+
+    //组件渲染之前
+    componentWillMount() {
+        if(this.state.data.length==0) {
+            permissionList('', (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    this.setState({data:res.data.permissionList,staticData:res.data.permissionList})
+                    console.log(res);
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+
+        }
+    }
+    //组件销毁时
+    componentWillUnmount() {
+        const logoutSign = this.props.logout.logoutSign
+        if (logoutSign) {
+            let data = {
+                show: this.state.show,
+                selectedRowKeys:this.state.selectedRowKeys,
+                data:this.state.data,
+                deleteIds:this.state.deleteIds,
+                staticData:this.state.staticData,
+                searchText:this.state.searchText
+            };
+            this.props.config.WEBDATA.permissionList = JSON.stringify(data);
+        } else {
+            this.props.config.WEBDATA='';
+        }
 
     }
 
@@ -52,12 +106,7 @@ export default class permission_list extends Component {
     handleOk = () => {
         this.props.form.validateFields((err, values) => {
             if(!err) {
-                // values.key=values.name;
-                //console.log(values);
                 console.log("验证成功"+values.roleName+values.systemcode)
-                // this.props.config.DATA.push(values);
-                // this.setState({data:this.props.config.DATA}) ;
-                //  console.log(this.props.config.DATA);
                 this.setState({loading: true});
                 //this.setState({ loading: false, visible: false });
                 setTimeout(() => {
@@ -72,45 +121,61 @@ export default class permission_list extends Component {
     handleCancel = () => {
         this.setState({ visible: false });
     }
-    deleteRole  = (index) => {
-        // this.props.config.USER[index].status = 0;
-        console.log("要删除的角色id"+index);
-        this.setState({data:permissions}) ;
+    deleteIds=(ids)=>{
+        let pagination={}
+        pagination.pageNo =1;
+        pagination.pageSize = 100000;
+        pagination.ids = ids.toString()
+        deletePermission(pagination, (res) => {
+            //1  有效 0 禁止
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                console.log("返回的结果+++"+res);
+                this.setState({ loading: true });
+                setTimeout(() => {
+                    console.log('删除的IDs: ', this.state.deleteIds);
+                    this.setState({
+                        selectedRowKeys: [],
+                        deleteIds:[],
+                        loading: false,
+                    });
+                }, 1000);
+                this.setState({data:res.data.permissionList,staticData:res.data.permissionList})
+
+            } else {
+                message.warning(res.msg)
+            }
+        })
+    }
+    deletePermission  = (index) => {
+        let ids=[];
+        ids.push(index)
+        this.deleteIds(ids)
     }
 
     onDelete  = () => {
-               if(this.state.selectedRowKeys == '') {
-                   message.error('请选择要删除的权限');
-               }else {
-                   this.setState({loading: true});
-                   // ajax request after empty completing
-                   setTimeout(() => {
-                       console.log('删除的IDs: ', this.state.selectedRowKeys);
-                       // const data = [...this.state.data];
-                       //
-                       // this.setState({ dataSource });
-                       // this.state.selectedRowKeys.map((item,index)=>{
-                       //     console.log(index+"--"+item);
-                       //     console.log(dataSource.splice(item,1));
-                       // });
-                       //this.setState({ selectedRowKeys });
-                       this.setState({
-                           selectedRowKeys: [],
-                           loading: false,
-                           //searchText: '',
-                       });
-                   }, 1000);
-               }
-
+        if(this.state.selectedRowKeys == '') {
+            message.error('请选择要删除的角色');
+        }else {
+            this.deleteIds(this.state.deleteIds)
+        }
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
         this.setState({ searchText: e.target.value });
     }
     //选择的table每一行的key值
-    onSelectChange = (selectedRowKeys) => {
-        console.log('选择的id: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
+    onSelectChange = (selectedRowKeys,selectedRows) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        console.log("每行"+selectedRows)
+        let ids = [];
+        selectedRows.map((item)=>{
+            ids.push(item.permissionId)
+        })
+
+        this.setState({ selectedRowKeys})
+        this.state.deleteIds = ids;
+        console.log("menuId==="+ this.state.deleteIds)
     }
     //查询
     onSearch = () => {
@@ -118,17 +183,17 @@ export default class permission_list extends Component {
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             // filterDropdownVisible: false,
-            data: permissions.map((record) => {
-                const match = record.permissionName.match(reg);
+            data: this.state.staticData.map((record) => {
+                const match = record.menuName.match(reg);
 
                 if (!match) {
                     return null;
                 }
                 return {
                     ...record,
-                    permissionName: (
+                    name: (
                         <span>
-              {record.permissionName.split(reg).map((text, i) => (
+              {record.menuName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -141,20 +206,23 @@ export default class permission_list extends Component {
 
         const columns = [{
             title: '权限名称',
-            dataIndex: 'permissionName',
+            dataIndex: 'menuName',
         }, {
             title: '权限url',
-            dataIndex: 'permissionUrl',
-        },,
+            dataIndex: 'menuUrl',
+        },{
+            title: '类型',
+            dataIndex: 'permissionType',
+        },
             {
                 title: '操作',
                 dataIndex: 'operation',
                 render: (text, record, index) => {
-                    let title_action = "删除"+record.permissionName
+                    let title_action = "删除"+record.menuName
                     return (
                         this.state.data.length > 1 ?
                             (
-                                ( <Popconfirm title={title_action} onConfirm={() => this.deleteRole(record.key)}>
+                                ( <Popconfirm title={title_action} onConfirm={() => this.deletePermission(record.permissionId)}>
                                         <a href="#">删除</a>
                                     </Popconfirm>
                                 )
@@ -174,7 +242,7 @@ export default class permission_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
+            <div style={{height:'80%'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入权限名称"

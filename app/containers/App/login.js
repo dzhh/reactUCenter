@@ -81,6 +81,11 @@ export default class Login extends Component {
                 this.setState({
                     loading: false
                 })
+            }else {
+                message.warning(res.data.msg)
+                this.setState({
+                    loading: false
+                })
             }
         })
       }

@@ -65,8 +65,6 @@ export default class user_list extends Component {
                     //this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
                     this.setState({data:res.data.ucUser})
                     this.setState({staticData:res.data.ucUser})
-                   // this.state.staticData=res.data.ucUser;
-                   // this.state.data=res.data.ucUser
                     console.log(res);
                 } else {
                     message.warning(res.msg)
@@ -111,15 +109,6 @@ export default class user_list extends Component {
                 message.warning(res.msg)
             }
         })
-        // const dataTemp =this.state.data
-        // dataTemp.map((item)=>{
-        //     if(item.userId == index) {
-        //         item.status = 1;
-        //     }
-        // })
-        // this.changeUser(index,1)
-        // this.setState({data:dataTemp}) ;
-      //  this.setState({data:this.props.config.USER}) ;
     }
     //禁止登陆
     stopLogin  = (index) => {
@@ -138,22 +127,16 @@ export default class user_list extends Component {
                 message.warning(res.msg)
             }
         })
-        // this.state.data[index].status = 0;
-        // const dataTemp =this.state.data
-        // dataTemp.map((item)=>{
-        //     if(item.userId == index) {
-        //         item.status = 0;
-        //     }
-        // })
-        // this.changeUser(index,0)
-        // this.setState({data:dataTemp}) ;
+
 
     }
+
     //删除
     onDelete  = () => {
         if(this.state.selectedRowKeys == '') {
             message.error('请选择要删除的用户');
         }else {
+
             let pagination={}
             pagination.pageNo =1;
             pagination.pageSize = 100000;
@@ -171,13 +154,12 @@ export default class user_list extends Component {
                             loading: false,
                         });
                     }, 1000);
-                  this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
-                  console.log(res);
+                    this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
+                    console.log(res);
                 } else {
                     message.warning(res.msg)
                 }
             })
-
         }
 
     }
