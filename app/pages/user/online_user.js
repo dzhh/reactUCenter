@@ -93,7 +93,7 @@ export default class online_user extends Component {
     }
     deleteLogin  = (index) => {
         let data = {}
-            data.ids = index;
+            data.jwtToken = index;
         data.pageNo =1;
         data.pageSize = 100000;
         shotOffOnlineUser(data, (res) => {
@@ -151,7 +151,7 @@ export default class online_user extends Component {
                     return (
                         this.state.data.length > 1 ?
                             (
-                                <div> <Popconfirm title={title_action} onConfirm={() => this.deleteLogin(record.userId)}>
+                                <div> <Popconfirm title={title_action} onConfirm={() => this.deleteLogin(record.jwtToken)}>
                                     <a href="#">踢出</a>
                                 </Popconfirm>
                                     <span className="ant-divider" />

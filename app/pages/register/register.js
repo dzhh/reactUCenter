@@ -91,7 +91,7 @@ export default class register extends Component {
     render() {
 
         const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
+            const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
                 sm: { span: 6 },
