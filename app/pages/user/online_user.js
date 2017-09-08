@@ -190,7 +190,7 @@ export default class online_user extends Component {
         const auser = this.state.auser;
         return (
 
-                <div>
+                <div style={{height:'80%'}}>
                     <Modal
                         visible={this.state.visible}
                         title="Session详情"
