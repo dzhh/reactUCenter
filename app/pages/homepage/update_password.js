@@ -9,6 +9,7 @@ import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { updateUserPwd } from '../../ajax/user'
+import $ from 'jquery'
 import {getLogout } from '../../actions/login'
 const FormItem = Form.Item
 var old_pas=''
@@ -114,12 +115,16 @@ export default class update_password extends Component {
                             data.new_password=''
                             data.new_password_too=''
                         }
-                        this.setState({
-                            old_password:'',
-                            new_password:'',
-                            new_password_too:''
-                        })
                         message.success("修改成功")
+                        this.props.form.setFieldsValue({
+                            new_password_too: '',
+                            old_password: '',
+                            new_password: '',
+                        });
+
+
+                    }else if (res.ospState == 401){
+                        message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                     } else {
                         message.error("原密码错误")
                     }
@@ -192,11 +197,12 @@ export default class update_password extends Component {
                             //{pattern: "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]){5,10}$", message: '密码错误!',}
                             ],
                     })(
-                        <Input type="password" placeholder="请输入旧密码"/>
+                        <Input  type="password" placeholder="请输入旧密码"/>
                     )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
+                    id="test"
                     label="新密码"
                     hasFeedback>
                     {getFieldDecorator('new_password', {

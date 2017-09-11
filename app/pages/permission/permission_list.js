@@ -4,6 +4,7 @@
 
 
 import { bindActionCreators } from 'redux'
+import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import {permissionList,deletePermission} from '../../ajax/userRole'
 import React, { Component } from 'react'
@@ -70,6 +71,8 @@ export default class permission_list extends Component {
                 if (res.ospState == 200) {
                     this.setState({data:res.data.permissionList,staticData:res.data.permissionList})
                     console.log(res);
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
                     message.warning(res.msg)
                 }

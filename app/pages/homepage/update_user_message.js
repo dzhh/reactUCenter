@@ -80,7 +80,7 @@ export default class update_user_message extends Component {
                         message.success("修改成功")
 
                     } else {
-                        message.warning("服务器异常"+res.msg)
+                        message.warning(res.msg)
                     }
                 })
                 //hashHistory.push('/homePage')
@@ -101,8 +101,10 @@ export default class update_user_message extends Component {
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
                     user_EmailTemp = res.data.ucUser.userEmail;
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
-                    message.warning("服务器异常"+res.msg)
+                    message.warning(res.msg)
                 }
             })
         }

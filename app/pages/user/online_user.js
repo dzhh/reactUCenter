@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
+import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { connect } from 'react-redux'
 import {message,Card,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
@@ -53,8 +54,10 @@ export default class online_user extends Component {
                     //this.state.data = res.data.ucUser
                     this.setState({data:res.data.ucUser})
                     console.log(res);
-                } else {
-                    message.warning('服务器异常')
+                } else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+                }else {
+                    message.warning(res.msg)
                 }
             })
         }
@@ -75,6 +78,8 @@ export default class online_user extends Component {
     }
     //展示弹出框
     showModal = (record) => {
+        record.jwtToken = record.jwtToken.substring(32,64)
+        console.log("显示时的长度"+record.jwtToken.length)
         this.setState({
             auser:record,
             visible: true,
@@ -103,6 +108,8 @@ export default class online_user extends Component {
 
                 this.setState({data:res.data.ucUser})
                 console.log(res);
+            }else if (res.ospState == 401){
+                message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
             } else {
                 message.warning(res.msg)
             }
@@ -116,12 +123,18 @@ export default class online_user extends Component {
     render() {
 
         const columns = [{
-            title: 'SessionID',
+            title: '会话ID',
             dataIndex: 'jwtToken',
             render: (text, record, index) => {
                 const a = text;
-                        return a.substring(a.length-32,a.length);
-                     }
+                console.log("列表时的长度"+text.length)
+                if(a.length<33) {
+                    return a;
+                }   else {
+                    return a.substring(32,64);
+                }
+
+            }
         }, {
             title: '账号',
             dataIndex: 'userName',
@@ -129,10 +142,10 @@ export default class online_user extends Component {
             title: 'Email',
             dataIndex: 'userEmail',
         },{
-            title: '创建回话',
+            title: '创建时间',
             dataIndex: 'createJWTTime',
         },{
-            title: '回话最后活动时间',
+            title: '会话最后活动时间',
             dataIndex: 'lastActionTime',
         },
         //     {
@@ -149,7 +162,7 @@ export default class online_user extends Component {
                     let title_action = ''
                      record.status > 0 ?(title_action = "踢出"+record.userName):(title_action = "激活"+record.nickName);
                     return (
-                        this.state.data.length > 1 ?
+                        this.state.data.length > 0 ?
                             (
                                 <div> <Popconfirm title={title_action} onConfirm={() => this.deleteLogin(record.jwtToken)}>
                                     <a href="#">踢出</a>
@@ -201,7 +214,7 @@ export default class online_user extends Component {
                         ]}
                     >
                         <Form layout="vertical">
-                            <FormItem label="Session Id">
+                            <FormItem label="会话ID">
                                 <Input value={auser.jwtToken}  />
                             </FormItem>
                             <FormItem label="创建时间">

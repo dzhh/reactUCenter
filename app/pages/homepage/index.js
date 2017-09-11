@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react'
+import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
 import {message, Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
 import { getUserMessage } from '../../ajax/user'
@@ -63,8 +64,10 @@ export default class homepage extends Component {
             getUserMessage(user, (res) => {
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser})
-                } else {
-                    message.warning("服务器异常"+res.msg)
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+                }else {
+                    message.warning(res.msg)
                 }
             })
         }

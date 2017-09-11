@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
+import {message,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
 import moment from 'moment';
 import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
@@ -37,7 +37,9 @@ export default class my_permissions extends Component {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
                     console.log(res.ucUserRole);
-                } else {
+                } else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+                }else {
                     message.warning(res.msg)
                 }
             })

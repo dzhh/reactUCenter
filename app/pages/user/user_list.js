@@ -5,6 +5,7 @@
 import { getUserList,deleteUsers ,activeUserById,forbidUserById} from '../../ajax/user'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { routerActions } from 'react-router-redux'
 import {message,Card,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge} from 'antd'
@@ -66,6 +67,8 @@ export default class user_list extends Component {
                     this.setState({data:res.data.ucUser})
                     this.setState({staticData:res.data.ucUser})
                     console.log(res);
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
                     message.warning(res.msg)
                 }
@@ -156,6 +159,8 @@ export default class user_list extends Component {
                     }, 1000);
                     this.setState({data:res.data.ucUser,staticData:res.data.ucUser})
                     console.log(res);
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
                     message.warning(res.msg)
                 }

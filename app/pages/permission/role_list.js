@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 import { bindActionCreators } from 'redux'
+import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import {roleList,deleteRole,addRole,testPer} from '../../ajax/userRole'
 const FormItem = Form.Item
@@ -124,6 +125,8 @@ export default class role_list extends Component {
                 }, 1000);
                 this.setState({data:res.data.ucRole,staticData:res.data.ucRole})
                 console.log(res);
+            } else if (res.ospState == 401){
+                message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
             } else {
                 message.warning(res.msg)
             }
