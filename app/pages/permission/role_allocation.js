@@ -4,23 +4,29 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { hashHistory } from 'react-router'
+import { routerActions } from 'react-router-redux'
+import {allocationLists,selectRolesByUserId,addRolesUser,clearRoleByUserIds} from '../../ajax/userRole'
 import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
-var ROLE = [
-    {key:1,id:11,nickName:'test1',userEmail:'baidu@qq.com',status:'1',roles:'系统管理员',defaultValue:['1']},
-    {key:2,id:22,nickName:'test2',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
-    {key:3,id:33,nickName:'test3',userEmail:'baidu@qq.com',status:'1',roles:'用户中心',defaultValue:['3']},
-    {key:4,id:33,nickName:'test4',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
-    {key:5,id:55,nickName:'test5',userEmail:'baidu@qq.com',status:'0',roles:'系统管理员',defaultValue:['1']},
-];
+// var ROLE = [
+//     {key:1,id:11,nickName:'test1',userEmail:'baidu@qq.com',status:'1',roles:'系统管理员',defaultValue:['1']},
+//     {key:2,id:22,nickName:'test2',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
+//     {key:3,id:33,nickName:'test3',userEmail:'baidu@qq.com',status:'1',roles:'用户中心',defaultValue:['3']},
+//     {key:4,id:33,nickName:'test4',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
+//     {key:5,id:55,nickName:'test5',userEmail:'baidu@qq.com',status:'0',roles:'系统管理员',defaultValue:['1']},
+// ];
 const plainOptions = ['1', '2', '3'];
-const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'}, {label: '用户中心', value: '3'}];
+//const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'}, {label: '用户中心', value: '3'}];
 
 @connect(
     (state, props) => ({
         config: state.config,
+        logout:state.logout
     }),
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 
 )
 @Form.create({
@@ -37,67 +43,128 @@ export default class role_allocation extends Component {
             selectedRowKeys: [],
             show: true,
             loading: false,
-            data:ROLE,
+            data:[],
+            staticData:[],
             visible: false,
             checkedList: [],
             indeterminate: true,
             checkAll: false,
-            defaultId:'',
+            selectId:'',
+            options:[],
+            plainOptions:[],
+            deleteIds:[]
 
         }
-
+        let data =this.props.config.WEBDATA.role_allocation;
+        if(data) {
+            data = JSON.parse(data);
+            this.state = {
+                show: data.show,
+                selectedRowKeys:data.selectedRowKeys,
+                data:data.data,
+                visible:data.visible,
+                deleteIds:data.deleteIds,
+                staticData:data.staticData,
+                searchText:data.searchText
+            }
+        }
         this.onSelectChange = this.onSelectChange.bind(this);
         this.onDelete  = this.onDelete .bind(this);
 
     }
+    //组件渲染之前
+    componentWillMount() {
+        if(this.state.data.length==0) {
+        let pagination={}
+        pagination.pageNo =1;
+        pagination.pageSize = 10000;
+         allocationLists(pagination, (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    this.setState({data:res.data.ucUserRole,staticData:res.data.ucUserRole})
+                    console.log(res);
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+
+        }
+    }
+
+    //组件销毁时
+    componentWillUnmount() {
+        const logoutSign = this.props.logout.logoutSign
+
+        if (logoutSign) {
+            let data = {
+                show: this.state.show,
+                selectedRowKeys:this.state.selectedRowKeys,
+                data:this.state.data,
+                visible:this.state.visible,
+                deleteIds:this.state.deleteIds,
+                staticData:this.state.staticData,
+                searchText:this.state.searchText
+            };
+            this.props.config.WEBDATA.role_allocation = JSON.stringify(data);
+        } else {
+            this.props.config.WEBDATA='';
+        }
+
+    }
 
     //展示弹出框
-    showModal = (index) => {
+    showModal = (record) => {
+        let user={}
+        user.id = record.userId
+        user.pageNo =1
+        user.pageSize = 10000
+        selectRolesByUserId(user, (res) => {
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                res.data.defaultValue = res.data.defaultValue.split(',')
+                res.data.allRoleIds = res.data.allRoleIds.split(',')
+                this.setState({checkedList:res.data.defaultValue,options:res.data.ucRole,
+                    plainOptions:res.data.allRoleIds,
+                    selectId:record.userId,
+                    visible: true,
+                })
+                console.log(res);
+            }else if (res.ospState == 401){
+                message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+            } else {
+                message.warning(res.msg)
+            }
+        })
 
-        this.setState({
-            defaultId:index,
-            checkedList:this.state.data[index].defaultValue,
-            visible: true,
-        });
     }
     //弹出框点击ok
     handleOk = () => {
-
-                this.state.data[this.state.defaultId].defaultValue = this.state.checkedList;
-
-                console.log("验证成功"+this.state.checkedList)
-                let roles = '';
-               this.state.checkedList.map((item,index)=>{
-                    if(item == 1) {
-                        if(roles == '') {
-                            roles = '系统管理员'
-                        } else {
-                            roles =roles+ ',系统管理员'
-                        }
-                    } else if(item == 2) {
-                        if(roles == '') {
-                            roles = '权限角色'
-                        } else {
-                            roles =roles+ ',权限角色'
-                        }
-                    }else if(item == 3) {
-                        if(roles == '') {
-                            roles = '用户中心'
-                        } else {
-                            roles =roles+ ',用户中心'
-                        }
-                    }
-               })
-        this.state.data[this.state.defaultId].roles = roles;
-                this.setState({loading: true});
+    console.log("选中的角色id为"+this.state.checkedList);
+        let user = {};
+        user.id = this.state.selectId
+        user.ids = this.state.checkedList.toString()
+        addRolesUser(user, (res) => {
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
 
                 setTimeout(() => {
-                    this.setState({loading: false,
+                    this.setState({
+                        data: res.data.ucUserRole, staticData: res.data.ucUserRole,
                         visible: false,
-                        checkedList: [],
-                        defaultId: []
-                    });
-                }, 1000);
+                    })
+                })
+                console.log(res);
+            } else if (res.ospState == 401) {
+                message.warning("没有登录或登录时间过期，请重新登录", 2, () => {
+                    hashHistory.push('/login')
+                })
+            } else {
+                message.warning(res.msg)
+            }
+        })
+
 
     }
     //弹出框点击离开
@@ -105,55 +172,64 @@ export default class role_allocation extends Component {
         this.setState({ visible: false,  checkedList: [],
             defaultId: [] });
     }
-    // deleteRole  = (index) => {
-    //     // this.props.config.USER[index].status = 0;
-    //     console.log("要删除的角色id"+index);
-    //     this.setState({data:ROLE});
-    // }
+
+    onSelectChange = (selectedRowKeys,selectedRows) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        console.log("每行"+selectedRows)
+        let ids = [];
+        selectedRows.map((item)=>{
+            ids.push(item.userId)
+        })
+        this.setState({ selectedRowKeys})
+
+        this.setState({ deleteIds:ids})
+
+    }
         //删除
     onDelete  = () => {
         if(this.state.selectedRowKeys == '') {
             message.error('请选择要清空的用户角色');
         }else {
             this.setState({loading: true});
-            // ajax request after empty completing
-            setTimeout(() => {
-                console.log('删除的IDs: ', this.state.selectedRowKeys);
-                this.state.selectedRowKeys.map((item, index) => {
-                    this.state.data.map((item1, index) => {
-                        if (item == item1.key) {
-                            this.state.data[index].roles = '';
-                            this.state.data[index].defaultValue = [];
-                        }
-                    })
-                    console.log(item + "====" + index);
-                    //
-                    //this.state.data[item].defaultValue=[];
-                })
+            let user = {};
+            user.ids = this.state.deleteIds.toString()
+            clearRoleByUserIds(user, (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
 
-                // const data = [...this.state.data];
-                //
-                // this.setState({ dataSource });
-                // this.state.selectedRowKeys.map((item,index)=>{
-                //     console.log(index+"--"+item);
-                //     console.log(dataSource.splice(item,1));
-                // });
-                //this.setState({ selectedRowKeys });
-                this.setState({
-                    selectedRowKeys: [],
-                    loading: false,
-                });
-            }, 1000);
+                    setTimeout(() => {
+                        this.setState({
+                            data: res.data.ucUserRole, staticData: res.data.ucUserRole,
+                            visible: false,
+                            selectedRowKeys: [],
+                            loading: false,
+                            deleteIds:[]
+                        })
+                    })
+                    console.log(res);
+                } else if (res.ospState == 401) {
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, () => {
+                        hashHistory.push('/login')
+                    })
+                } else {
+                    message.warning(res.msg)
+                }
+            })
+
         }
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
         this.setState({ searchText: e.target.value });
     }
-    //选择的table每一行的key值
-    onSelectChange = (selectedRowKeys) => {
-        console.log('选择的id: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
+
+    checkOnChange = (checkedList) => {
+        console.log('每次改变的值 ', checkedList);
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < this.state.plainOptions.length),
+            checkAll: checkedList.length === this.state.plainOptions.length,
+        });
     }
     //查询
     onSearch = () => {
@@ -161,17 +237,17 @@ export default class role_allocation extends Component {
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             // filterDropdownVisible: false,
-            data: this.state.data.map((record) => {
-                const match = record.nickName.match(reg);
+            data: this.state.staticData.map((record) => {
+                const match = record.userName.match(reg);
 
                 if (!match) {
                     return null;
                 }
                 return {
                     ...record,
-                    nickName: (
+                    name: (
                         <span>
-              {record.nickName.split(reg).map((text, i) => (
+              {record.userName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -182,15 +258,11 @@ export default class role_allocation extends Component {
     }
 
     onChange = (checkedList) => {
-        this.setState({
-            checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-            checkAll: checkedList.length === plainOptions.length,
-        });
+
     }
     onCheckAllChange = (e) => {
         this.setState({
-            checkedList: e.target.checked ? plainOptions : [],
+            checkedList: e.target.checked ? this.state.plainOptions : [],
             indeterminate: false,
             checkAll: e.target.checked,
         });
@@ -199,7 +271,7 @@ export default class role_allocation extends Component {
 
         const columns = [{
             title: '用户昵称',
-            dataIndex: 'nickName',
+            dataIndex: 'userName',
         }, {
             title: 'Email',
             dataIndex: 'userEmail',
@@ -211,7 +283,7 @@ export default class role_allocation extends Component {
             }
         }, {
             title:'拥有的角色',
-            dataIndex: 'roles',
+            dataIndex: 'roleNames',
         }
         ,
             {
@@ -221,7 +293,7 @@ export default class role_allocation extends Component {
                     return (
                         this.state.data.length > 1 ?
                                 (
-                                    <a onClick={() => this.showModal(index)}>选择角色</a>
+                                    <a onClick={() => this.showModal(record)}>选择角色</a>
                                 )
                              : null
                       );
@@ -282,7 +354,7 @@ export default class role_allocation extends Component {
                             </div>
                             <br/>
                             <div style={{width:'25%'}}>
-                            <CheckboxGroup  options={options} value={this.state.checkedList} onChange={this.onChange} />
+                            <CheckboxGroup    options={this.state.options} value={this.state.checkedList} onChange={this.checkOnChange} />
                             </div>
                         </Form>
                     </Modal>

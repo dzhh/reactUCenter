@@ -21,3 +21,12 @@ export const testPer = createAjaxAction(ajaxFun.fetchJSONByPost('/permission/del
 export const permissionList = createAjaxAction(ajaxFun.fetchJSONByPost('/permission/permissionLists'));
 
 export const deletePermission = createAjaxAction(ajaxFun.fetchJSONByPost('/permission/deletePermission'));
+
+export const allocationLists = createAjaxAction(ajaxFun.fetchJSONByPost('/userRole/allocationLists'));
+export const selectRolesByUserId = createAjaxAction(ajaxFun.fetchJSONByPost('/userRole/selectRoleByUserId'));
+
+export const addRolesUser = createAjaxAction(ajaxFun.fetchJSONByPost('/userRole/addRole2User'));
+
+
+
+export const clearRoleByUserIds = createAjaxAction(ajaxFun.fetchJSONByPost('/userRole/clearRoleByUserIds'));
