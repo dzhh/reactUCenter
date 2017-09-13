@@ -58,7 +58,7 @@ export default class permission_allocation extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA.role_allocation;
+        let data =this.props.config.WEBDATA.permission_allocation;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -77,7 +77,7 @@ export default class permission_allocation extends Component {
     }
     //组件渲染之前
     componentWillMount() {
-        if(this.state.data.length==0) {
+        if(this.state.data.length == 0) {
 
         rolePermissionAllocation('', (res) => {
                 console.log("++++++" + res);
