@@ -58,7 +58,7 @@ export default class register extends Component {
                     if (res.ospState == 200) {
                         message.success("注册成功", 2, ()=>{ hashHistory.push('/login')})
                     } else  {
-                        message.warning(res.message)
+                        message.error(res.data.msg)
                         this.setState({
                             loading: false
                         })

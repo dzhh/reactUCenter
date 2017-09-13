@@ -74,7 +74,7 @@ export default class permission_list extends Component {
                 }else if (res.ospState == 401){
                     message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
-                    message.warning(res.msg)
+                    message.warning(res.data.msg)
                 }
             })
 

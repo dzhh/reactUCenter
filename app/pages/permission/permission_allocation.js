@@ -5,7 +5,11 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
+import { bindActionCreators } from 'redux'
+import { hashHistory } from 'react-router'
+import { routerActions } from 'react-router-redux'
+import {rolePermissionAllocation,selectPermissionByRoleId,addPermission2Role,clearPermissionByRoleIds} from '../../ajax/rolePermission'
+import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
 var ROLE = [
@@ -40,12 +44,16 @@ export default class permission_allocation extends Component {
             selectedRowKeys: [],
             show: true,
             loading: false,
-            data:ROLE,
+            data:[],
+            staticData:[],
             visible: false,
             checkedList: [],
             indeterminate: true,
             checkAll: false,
             defaultId:'',
+            options:[],
+            plainOptions:[],
+            deleteIds:[]
 
         }
 
@@ -53,54 +61,79 @@ export default class permission_allocation extends Component {
         this.onDelete  = this.onDelete .bind(this);
 
     }
+    //组件渲染之前
+    componentWillMount() {
+        if(this.state.data.length==0) {
+
+        rolePermissionAllocation('', (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+                    this.setState({data:res.data.rolePermission,staticData:res.data.rolePermission})
+                    console.log(res);
+                }else if (res.ospState == 401){
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+                } else {
+                    message.warning(res.data.msg)
+                }
+            })
+
+        }
+    }
 
     //展示弹出框
-    showModal = (index) => {
+    showModal = (record) => {
+        let user={}
+        user.id = record.roleId
+        selectPermissionByRoleId(user, (res) => {
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
+                if(res.data.defaultValue == null) {
+                    res.data.defaultValue = '';
+                }
+                res.data.defaultValue = res.data.defaultValue.split(',')
+                res.data.allPermissionIds = res.data.allPermissionIds.split(',')
+                this.setState({checkedList:res.data.defaultValue,options:res.data.permissionList,
+                    plainOptions:res.data.allPermissionIds,
+                    selectId:record.roleId,
+                    visible: true,
+                })
+                console.log(res);
+            }else if (res.ospState == 401){
+                message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
+            } else {
+                message.warning(res.msg)
+            }
+        })
 
-        this.setState({
-            defaultId:index,
-            checkedList:this.state.data[index].defaultValue,
-            visible: true,
-        });
     }
     //弹出框点击ok
     handleOk = () => {
 
-        this.state.data[this.state.defaultId].defaultValue = this.state.checkedList;
+        console.log("选中的角色id为"+this.state.checkedList);
+        let user = {};
+        user.id = this.state.selectId
+        user.ids = this.state.checkedList.toString()
+        addPermission2Role(user, (res) => {
+            console.log("++++++" + res);
+            if (res.ospState == 200) {
 
-        console.log("验证成功"+this.state.checkedList)
-        let roles = '';
-        this.state.checkedList.map((item,index)=>{
-            if(item == 1) {
-                if(roles == '') {
-                    roles = '权限添加'
-                } else {
-                    roles =roles+ ',权限添加'
-                }
-            } else if(item == 2) {
-                if(roles == '') {
-                    roles = '角色列表删除'
-                } else {
-                    roles =roles+ ',角色列表删除'
-                }
-            }else if(item == 3) {
-                if(roles == '') {
-                    roles = '用户激活&禁止'
-                } else {
-                    roles =roles+ ',用户激活&禁止'
-                }
+                setTimeout(() => {
+                    this.setState({
+                        data: res.data.rolePermission, staticData: res.data.rolePermission,
+                        visible: false,
+                    })
+                })
+                console.log(res);
+            } else if (res.ospState == 401) {
+                message.warning("没有登录或登录时间过期，请重新登录", 2, () => {
+                    hashHistory.push('/login')
+                })
+            } else {
+                message.warning(res.data.msg)
             }
         })
-        this.state.data[this.state.defaultId].permissions = roles;
-        this.setState({loading: true});
 
-        setTimeout(() => {
-            this.setState({loading: false,
-                visible: false,
-                checkedList: [],
-                defaultId: []
-            });
-        }, 1000);
+
 
     }
     //弹出框点击离开
@@ -115,52 +148,54 @@ export default class permission_allocation extends Component {
     // }
 
     onDelete  = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            console.log('删除的IDs: ', this.state.selectedRowKeys);
-            this.state.selectedRowKeys.map((item,index)=>{
-                this.state.data.map((item1,index)=>{
-                    if(item == item1.key){
-                        this.state.data[index].permissions='';
-                        this.state.data[index].defaultValue=[];
-                    }
-                })
-                console.log(item+"===="+index);
-                //
-                //this.state.data[item].defaultValue=[];
+        if(this.state.selectedRowKeys == '') {
+            message.error('请选择要清空权限的角色');
+        }else {
+            this.setState({loading: true});
+            let user = {};
+            user.ids = this.state.deleteIds.toString()
+            clearPermissionByRoleIds(user, (res) => {
+                console.log("++++++" + res);
+                if (res.ospState == 200) {
+
+                    setTimeout(() => {
+                        this.setState({
+                            data: res.data.rolePermission, staticData: res.data.rolePermission,
+                            visible: false,
+                            selectedRowKeys: [],
+                            loading: false,
+                            deleteIds:[]
+                        })
+                    })
+                    console.log(res);
+                } else if (res.ospState == 401) {
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, () => {
+                        hashHistory.push('/login')
+                    })
+                } else {
+                    message.warning(res.msg)
+                }
             })
 
-            // const data = [...this.state.data];
-            //
-            // this.setState({ dataSource });
-            // this.state.selectedRowKeys.map((item,index)=>{
-            //     console.log(index+"--"+item);
-            //     console.log(dataSource.splice(item,1));
-            // });
-            //this.setState({ selectedRowKeys });
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
+        }
+
     }
     //获得输入框的搜索的值
     onInputChange = (e) => {
         this.setState({ searchText: e.target.value });
     }
     //选择的table每一行的key值
-    onSelectChange = (selectedRowKeys) => {
-        console.log('选择的id: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
-    }
+    // onSelectChange = (selectedRowKeys) => {
+    //     console.log('选择的id: ', selectedRowKeys);
+    //     this.setState({ selectedRowKeys });
+    // }
     //查询
     onSearch = () => {
         const { searchText } = this.state;
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             // filterDropdownVisible: false,
-            data: this.state.data.map((record) => {
+            data: this.state.staticData.map((record) => {
                 const match = record.roleName.match(reg);
 
                 if (!match) {
@@ -168,7 +203,7 @@ export default class permission_allocation extends Component {
                 }
                 return {
                     ...record,
-                    roleName: (
+                    name: (
                         <span>
               {record.roleName.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
@@ -183,16 +218,29 @@ export default class permission_allocation extends Component {
     onChange = (checkedList) => {
         this.setState({
             checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-            checkAll: checkedList.length === plainOptions.length,
+            indeterminate: !!checkedList.length && (checkedList.length < this.state.plainOptions.length),
+            checkAll: checkedList.length === this.state.plainOptions.length,
         });
     }
     onCheckAllChange = (e) => {
         this.setState({
-            checkedList: e.target.checked ? plainOptions : [],
+            checkedList: e.target.checked ? this.state.plainOptions : [],
             indeterminate: false,
             checkAll: e.target.checked,
         });
+    }
+    //选择的table每一行的key值
+    onSelectChange = (selectedRowKeys,selectedRows) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        console.log("每行"+selectedRows)
+        let ids = [];
+        selectedRows.map((item)=>{
+            ids.push(item.roleId)
+        })
+        this.setState({ selectedRowKeys})
+
+        this.setState({ deleteIds:ids})
+
     }
     render() {
 
@@ -200,21 +248,18 @@ export default class permission_allocation extends Component {
             title: '角色名称',
             dataIndex: 'roleName',
         }, {
-            title: '角色类型',
-            dataIndex: 'systemcode',
-        }, {
             title:'拥有的权限',
-            dataIndex: 'permissions',
+            dataIndex: 'menuNames',
         }
-            ,
+        ,
             {
                 title: '操作',
                 dataIndex: 'operation',
                 render: (text, record, index) => {
                     return (
-                        this.state.data.length > 1 ?
+                        this.state.data.length > 0 ?
                             (
-                                <a onClick={() => this.showModal(index)}>选择权限</a>
+                                <a onClick={() => this.showModal(record)}>选择权限</a>
                             )
                             : null
                     );
@@ -245,11 +290,11 @@ export default class permission_allocation extends Component {
                     <Button type="primary" onClick={this.onSearch} >搜索</Button>
                     {/*---------------*/}
 
-                    {/*<Button type="primary" onClick={this.onDelete}*/}
-                            {/*disabled={!hasSelected} loading={loading} style={{marginLeft:"10px"}}*/}
-                    {/*>*/}
-                        {/*清空用户角色</Button>*/}
-                    {/******************/}
+                    <Button type="danger" onClick={this.onDelete}
+                            loading={loading}
+                            style={{marginLeft:"10px",backgroundColor:'#EE0000',color:'white'}}
+                    >
+                        清空用户角色</Button>
                     <Modal style={{width:'60%'}}
                            visible={this.state.visible}
                            title="权限添加"
@@ -274,14 +319,14 @@ export default class permission_allocation extends Component {
                             </div>
                             <br/>
                             <div style={{width:'25%'}}>
-                                <CheckboxGroup  options={options} value={this.state.checkedList} onChange={this.onChange} />
+                                <CheckboxGroup  options={this.state.options} value={this.state.checkedList} onChange={this.onChange} />
                             </div>
                         </Form>
                     </Modal>
                     {/*---------------*/}
                 </div>
                 <div>  <Card style={{marginTop:'5px'}}>
-                    <Table  bordered  columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
+                    <Table  bordered rowSelection={rowSelection}   columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
                 </Card>
                 </div>
             </div>

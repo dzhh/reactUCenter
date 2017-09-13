@@ -69,7 +69,7 @@ export default class role_list extends Component {
                     this.setState({data:res.data.ucRole,staticData:res.data.ucRole})
                     console.log(res);
                 } else {
-                    message.warning(res.msg)
+                    message.warning(res.data.msg)
                 }
             })
             // var menuIds="10,11";

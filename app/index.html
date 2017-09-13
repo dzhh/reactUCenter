@@ -11,14 +11,9 @@
     +function(global){
         // 本地开发打开的路径以及端口
         global.$ctx = "http://localhost:8080";
-        global.WEBDATA={};
+        global.WEBDATA=[];
 
-        global.USERMESSAGE = {
-            nickname: 'kwx',
-            e_amil: '孔维轩@163.com',
-            creattime:"2011-11-11 11:11:11",
-            lasttime:"2017-11-11 11:11:11"
-        };
+
         global.PERMISSIONS =[
             {
                 id:1,
@@ -69,46 +64,7 @@
                     ]
             }
               ]
-        global.DATA = [
 
-            {key:1,name:'test1',url:'baidu',icon:'user'},
-            {key:2,name:'test2',url:'baidu',icon:'user'},
-            {key:3,name:'test3',url:'baidu',icon:'user'},
-            {key:4,name:'test4',url:'baidu',icon:'user'},
-            {key:5,name:'test5',url:'baidu',icon:'user'},
-            {key:6,name:'test6',url:'baidu',icon:'user'},
-
-        ];
-        global.ROLE = [
-
-            {key:1,roleName:'test1',roleId:'10',systemcode:'11'},
-            {key:2,roleName:'test2',roleId:'20',systemcode:'22'},
-            {key:3,roleName:'test3',roleId:'30',systemcode:'33'},
-            {key:4,roleName:'test4',roleId:'40',systemcode:'44'},
-            {key:5,roleName:'test5',roleId:'50',systemcode:'55'},
-            {key:6,roleName:'test6',roleId:'60',systemcode:'66'},
-
-        ];
-        global.USER = [
-
-            {key:1,name:'pawn',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:2,name:'smeb',email:'b@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:3,name:'deft',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:4,name:'nickname',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:5,name:'marin',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:6,name:'faker',email:'a@163.com',status:'1',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-            {key:7,name:'bang',email:'a@163.com',status:'0',createtime:'2017-8-16 12:00:00',lasttime:'2017-8-16 18:00:00'},
-        ];
-        global.ONLINEUSER = [
-
-            {key:1,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e45',nickName:'pawn',email:'a@163.com',status:'0',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:2,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e46',nickName:'smeb',email:'b@163.com',status:'0',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:3,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e47',nickName:'deft',email:'a@163.com',status:'0',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:4,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e48',nickName:'nickname',email:'a@163.com',status:'1',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:5,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e49',nickName:'marin',email:'a@163.com',status:'1',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:6,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e10',nickName:'faker',email:'a@163.com',status:'1',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-            {key:7,sessionID:'eb95ebb1-37f2-4506-bdef-67c6c2217e11',nickName:'bang',email:'a@163.com',status:'0',createTime:'2017-8-16 12:00:00',lastTime:'2017-8-16 18:00:00'},
-        ];
 
         // 系统一二级菜单
         global.NAVIGATION = [

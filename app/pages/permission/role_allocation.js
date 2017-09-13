@@ -86,7 +86,7 @@ export default class role_allocation extends Component {
                 }else if (res.ospState == 401){
                     message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
-                    message.warning(res.msg)
+                    message.warning(res.data.msg)
                 }
             })
 
@@ -134,7 +134,7 @@ export default class role_allocation extends Component {
             }else if (res.ospState == 401){
                 message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
             } else {
-                message.warning(res.msg)
+                message.warning(res.data.msg)
             }
         })
 
@@ -311,7 +311,7 @@ export default class role_allocation extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
+            <div style={{height:'80%'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入角色名称"
