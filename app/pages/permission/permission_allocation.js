@@ -126,7 +126,7 @@ export default class permission_allocation extends Component {
                 }
                 res.data.defaultValue = res.data.defaultValue.split(',')
                 res.data.allPermissionIds = res.data.allPermissionIds.split(',')
-                this.setState({checkedList:res.data.defaultValue,options:res.data.permissionList,
+                this.setState({checkedList:res.data.defaultValue,options:res.data.permissionLists,
                     plainOptions:res.data.allPermissionIds,
                     selectId:record.roleId,
                     visible: true,
