@@ -69,8 +69,11 @@ export default class permission_list extends Component {
             permissionList('', (res) => {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
-                    this.setState({data:res.data.permissionList,staticData:res.data.permissionList})
-                    console.log(res);
+                    this.setState(
+                        {data:res.data.permissionLists,
+                        staticData:res.data.permissionLists}
+                        )
+
                 }else if (res.ospState == 401){
                     message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
                 } else {
