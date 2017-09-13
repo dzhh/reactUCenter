@@ -235,10 +235,7 @@ export default class role_list extends Component {
         const columns = [{
             title: '角色名称',
             dataIndex: 'roleName',
-        }, {
-            title: '角色类型',
-            dataIndex: 'systemcode',
-        },,
+        },
             {
                 title: '操作',
                 dataIndex: 'operation',
@@ -267,7 +264,7 @@ export default class role_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
+            <div style={{height:'80%'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入角色名称"

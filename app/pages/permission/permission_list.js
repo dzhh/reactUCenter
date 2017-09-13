@@ -187,7 +187,7 @@ export default class permission_list extends Component {
         this.setState({
             // filterDropdownVisible: false,
             data: this.state.staticData.map((record) => {
-                const match = record.menuName.match(reg);
+                const match = record.label.match(reg);
 
                 if (!match) {
                     return null;
@@ -196,7 +196,7 @@ export default class permission_list extends Component {
                     ...record,
                     name: (
                         <span>
-              {record.menuName.split(reg).map((text, i) => (
+              {record.label.split(reg).map((text, i) => (
                   i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -209,7 +209,7 @@ export default class permission_list extends Component {
 
         const columns = [{
             title: '权限名称',
-            dataIndex: 'menuName',
+            dataIndex: 'label',
         }, {
             title: '权限url',
             dataIndex: 'menuUrl',
