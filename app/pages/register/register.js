@@ -56,8 +56,7 @@ export default class register extends Component {
                 user.userPwd = values.password
                 fetchRegister(user, (res) => {
                     if (res.ospState == 200) {
-                        message.success("注册成功")
-                        hashHistory.push('/')
+                        message.success("注册成功", 2, ()=>{ hashHistory.push('/login')})
                     } else  {
                         message.warning(res.message)
                         this.setState({

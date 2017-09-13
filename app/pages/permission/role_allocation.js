@@ -18,7 +18,7 @@ const CheckboxGroup = Checkbox.Group;
 //     {key:4,id:33,nickName:'test4',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
 //     {key:5,id:55,nickName:'test5',userEmail:'baidu@qq.com',status:'0',roles:'系统管理员',defaultValue:['1']},
 // ];
-const plainOptions = ['1', '2', '3'];
+//const plainOptions = ['1', '2', '3'];
 //const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'}, {label: '用户中心', value: '3'}];
 
 @connect(
