@@ -69,6 +69,8 @@ export default class Login extends Component {
                 //const query = this.props.form.getFieldsValue()
                 sessionStorage.setItem('userName', res.data.ucUser.userName)
                 sessionStorage.setItem('userId', res.data.ucUser.userId)
+                sessionStorage.setItem('menus', JSON.stringify(res.data.menuTrees))
+
                 sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
                 //this.props.config.WEBDATA.login=true

@@ -89,12 +89,12 @@ export default class LeftNav extends Component {
   renderLeftNav(options) {
     const self = this
     return options.map((item, index) => {
-      if (!item.children) {
+      if (item.children.length == 0) {
         return (
           // <SubMenu key={index} title={item.name}>
-            <Menu.Item key={item.url ? item.url : item.id} name={item.name}>
-              <Icon type={item.icon} title={item.name} />
-              <span className="menu-name">{item.name}</span>
+            <Menu.Item key={item.menuUrl ? item.menuUrl : item.menuId} name={item.menuName}>
+              <Icon type={item.menuIcon} title={item.menuName} />
+              <span className="menu-name">{item.menuName}</span>
             </Menu.Item>
           // </SubMenu>
         )
@@ -102,15 +102,15 @@ export default class LeftNav extends Component {
         return (
           <SubMenu key={index} title={
             <span>
-              <Icon type="caret-down" title={item.name} />
-              <span className="menu-name">{item.name}</span>
+              <Icon type="caret-down" title={item.menuName} />
+              <span className="menu-name">{item.menuName}</span>
             </span>}
           >
             {
-              item.url ?
-                <Menu.Item key={item.url} name={item.name}>
-                  <Icon type={item.icon} title={item.name} />
-                  <span className="menu-name">{item.name}</span>
+              item.menuUrl ?
+                <Menu.Item key={item.menuUrl} name={item.menuName}>
+                  <Icon type={item.menu_icon} title={item.menuName} />
+                  <span className="menu-name">{item.menuName}</span>
                 </Menu.Item> : null
             }
 
@@ -144,7 +144,7 @@ export default class LeftNav extends Component {
               mode="inline"
               // mode="vertical"
             >
-              { this.renderLeftNav(this.props.config.NAVIGATION || []) }
+              { this.renderLeftNav(JSON.parse(sessionStorage.getItem('menus')) || []) }
             </Menu>
           </Spin>
         </nav>

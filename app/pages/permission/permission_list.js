@@ -68,7 +68,11 @@ export default class permission_list extends Component {
         if(this.state.data.length==0) {
             permissionList('', (res) => {
                 console.log("++++++" + res);
+                let i = 0;
                 if (res.ospState == 200) {
+                    res.data.permissionLists.map(item=>{
+                        item.key = i++;
+                    })
                     this.setState(
                         {data:res.data.permissionLists,
                         staticData:res.data.permissionLists}
@@ -149,7 +153,7 @@ export default class permission_list extends Component {
                 this.setState({data:res.data.permissionList,staticData:res.data.permissionList})
 
             } else {
-                message.warning(res.msg)
+                message.warning(res.data.msg)
             }
         })
     }
