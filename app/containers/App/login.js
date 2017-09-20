@@ -10,6 +10,11 @@ import imgUrlWeb from '../../images/leftBg.jpg'
 import { routerActions } from 'react-router-redux'
 import '../../style/login.less'
 import {changeLogout } from '../../actions/login'
+import { deleteAllTab } from '../../actions/tabList'
+
+import {
+     logOut
+} from '../../utils'
 const FormItem = Form.Item
 var webStyle = {
     // backgroundImage: `url(${imgUrlWeb})`
@@ -49,7 +54,11 @@ export default class Login extends Component {
     this.checkName = this.checkName.bind(this)
     this.noop = this.noop.bind(this)
   }
-
+    componentWillMount() {
+        const {dispatch} = this.props
+        dispatch(deleteAllTab());
+      //  dispatch(changeLogout())
+    }
   handleSubmit(e) {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {

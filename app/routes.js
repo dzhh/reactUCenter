@@ -132,14 +132,12 @@ const routes = (
         /*onEnter当路由进入即触发 子路由进入父路由不会触发*/
         <Route path="/" component={App} onEnter={isLogin}>
             <IndexRoute component={Welcome} />
-            <Route path="/houseManage" getComponent={houseManage} />
-            <Route path="/test" getComponent={test}  />
             <Route path="/homePage" getComponent={homePage} />
             <Route path="/updateUserMessage" getComponent={updateUserMessage} />
             <Route path="/updatePassword" getComponent={updatePassword} />
             <Route path="/myPermissions" getComponent={myPermissions} />
             <Route path="/menuList" getComponent={menuList} />
-            <Route path="/userList" getComponent={userList} />
+            <Route path="/userLists" getComponent={userList} />
             <Route path="/roleList" getComponent={roleList} />
             <Route path="/onlineUser" getComponent={onlineUser} />
             <Route path="/roleAllocation" getComponent={roleAllocation} />

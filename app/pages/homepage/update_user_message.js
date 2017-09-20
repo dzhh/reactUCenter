@@ -66,9 +66,9 @@ export default class update_user_message extends Component {
                             data = JSON.parse(data)
                             data.userEmail = ''
                         }
-                        this.props.form.setFieldsValue({
-                            userEmail: '',
-                        });
+                        // this.props.form.setFieldsValue({
+                        //     userEmail: '',
+                        // });
 
                     } else {
                         message.warning(res.msg)
@@ -88,6 +88,7 @@ export default class update_user_message extends Component {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
                     this.props.config.WEBDATA['updateUserMessage'].isclose = false
+                    user_EmailTemp = res.data.ucUser.userEmail
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
                     user_EmailTemp = res.data.ucUser.userEmail;
                 }else if (res.ospState == 401){
@@ -145,6 +146,10 @@ export default class update_user_message extends Component {
         };
 
         const user = this.state.user;
+        var buttonShow = false
+        if(user_EmailTemp == this.state.user.userEmail) {
+            buttonShow = true;
+        }
         return (
             <div style={{height:'100%',overflow:'auto'}}>
             <Form onSubmit={this.handleSubmit}>
@@ -192,7 +197,7 @@ export default class update_user_message extends Component {
 
 
                 <FormItem {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" size="large">修改</Button>
+                    <Button disabled={buttonShow} type="primary" htmlType="submit" size="large">修改</Button>
                 </FormItem>
             </Form></div>
         );

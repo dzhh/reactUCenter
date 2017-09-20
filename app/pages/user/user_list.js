@@ -37,7 +37,7 @@ export default class user_list extends Component {
             deleteIds: [],
             searchText:'',
         }
-        let data =this.props.config.WEBDATA['userList'].value;
+        let data =this.props.config.WEBDATA['userLists'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -78,8 +78,8 @@ export default class user_list extends Component {
 
     //组件销毁时
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['userList'].isclose) {
-            this.props.config.WEBDATA['userList'].value = '';
+        if(this.props.config.WEBDATA['userLists'].isclose) {
+            this.props.config.WEBDATA['userLists'].value = '';
 
         }else if (this.props.logout.logoutSign) {
             let data = {
@@ -90,7 +90,7 @@ export default class user_list extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA['userList'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['userLists'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
