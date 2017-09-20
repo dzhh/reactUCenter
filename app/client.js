@@ -9,6 +9,17 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import routes from './routes';
 import configure from './store/configureStore';
 import myhistory from './history'
+
+global.$GLOBALCONFIG.WEBDATA=[];
+var page = ['homePage','updateUserMessage','updatePassword','myPermissions','userList','onlineUser',
+    'menuList','roleList','roleAllocation','permissionList','permissionAllocation']
+page.map((item)=>{
+    global.$GLOBALCONFIG.WEBDATA[item] = []
+    global.$GLOBALCONFIG.WEBDATA[item].isclose = false;
+    global.$GLOBALCONFIG.WEBDATA[item].value = ''
+})
+
+
 //const 声明一个只读的常量，值不可变；var 声明一个全局变量，值可变
 const store = configure({ config: global.$GLOBALCONFIG })
 //创建一个hashHistory，路由的切换由URL的hash变化决定，即URL的#部分发生变化 加强版history

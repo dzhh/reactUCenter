@@ -58,8 +58,10 @@ export const createAjaxAction = (api) => (data, callback) => {
          if (!response) {
              // message.error('连接不到服务器')
              console.log(error)
+
              let resp = {}
-             resp.msg = '连接不到服务器'
+             // resp.msg = '连接不到服务器'
+             resp.msg = error.message
              if (typeof callback === 'function') {
                  callback(resp)
              }
