@@ -30,7 +30,7 @@ export default class online_user extends Component {
             auser:{}
 
         }
-        let data =this.props.config.WEBDATA.onlineUserList;
+        let data =this.props.config.WEBDATA['onlineUser'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -63,14 +63,15 @@ export default class online_user extends Component {
         }
     }
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+        if(this.props.config.WEBDATA['onlineUser'].isclose) {
+            this.props.config.WEBDATA['onlineUser'].value = '';
+        }else if ( this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 data:this.state.data,
                 auser:this.state.auser,
             };
-            this.props.config.WEBDATA.onlineUserList = JSON.stringify(data);
+            this.props.config.WEBDATA['onlineUser'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
@@ -78,7 +79,9 @@ export default class online_user extends Component {
     }
     //展示弹出框
     showModal = (record) => {
-        record.jwtToken = record.jwtToken.substring(32,64)
+        if(record.jwtToken.length>32) {
+            record.jwtToken = record.jwtToken.substring(32,64)
+        }
         console.log("显示时的长度"+record.jwtToken.length)
         this.setState({
             auser:record,
@@ -203,7 +206,7 @@ export default class online_user extends Component {
         const auser = this.state.auser;
         return (
 
-                <div style={{height:'80%'}}>
+                <div style={{height:'100%',overflow:'auto'}}>
                     <Modal
                         visible={this.state.visible}
                         title="Session详情"

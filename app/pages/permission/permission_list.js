@@ -11,12 +11,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {message,Alert,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
-const permissions = [{key:1,permissionName:'权限1',permissionUrl:'权限url'},
-    {key:2,permissionName:'权限2',permissionUrl:'权限url'},
-    {key:3,permissionName:'权限3',permissionUrl:'权限url'},
-    {key:4,permissionName:'权限4',permissionUrl:'权限url'},
-    {key:5,permissionName:'权限5',permissionUrl:'权限url'}
-]
+
 @connect(
     (state, props) => ({
         config: state.config,
@@ -46,7 +41,7 @@ export default class permission_list extends Component {
             deleteIds:[]
         }
 
-        let data =this.props.config.WEBDATA.permissionList;
+        let data =this.props.config.WEBDATA['permissionList'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -89,8 +84,10 @@ export default class permission_list extends Component {
     }
     //组件销毁时
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+        if(this.props.config.WEBDATA['permissionList'].isclose) {
+            this.props.config.WEBDATA['permissionList'].value = '';
+
+        }else if (this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 selectedRowKeys:this.state.selectedRowKeys,
@@ -99,7 +96,7 @@ export default class permission_list extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA.permissionList = JSON.stringify(data);
+            this.props.config.WEBDATA['permissionList'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
@@ -252,7 +249,7 @@ export default class permission_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div style={{height:'80%'}}>
+            <div style={{height:'100%',overflow:'auto'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入权限名称"

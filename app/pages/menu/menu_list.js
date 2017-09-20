@@ -149,7 +149,7 @@ export default class menu_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
+            <div style={{height:'80%'}}>
         <div className="custom-filter-dropdown">
             <Input
                 placeholder="Search name"

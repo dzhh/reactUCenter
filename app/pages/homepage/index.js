@@ -5,13 +5,12 @@
 import React, { Component } from 'react'
 import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
-import {message, Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
+import {message, Form, Input, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Card } from 'antd';
 import { getUserMessage } from '../../ajax/user'
 const FormItem = Form.Item
 @connect(
     (state, props) => ({
         config: state.config,
-        ucUser: state.ucUser,
         logout:state.logout
     })
 )
@@ -26,8 +25,8 @@ export default class homepage extends Component {
             confirmDirty: false,
             user:{},
         }
-        //let data = window.sessionStorage.getItem("index")
-        let data = this.props.config.WEBDATA.homeindex
+
+        let data = this.props.config.WEBDATA['homePage'].value;
         if(data){
               data = JSON.parse(data);
               this.state = {
@@ -38,30 +37,14 @@ export default class homepage extends Component {
         }
 
     }
-    // componentWillReceiveProps(newProps) {
-    //     if (newProps.list.data && newProps.list.data.length > 0) {
-    //         //第一次加载将数据换存在全局变量Glist中;
-    //         if (this.props.list.data && this.props.list.data.length <= 0) {
-    //             let newData = newProps.list.data;
-    //             WEBDATA = newData;
-    //         }
-    //         // 之后数据使用本地缓存即可
-    //         else {
-    //             WEBDATA = WEBDATA;
-    //         }
-    //     }
-    // }
-    // componentDidMount() {
-    //     this.props.list.data && this.props.list.data.length <= 0 && this.props.getList.call(this);
-    // }
+    //页面渲染之前
     componentWillMount(){
-        console.log(this.state.user+"===============index  componentWillMount=================================")
         if(!this.state.user.userId) {
             const user = {};
-            // user.token = sessionStorage.getItem("token");
             user.userName = sessionStorage.getItem('userName')
             user.userId = sessionStorage.getItem('userId')
             getUserMessage(user, (res) => {
+                this.props.config.WEBDATA['homePage'].isclose = false
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser})
                 }else if (res.ospState == 401){
@@ -73,24 +56,20 @@ export default class homepage extends Component {
         }
     }
 
-    // componentDidMount() {
-    //     console.log("===============index  componentDidMount=================================")
-    // }
-
+    //页面销毁之前
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+        if(this.props.config.WEBDATA['homePage'].isclose) {
+            this.props.config.WEBDATA['homePage'].value = '';
+        }else if (this.props.logout.logoutSign) {
             let data = {
                 user: this.state.user,
                 show: this.state.show,
                 confirmDirty: this.state.confirmDirty,
             };
-            this.props.config.WEBDATA.homeindex = JSON.stringify(data);
-           // window.sessionStorage.setItem("index", JSON.stringify(data));
+            this.props.config.WEBDATA['homePage'].value = JSON.stringify(data);
         }else {
-            this.props.config.WEBDATA.homeindex = '';
+            this.props.config.WEBDATA = '';
         }
-        console.log("===============index  componentWillUnmount=================================")
     }
 
 
@@ -107,9 +86,11 @@ export default class homepage extends Component {
         };
 
          const user = this.state.user;
-         //const ucUser = this.props.ucUser;
         return (
+            <div style={{height:'100%',overflow:'auto'}}>
+                {/*<Card style={{marginTop:'5px',marginRight:'15%',marginLeft:'15%',height:'100%'}}>*/}
             <Form onSubmit={this.handleSubmit}>
+
                 <FormItem
                     {...formItemLayout}
                     label="昵称"
@@ -143,7 +124,7 @@ export default class homepage extends Component {
 
                 </FormItem>
 
-            </Form>
+            </Form></div>
         );
     }
 

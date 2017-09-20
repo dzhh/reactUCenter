@@ -34,8 +34,6 @@ var new_pas_too=''
         if(items.new_password_too) {
             new_pas_too = items.new_password_too.value;
         }
-        // console.log(items)
-        // props.cacheSearch(items);
     },
 })
 
@@ -43,7 +41,7 @@ export default class update_password extends Component {
     constructor(props) {
         super(props)
 
-        let data =this.props.config.WEBDATA.updatePassword;
+        let data =this.props.config.WEBDATA['updatePassword'].value;
         if(data){
             data = JSON.parse(data);
             this.state = {
@@ -63,7 +61,6 @@ export default class update_password extends Component {
             }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -71,10 +68,13 @@ export default class update_password extends Component {
     }
 
     componentWillUnmount() {
-       // const {logoutSign} = this.props.dispatch(getLogout())
-       // console.log("登录"+logoutSign)
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+
+        if(this.props.config.WEBDATA['updatePassword'].isclose) {
+            this.props.config.WEBDATA['updatePassword'].value = '';
+            old_pas=''
+            new_pas=''
+            new_pas_too=''
+        }else if (this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 confirmDirty: this.state.confirmDirty,
@@ -82,14 +82,14 @@ export default class update_password extends Component {
                 new_password:new_pas,
                 new_password_too:new_pas_too,
             };
-            this.props.config.WEBDATA.updatePassword = JSON.stringify(data);
+            this.props.config.WEBDATA['updatePassword'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
             old_pas=''
             new_pas=''
             new_pas_too=''
         }
-        console.log("===============index  componentWillUnmount=================================")
+
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -108,14 +108,14 @@ export default class update_password extends Component {
                         old_pas = ''
                         new_pas = ''
                         new_pas_too = ''
-                        let data =this.props.config.WEBDATA.updatePassword;
+                        let data =this.props.config.WEBDATA['updatePassword'].value;
                         if(data){
                             data = JSON.parse(data)
                             data.old_password = ''
                             data.new_password=''
                             data.new_password_too=''
                         }
-                        message.success("修改成功")
+                        message.success("修改成功",1)
                         this.props.form.setFieldsValue({
                             new_password_too: '',
                             old_password: '',
@@ -181,7 +181,7 @@ export default class update_password extends Component {
         };
 
 
-        return (
+        return (   <div style={{height:'100%',overflow:'auto'}}>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}
@@ -242,7 +242,7 @@ export default class update_password extends Component {
                 <FormItem {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit" size="large">修改</Button>
                 </FormItem>
-            </Form>
+            </Form></div>
         );
     }
 

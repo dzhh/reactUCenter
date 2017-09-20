@@ -12,18 +12,6 @@ import {rolePermissionAllocation,selectPermissionByRoleId,addPermission2Role,cle
 import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
-// var ROLE = [
-//     {key:1,id:11,roleName:'系统管理员',systemcode:'666666',permissions:'权限添加',defaultValue:['1']},
-//     {key:2,id:22,roleName:'权限角色',systemcode:'888888',permissions:'角色列表删除,用户激活&禁止',defaultValue:['2','3']},
-//     {key:3,id:33,roleName:'用户中心',systemcode:'999999',permissions:'权限添加,角色列表删除',defaultValue:['1,3']},
-//
-// ];
-// const plainOptions = ['1', '2', '3'];
-// const options = [
-//                   {label: '权限添加',value: '1'},
-//                   {label: '角色列表删除', value: '2'},
-//                   {label: '用户激活&禁止', value: '3'}
-//                 ];
 @connect(
     (state, props) => ({
         config: state.config,
@@ -58,7 +46,7 @@ export default class permission_allocation extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA.permission_allocation;
+        let data =this.props.config.WEBDATA['permissionAllocation'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -95,9 +83,10 @@ export default class permission_allocation extends Component {
     }
     //组件销毁时
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
+        if(this.props.config.WEBDATA['permissionAllocation'].isclose) {
+            this.props.config.WEBDATA['permissionAllocation'].value = '';
 
-        if (logoutSign) {
+        }else if (this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 selectedRowKeys:this.state.selectedRowKeys,
@@ -107,7 +96,7 @@ export default class permission_allocation extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA.permission_allocation = JSON.stringify(data);
+            this.props.config.WEBDATA['permissionAllocation'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
@@ -311,7 +300,7 @@ export default class permission_allocation extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div style={{height:'80%'}}>
+            <div style={{height:'100%',overflow:'auto'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入角色名称"

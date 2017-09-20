@@ -3,6 +3,7 @@ import { handleActions } from 'redux-actions'
 
 const tabList = JSON.parse(sessionStorage.getItem('tabList'));
 
+
 const initialState = {
   list: tabList ? tabList.list : [],
   activeKey: tabList ? tabList.activeKey : '',
@@ -30,6 +31,7 @@ const tabListResult = handleActions({
     return { ...state, activeKey, loading: false }
   },
   'delete tab from list'(state, action) {
+
     const targetKey = action.payload.targetKey
     const list = []
     let delIndex = 0

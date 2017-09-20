@@ -93,6 +93,9 @@ export default class LeftNav extends Component {
         return (
           // <SubMenu key={index} title={item.name}>
             <Menu.Item key={item.menuUrl ? item.menuUrl : item.menuId} name={item.menuName}>
+                {/*{this.props.config.WEBDATA[item.menuUrl] = []}*/}
+                {/*{this.props.config.WEBDATA[item.menuUrl].isclose = false}*/}
+                {/*{this.props.config.WEBDATA[item.menuUrl].value = ''}*/}
               <Icon type={item.menuIcon} title={item.menuName} />
               <span className="menu-name">{item.menuName}</span>
             </Menu.Item>

@@ -9,7 +9,7 @@ import { updateTabChecked, deleteTabFromList } from '../../actions/tabList'
 const TabPane = Tabs.TabPane
 
 @connect(
-    (state, props) => ({ tabList: state.tabListResult }),
+    (state, props) => ({ tabList: state.tabListResult , config: state.config,}),
     (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch),
       dispatch: dispatch })
 )
@@ -50,9 +50,12 @@ export default class TabList extends Component {
           tabList.list[delIndex - 1].key : '');
       actions.push(activeKey);
     }
+     this.props.config.WEBDATA[targetKey].value = '';
+    this.props.config.WEBDATA[targetKey].isclose = true;
     this.props.dispatch(deleteTabFromList({ targetKey: targetKey }));
   }
   shouldComponentUpdate(nextProps, nextState) {
+    this.props.config.WEBDATA[nextProps.tabList.activeKey].isclose = false
     const thisProps = this.props || {};
 
     if (Object.keys(thisProps).length !== Object.keys(nextProps).length) {
@@ -77,7 +80,7 @@ export default class TabList extends Component {
         onEdit={this.onEdit}
       >
         {
-          tabList.list.map((tab) =>
+            tabList.list.map((tab) =>
             <TabPane tab={tab.title} key={tab.key}>{tab.content}</TabPane>)
         }
       </Tabs>

@@ -8,7 +8,7 @@ import moment from 'moment';
 import { hashHistory } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
-import { selectRoleByUserId } from '../../ajax/userRole'
+import { myPermission } from '../../ajax/user'
 @connect(
     (state, props) => ({
         config: state.config,
@@ -24,89 +24,73 @@ export default class my_permissions extends Component {
         this.state = {
             show: true,
             confirmDirty: false,
+            data:[]
         }
-        this.getPermissions = this.getPermissions.bind(this);
-        this.allPermiession = this.allPermiession.bind(this);
+        let data = this.props.config.WEBDATA['myPermissions'].value;
+        if(data){
+            data = JSON.parse(data);
+            this.state = {
+                show: data.show,
+                confirmDirty: data.confirmDirty,
+                data:data.data,
+            }
+        }
     }
     componentWillMount(){
+        if(this.state.data.length == 0) {
             const user = {};
-            // user.token = sessionStorage.getItem("token");
             user.userId = sessionStorage.getItem('userId')
-
-        selectRoleByUserId(user, (res) => {
+            myPermission(user, (res) => {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
-                    console.log(res.ucUserRole);
-                } else if (res.ospState == 401){
-                    message.warning("没有登录或登录时间过期，请重新登录", 2, ()=>{ hashHistory.push('/login')})
-                }else {
-                    message.warning(res.data.msg)
+                    //console.log(res.data.ucUserRole);
+                    this.setState({data: res.data.myPermission})
+                } else if (res.ospState == 401) {
+                    message.warning("没有登录或登录时间过期，请重新登录", 2, () => {
+                        hashHistory.push('/login')
+                    })
+                } else {
+                    message.warning('未知错误')
                 }
             })
-
+        }
     }
     componentDidMount() {
         console.log(this.props)
     }
+//页面销毁之前
+    componentWillUnmount() {
+        if(this.props.config.WEBDATA['myPermissions'].isclose) {
+            this.props.config.WEBDATA['myPermissions'].value = '';
+        }else if (this.props.logout.logoutSign) {
+            let data = {
+                data: this.state.data,
+                show: this.state.show,
+                confirmDirty: this.state.confirmDirty,
+            };
+            this.props.config.WEBDATA['myPermissions'].value = JSON.stringify(data);
+        }else {
+            this.props.config.WEBDATA = '';
+        }
+    }
+     // getPermissions(children){
+     //         children.map((item, index) => {
+     //         return <Menu.Item style={{textAlign:'center'}} key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
+     //     })
+     //
+     // }
 
-     getPermissions(children){
-             children.map((item, index) => {
-             return <Menu.Item style={{textAlign:'center'}} key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
-         })
-
-     }
-     allPermiession=(all)=> {
-
-          all.map((item, index) => {
-
-             let menu = (
-                 <Menu>
-                     {item.children.map((item_chileren, index_1) => {
-                         return <Menu.Item style={{textAlign:'center'}} key={item_chileren.id}> <Icon type="user" />{item_chileren.value}</Menu.Item>
-                     })
-                     }
-                 </Menu>
-
-             );
-
-
-              return  <Dropdown overlay={menu} trigger={['click']}>
-                     <h1 className="ant-dropdown-link" href="#" style={{textAlign: 'center'}}>
-                         <Icon type="user"/>{item.name} <Icon type="down"/>
-                         <Badge count={item.count}
-                                style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
-                     </h1>
-                 </Dropdown>
-
-
-
-
-         })
-
-     }
     render() {
 
-      // console.log(this.getPermissions());
-      //   const menu = (
-      //
-      //       <Menu>
-      //           {this.props.config.PERMISSIONS.map((item, index) => {
-      //              return <Menu.Item style={{textAlign:'center'}} key={item.id}> <Icon type="user" />{item.value}</Menu.Item>
-      //            })
-      //           }
-      //       </Menu>
-      //
-      //   );
-      //   {console.log("00000"+menu);}
 
         return (
                 (
-                  <div>
-                      {this.props.config.PERMISSIONS.map((item, index) => {
+                    <div style={{height:'100%',overflow:'auto'}}>
+                      {this.state.data.map((item, index) => {
                           const menu = (
                               <Menu>
-                                  {item.children.map((item_chileren, index_1) => {
-                                      return <Menu.Item style={{marginLeft:"2%"}} key={item_chileren.id}> <Icon type="user" />{item_chileren.value}</Menu.Item>
+                                  {item.permissions.map((item_chileren, index_1) => {
+                                      return <Menu.Item style={{marginLeft:"2%"}} key={item_chileren.actionId|item_chileren.menuId}> <Icon type="user" />{item_chileren.menuName||item_chileren.actionName}</Menu.Item>
                                   })
                                   }
                               </Menu>
@@ -114,33 +98,24 @@ export default class my_permissions extends Component {
                           );
 
 
-                          return <div style={{marginLeft:"45%",marginRight:"45%"}}><Dropdown overlay={menu} trigger={['click']}>
-                              <h3 className="ant-dropdown-link" href="#" style={{textAlign: 'left'}}>
-                                  <div style={{textAlign:'left'}}><Icon type="user"/>{item.name} <Icon type="down"/>
-                                  <Badge count={item.count}
+                          return <div style={{marginLeft:"45%",marginRight:"42%"}}><Dropdown overlay={menu} trigger={['click']}>
+                              <h2 className="ant-dropdown-link" href="#" style={{textAlign: 'left'}}>
+                                  <div style={{textAlign:'left'}}><Icon type="user"/>{item.roleName}
+                                      <Icon type="down"/>
+                                  <Badge count={item.permissions.length}
                                          style={{
-                                             backgroundColor: '#fff',
-                                             color: '#999',
-                                             marginLeft:'20%',
+                                             textAlign:'center'
+                                             //backgroundColor: '#87d068',
+
                                          }}
                                   />
                                   </div>
-                              </h3>
+                              </h2>
                           </Dropdown></div>
                       })
                       }
                   </div>
               )
-
-            // (<div>
-            //     <Dropdown overlay="" trigger={['click']}>
-            //     <h1 className="ant-dropdown-link" href="#" style={{textAlign: 'center'}}>
-            //     <Icon type="user"/>3333 <Icon type="down"/>
-            //         <Badge count={2}
-            //         style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
-            //     </h1>
-            //   </Dropdown>
-            // </div>)
 
         )
     }

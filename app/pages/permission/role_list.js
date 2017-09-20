@@ -39,7 +39,7 @@ export default class role_list extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA.roleList;
+        let data =this.props.config.WEBDATA['roleList'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -89,8 +89,10 @@ export default class role_list extends Component {
 
     //组件销毁时
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+        if(this.props.config.WEBDATA['roleList'].isclose) {
+            this.props.config.WEBDATA['roleList'].value = '';
+        }else
+        if (this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 selectedRowKeys:this.state.selectedRowKeys,
@@ -99,7 +101,7 @@ export default class role_list extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA.roleList = JSON.stringify(data);
+            this.props.config.WEBDATA['roleList'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
@@ -264,7 +266,7 @@ export default class role_list extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div style={{height:'80%'}}>
+            <div style={{height:'100%',overflow:'auto'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入角色名称"

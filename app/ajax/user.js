@@ -24,3 +24,5 @@ export const activeUserById = createAjaxAction(ajaxFun.fetchJSONByPost('/user/ac
 export const getOnlineUserList = createAjaxAction(ajaxFun.fetchJSONByPost('/user/onlineUsers'));
 //踢出登陆
 export const shotOffOnlineUser = createAjaxAction(ajaxFun.fetchJSONByPost('/user/shotOffOnlineUser'));
+//查询用户角色
+export const myPermission = createAjaxAction(ajaxFun.fetchJSONByPost('/role/myPermission'));

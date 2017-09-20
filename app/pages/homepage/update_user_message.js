@@ -16,25 +16,22 @@ var user_EmailTemp=""
         config: state.config,
         logout:state.logout
     }),
-    //(dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
+    (dispatch) => ({ actions: bindActionCreators(routerActions, dispatch), dispatch: dispatch })
 )
-
+//取得页面输入数据
 @Form.create({
     onFieldsChange(props, items) {
         console.log(items)
         if(items.userEmail) {
             user_EmailTemp = items.userEmail.value;
         }
-        // props.cacheSearch(items);
     },
 })
 
 export default class update_user_message extends Component {
     constructor(props) {
         super(props)
-
-       // let data = window.sessionStorage.getItem("update")
-        let data =this.props.config.WEBDATA.updatemessage;
+        let data =this.props.config.WEBDATA['updateUserMessage'].value;
         if(data){
             data = JSON.parse(data);
             this.state = {
@@ -52,10 +49,7 @@ export default class update_user_message extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        console.log(this.props)
-    }
-
+    //页面提交信息修改
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -65,40 +59,35 @@ export default class update_user_message extends Component {
                 user.userId = this.state.user.userId;
                 user.userEmail = values.userEmail;
                 updateUserMessage(user, (res) => {
-                    console.log("++++++"+res);
                     if (res.ospState == 200) {
-
-                        // user_EmailTemp = ''
-                        // let data =this.props.config.WEBDATA.updatemessage;
-                        // if(data){
-                        //     data = JSON.parse(data);
-                        //     data.emailTemp = ''
-                        // }
-                        // this.setState({ userEmailTemp: ''})
-                        //this.setState({ user: res.data.ucUser})
-                        //hashHistory.push('/updateUserMessage')
-                        message.success("修改成功")
+                        message.success("修改成功",1)
+                        let data =this.props.config.WEBDATA['updateUserMessage'].value;
+                        if(data){
+                            data = JSON.parse(data)
+                            data.userEmail = ''
+                        }
+                        this.props.form.setFieldsValue({
+                            userEmail: '',
+                        });
 
                     } else {
                         message.warning(res.msg)
                     }
                 })
-                //hashHistory.push('/homePage')
 
             }
         });
     }
-
+  // 页面渲染之前
     componentWillMount(){
         if(!this.state.user.userId) {
             const user = {};
-            // user.token = sessionStorage.getItem("token");
             user.userName = sessionStorage.getItem('userName')
             user.userId = sessionStorage.getItem('userId')
-            console.log("===============update_user_message  componentWillMount=================================")
             getUserMessage(user, (res) => {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
+                    this.props.config.WEBDATA['updateUserMessage'].isclose = false
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
                     user_EmailTemp = res.data.ucUser.userEmail;
                 }else if (res.ospState == 401){
@@ -110,26 +99,23 @@ export default class update_user_message extends Component {
         }
     }
 
-
-    componentDidMount() {
-        console.log("===============update_user_message  componentDidMount=================================")
-    }
-
+  // 页面销毁之前
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
-        if (logoutSign) {
+        if(this.props.config.WEBDATA['updateUserMessage'].isclose) {
+            this.props.config.WEBDATA['updateUserMessage'].value = '';
+            user_EmailTemp='';
+        }
+       else if (this.props.logout.logoutSign) {
             let data = {
                 user: this.state.user,
                 show: this.state.show,
                 emailTemp: user_EmailTemp,
             };
-            //window.sessionStorage.setItem("update", JSON.stringify(data));
-            this.props.config.WEBDATA.updatemessage = JSON.stringify(data);
+            this.props.config.WEBDATA['updateUserMessage'].value = JSON.stringify(data);
         }else {
             this.props.config.WEBDATA = '';
             user_EmailTemp='';
         }
-        console.log("===============index  componentWillUnmount=================================")
     }
 
     render(){
@@ -160,6 +146,7 @@ export default class update_user_message extends Component {
 
         const user = this.state.user;
         return (
+            <div style={{height:'100%',overflow:'auto'}}>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                 {...formItemLayout}
@@ -207,7 +194,7 @@ export default class update_user_message extends Component {
                 <FormItem {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit" size="large">修改</Button>
                 </FormItem>
-            </Form>
+            </Form></div>
         );
     }
 

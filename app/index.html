@@ -12,8 +12,13 @@
         // 本地开发打开的路径以及端口
         global.$ctx = "http://localhost:8080";
         global.WEBDATA=[];
-
-
+        var page = ['homePage','updateUserMessage','updatePassword','myPermissions','userList','onlineUser',
+            'menuList','roleList','roleAllocation','permissionList','permissionAllocation']
+        page.map((item)=>{
+            global.WEBDATA[item] = []
+            global.WEBDATA[item].isclose = false;
+            global.WEBDATA[item].value = ''
+        })
         global.PERMISSIONS =[
             {
                 id:1,

@@ -11,15 +11,6 @@ import {allocationLists,selectRolesByUserId,addRolesUser,clearRoleByUserIds} fro
 import {message,Popconfirm ,Modal, Form, Dropdown,Input,Menu, Tooltip,DatePicker, Icon, Cascader, Select, Row, Col, Checkbox, Button,Table ,Badge,Card} from 'antd'
 const FormItem = Form.Item
 const CheckboxGroup = Checkbox.Group;
-// var ROLE = [
-//     {key:1,id:11,nickName:'test1',userEmail:'baidu@qq.com',status:'1',roles:'系统管理员',defaultValue:['1']},
-//     {key:2,id:22,nickName:'test2',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
-//     {key:3,id:33,nickName:'test3',userEmail:'baidu@qq.com',status:'1',roles:'用户中心',defaultValue:['3']},
-//     {key:4,id:33,nickName:'test4',userEmail:'baidu@qq.com',status:'0',roles:'权限角色,用户中心',defaultValue:['2','3']},
-//     {key:5,id:55,nickName:'test5',userEmail:'baidu@qq.com',status:'0',roles:'系统管理员',defaultValue:['1']},
-// ];
-//const plainOptions = ['1', '2', '3'];
-//const options = [ {label: '系统管理员', value: '1'},{label: '权限角色', value: '2'}, {label: '用户中心', value: '3'}];
 
 @connect(
     (state, props) => ({
@@ -55,7 +46,7 @@ export default class role_allocation extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA.role_allocation;
+        let data =this.props.config.WEBDATA['roleAllocation'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -95,9 +86,10 @@ export default class role_allocation extends Component {
 
     //组件销毁时
     componentWillUnmount() {
-        const logoutSign = this.props.logout.logoutSign
+        if(this.props.config.WEBDATA['roleAllocation'].isclose) {
+            this.props.config.WEBDATA['roleAllocation'].value = '';
 
-        if (logoutSign) {
+        }else if (this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 selectedRowKeys:this.state.selectedRowKeys,
@@ -107,7 +99,7 @@ export default class role_allocation extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA.role_allocation = JSON.stringify(data);
+            this.props.config.WEBDATA['roleAllocation'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA='';
         }
@@ -311,7 +303,7 @@ export default class role_allocation extends Component {
         const { getFieldDecorator } = this.props.form
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div style={{height:'80%'}}>
+            <div style={{height:'100%',overflow:'auto'}}>
                 <div className="custom-filter-dropdown">
                     <Input
                         placeholder="输入角色名称"

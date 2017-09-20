@@ -70,7 +70,7 @@ export default class Login extends Component {
                 sessionStorage.setItem('userName', res.data.ucUser.userName)
                 sessionStorage.setItem('userId', res.data.ucUser.userId)
                 sessionStorage.setItem('menus', JSON.stringify(res.data.menuTrees))
-
+                this.dealMenu(res.data.menuTrees)
                 sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
                 //this.props.config.WEBDATA.login=true
@@ -92,6 +92,19 @@ export default class Login extends Component {
         })
       }
     })
+  }
+  dealMenu(menus)  {
+      menus.map((item)=>{
+          if(item.children.length==0) {
+              if(item.menuUrl) {
+                  this.props.config.WEBDATA[item.menuUrl] = []
+                  this.props.config.WEBDATA[item.menuUrl].isclose = false
+                  this.props.config.WEBDATA[item.menuUrl].value = ''
+              }
+          } else {
+              this.dealMenu(item.children)
+          }
+      })
   }
 
   handleChange(e) {

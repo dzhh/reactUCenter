@@ -49,16 +49,6 @@ export default class Header extends Component {
       title: '提示',
       content: '确认退出登录吗？',
       onOk() {
-        // self.props.dispatch(fetchLogout({}, (result) => {
-        //   // console.log(result)
-        //   if (result.status == 1) {
-        //     config.staff = {}
-        //     hashHistory.push('/login')
-        //   } else {
-        //     message.error(result.msg)
-        //   }
-        // }))
-         //config.WEBDATA = {};
           dispatch(deleteAllTab());
           dispatch(changeLogout())
         //  config.WEBDATA = {};
