@@ -55,7 +55,9 @@ export default class TabList extends Component {
     this.props.dispatch(deleteTabFromList({ targetKey: targetKey }));
   }
   shouldComponentUpdate(nextProps, nextState) {
-    this.props.config.WEBDATA[nextProps.tabList.activeKey].isclose = false
+    if(nextProps.tabList.activeKey) {
+        this.props.config.WEBDATA[nextProps.tabList.activeKey].isclose = false
+    }
     const thisProps = this.props || {};
 
     if (Object.keys(thisProps).length !== Object.keys(nextProps).length) {
