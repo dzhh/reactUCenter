@@ -31,7 +31,7 @@ var user_EmailTemp=""
 export default class update_user_message extends Component {
     constructor(props) {
         super(props)
-        let data =this.props.config.WEBDATA['updateUserMessage'].value;
+        let data =this.props.config.WEBDATA['user/updateUserInfo'].value;
         if(data){
             data = JSON.parse(data);
             this.state = {
@@ -61,7 +61,7 @@ export default class update_user_message extends Component {
                 updateUserMessage(user, (res) => {
                     if (res.ospState == 200) {
                         message.success("修改成功",1)
-                        let data =this.props.config.WEBDATA['updateUserMessage'].value;
+                        let data =this.props.config.WEBDATA['user/updateUserInfo'].value;
                         if(data){
                             data = JSON.parse(data)
                             data.userEmail = ''
@@ -87,7 +87,7 @@ export default class update_user_message extends Component {
             getUserMessage(user, (res) => {
                 console.log("++++++" + res);
                 if (res.ospState == 200) {
-                    this.props.config.WEBDATA['updateUserMessage'].isclose = false
+                    this.props.config.WEBDATA['user/updateUserInfo'].isclose = false
                     user_EmailTemp = res.data.ucUser.userEmail
                     this.setState({user: res.data.ucUser,userEmailTemp: res.data.ucUser.userEmail})
                     user_EmailTemp = res.data.ucUser.userEmail;
@@ -102,8 +102,8 @@ export default class update_user_message extends Component {
 
   // 页面销毁之前
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['updateUserMessage'].isclose) {
-            this.props.config.WEBDATA['updateUserMessage'].value = '';
+        if(this.props.config.WEBDATA['user/updateUserInfo'].isclose) {
+            this.props.config.WEBDATA['user/updateUserInfo'].value = '';
             user_EmailTemp='';
         }
        else if (this.props.logout.logoutSign) {
@@ -112,7 +112,7 @@ export default class update_user_message extends Component {
                 show: this.state.show,
                 emailTemp: user_EmailTemp,
             };
-            this.props.config.WEBDATA['updateUserMessage'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['user/updateUserInfo'].value = JSON.stringify(data);
         }else {
             this.props.config.WEBDATA = [];
             user_EmailTemp='';

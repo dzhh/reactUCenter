@@ -30,7 +30,7 @@ export default class online_user extends Component {
             auser:{}
 
         }
-        let data =this.props.config.WEBDATA['onlineUser'].value;
+        let data =this.props.config.WEBDATA['user/onlineUsers'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -63,15 +63,15 @@ export default class online_user extends Component {
         }
     }
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['onlineUser'].isclose) {
-            this.props.config.WEBDATA['onlineUser'].value = '';
+        if(this.props.config.WEBDATA['user/onlineUsers'].isclose) {
+            this.props.config.WEBDATA['user/onlineUsers'].value = '';
         }else if ( this.props.logout.logoutSign) {
             let data = {
                 show: this.state.show,
                 data:this.state.data,
                 auser:this.state.auser,
             };
-            this.props.config.WEBDATA['onlineUser'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['user/onlineUsers'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
         }
@@ -237,9 +237,10 @@ export default class online_user extends Component {
                             </FormItem>
 
                         </Form>
-                    </Modal><Card>
-                    <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
-                </Card>
+                    </Modal>
+                    <Card style={{marginTop:'5px',height:'100%'}}>
+                    <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 3 }} />
+                   </Card>
                 </div>
         );
     }

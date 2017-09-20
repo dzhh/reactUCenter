@@ -41,7 +41,7 @@ export default class permission_list extends Component {
             deleteIds:[]
         }
 
-        let data =this.props.config.WEBDATA['permissionList'].value;
+        let data =this.props.config.WEBDATA['permission/permissionLists'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -84,8 +84,8 @@ export default class permission_list extends Component {
     }
     //组件销毁时
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['permissionList'].isclose) {
-            this.props.config.WEBDATA['permissionList'].value = '';
+        if(this.props.config.WEBDATA['permission/permissionLists'].isclose) {
+            this.props.config.WEBDATA['permission/permissionLists'].value = '';
 
         }else if (this.props.logout.logoutSign) {
             let data = {
@@ -96,7 +96,7 @@ export default class permission_list extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA['permissionList'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['permission/permissionLists'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
         }

@@ -46,7 +46,7 @@ export default class permission_allocation extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA['permissionAllocation'].value;
+        let data =this.props.config.WEBDATA['permission/rolePermissionAllocation'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -83,8 +83,8 @@ export default class permission_allocation extends Component {
     }
     //组件销毁时
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['permissionAllocation'].isclose) {
-            this.props.config.WEBDATA['permissionAllocation'].value = '';
+        if(this.props.config.WEBDATA['permission/rolePermissionAllocation'].isclose) {
+            this.props.config.WEBDATA['permission/rolePermissionAllocation'].value = '';
 
         }else if (this.props.logout.logoutSign) {
             let data = {
@@ -96,7 +96,7 @@ export default class permission_allocation extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA['permissionAllocation'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['permission/rolePermissionAllocation'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
         }

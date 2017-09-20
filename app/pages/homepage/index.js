@@ -26,7 +26,7 @@ export default class homepage extends Component {
             user:{},
         }
 
-        let data = this.props.config.WEBDATA['homePage'].value;
+        let data = this.props.config.WEBDATA['user/userInfo'].value;
         if(data){
               data = JSON.parse(data);
               this.state = {
@@ -44,7 +44,7 @@ export default class homepage extends Component {
             user.userName = sessionStorage.getItem('userName')
             user.userId = sessionStorage.getItem('userId')
             getUserMessage(user, (res) => {
-                this.props.config.WEBDATA['homePage'].isclose = false
+                this.props.config.WEBDATA['user/userInfo'].isclose = false
                 if (res.ospState == 200) {
                     this.setState({user: res.data.ucUser})
                 }else if (res.ospState == 401){
@@ -58,15 +58,15 @@ export default class homepage extends Component {
 
     //页面销毁之前
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['homePage'].isclose) {
-            this.props.config.WEBDATA['homePage'].value = '';
+        if(this.props.config.WEBDATA['user/userInfo'].isclose) {
+            this.props.config.WEBDATA['user/userInfo'].value = '';
         }else if (this.props.logout.logoutSign) {
             let data = {
                 user: this.state.user,
                 show: this.state.show,
                 confirmDirty: this.state.confirmDirty,
             };
-            this.props.config.WEBDATA['homePage'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['user/userInfo'].value = JSON.stringify(data);
         }else {
             this.props.config.WEBDATA = [];
         }

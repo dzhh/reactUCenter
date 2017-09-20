@@ -26,7 +26,7 @@ export default class my_permissions extends Component {
             confirmDirty: false,
             data:[]
         }
-        let data = this.props.config.WEBDATA['myPermissions'].value;
+        let data = this.props.config.WEBDATA['user/myPermission'].value;
         if(data){
             data = JSON.parse(data);
             this.state = {
@@ -60,15 +60,15 @@ export default class my_permissions extends Component {
     }
 //页面销毁之前
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['myPermissions'].isclose) {
-            this.props.config.WEBDATA['myPermissions'].value = '';
+        if(this.props.config.WEBDATA['user/myPermission'].isclose) {
+            this.props.config.WEBDATA['user/myPermission'].value = '';
         }else if (this.props.logout.logoutSign) {
             let data = {
                 data: this.state.data,
                 show: this.state.show,
                 confirmDirty: this.state.confirmDirty,
             };
-            this.props.config.WEBDATA['myPermissions'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['user/myPermission'].value = JSON.stringify(data);
         }else {
             this.props.config.WEBDATA = [];
         }

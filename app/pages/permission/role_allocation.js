@@ -46,7 +46,7 @@ export default class role_allocation extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA['roleAllocation'].value;
+        let data =this.props.config.WEBDATA['role/allocationLists'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -86,8 +86,8 @@ export default class role_allocation extends Component {
 
     //组件销毁时
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['roleAllocation'].isclose) {
-            this.props.config.WEBDATA['roleAllocation'].value = '';
+        if(this.props.config.WEBDATA['role/allocationLists'].isclose) {
+            this.props.config.WEBDATA['role/allocationLists'].value = '';
 
         }else if (this.props.logout.logoutSign) {
             let data = {
@@ -99,7 +99,7 @@ export default class role_allocation extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA['roleAllocation'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['role/allocationLists'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
         }

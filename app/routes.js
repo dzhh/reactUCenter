@@ -132,17 +132,18 @@ const routes = (
         /*onEnter当路由进入即触发 子路由进入父路由不会触发*/
         <Route path="/" component={App} onEnter={isLogin}>
             <IndexRoute component={Welcome} />
-            <Route path="/homePage" getComponent={homePage} />
-            <Route path="/updateUserMessage" getComponent={updateUserMessage} />
-            <Route path="/updatePassword" getComponent={updatePassword} />
-            <Route path="/myPermissions" getComponent={myPermissions} />
-            <Route path="/menuList" getComponent={menuList} />
-            <Route path="/userLists" getComponent={userList} />
-            <Route path="/roleList" getComponent={roleList} />
-            <Route path="/onlineUser" getComponent={onlineUser} />
-            <Route path="/roleAllocation" getComponent={roleAllocation} />
-            <Route path="/permissionList" getComponent={permissionList} />
-            <Route path="/permissionAllocation" getComponent={permissionAllocation} />
+            {/*<Route path="/homePage" getComponent={homePage} />*/}
+            <Route path="/user/userInfo" getComponent={homePage} />
+            <Route path="/user/updateUserInfo" getComponent={updateUserMessage} />
+            <Route path="/user/updateUserPsw" getComponent={updatePassword} />
+            <Route path="/user/myPermission" getComponent={myPermissions} />
+            <Route path="/menu/menuLists" getComponent={menuList} />
+            <Route path="/user/userLists" getComponent={userList} />
+            <Route path="/role/roleLists" getComponent={roleList} />
+            <Route path="/user/onlineUsers" getComponent={onlineUser} />
+            <Route path="/role/allocationLists" getComponent={roleAllocation} />
+            <Route path="/permission/permissionLists" getComponent={permissionList} />
+            <Route path="/permission/rolePermissionAllocation" getComponent={permissionAllocation} />
         </Route>
         <Route path="/login" getComponent={Login}></Route>
         <Route path="/register" component={Register}></Route>

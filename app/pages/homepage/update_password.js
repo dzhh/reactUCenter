@@ -41,7 +41,7 @@ export default class update_password extends Component {
     constructor(props) {
         super(props)
 
-        let data =this.props.config.WEBDATA['updatePassword'].value;
+        let data =this.props.config.WEBDATA['user/updateUserPsw'].value;
         if(data){
             data = JSON.parse(data);
             this.state = {
@@ -69,8 +69,8 @@ export default class update_password extends Component {
 
     componentWillUnmount() {
 
-        if(this.props.config.WEBDATA['updatePassword'].isclose) {
-            this.props.config.WEBDATA['updatePassword'].value = '';
+        if(this.props.config.WEBDATA['user/updateUserPsw'].isclose) {
+            this.props.config.WEBDATA['user/updateUserPsw'].value = '';
             old_pas=''
             new_pas=''
             new_pas_too=''
@@ -82,7 +82,7 @@ export default class update_password extends Component {
                 new_password:new_pas,
                 new_password_too:new_pas_too,
             };
-            this.props.config.WEBDATA['updatePassword'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['user/updateUserPsw'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
             old_pas=''

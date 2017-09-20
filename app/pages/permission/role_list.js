@@ -39,7 +39,7 @@ export default class role_list extends Component {
             deleteIds:[]
 
         }
-        let data =this.props.config.WEBDATA['roleList'].value;
+        let data =this.props.config.WEBDATA['role/roleLists'].value;
         if(data) {
             data = JSON.parse(data);
             this.state = {
@@ -89,8 +89,8 @@ export default class role_list extends Component {
 
     //组件销毁时
     componentWillUnmount() {
-        if(this.props.config.WEBDATA['roleList'].isclose) {
-            this.props.config.WEBDATA['roleList'].value = '';
+        if(this.props.config.WEBDATA['role/roleLists'].isclose) {
+            this.props.config.WEBDATA['role/roleLists'].value = '';
         }else
         if (this.props.logout.logoutSign) {
             let data = {
@@ -101,7 +101,7 @@ export default class role_list extends Component {
                 staticData:this.state.staticData,
                 searchText:this.state.searchText
             };
-            this.props.config.WEBDATA['roleList'].value = JSON.stringify(data);
+            this.props.config.WEBDATA['role/roleLists'].value = JSON.stringify(data);
         } else {
             this.props.config.WEBDATA=[];
         }

@@ -11,9 +11,9 @@ import configure from './store/configureStore';
 import myhistory from './history'
 
 global.$GLOBALCONFIG.WEBDATA=[];
-var page = ['homePage','updateUserMessage','updatePassword','myPermissions','userList','onlineUser',
-    'menuList','roleList','roleAllocation','permissionList','permissionAllocation']
-page.map((item)=>{
+global.$GLOBALCONFIG.PAGE = ['user/userInfo','user/updateUserInfo','user/updateUserPsw','user/myPermission','user/userLists','user/onlineUsers',
+    'menu/menuLists','role/roleLists','role/allocationLists','permission/permissionLists','permission/rolePermissionAllocation']
+global.$GLOBALCONFIG.PAGE.map((item)=>{
     global.$GLOBALCONFIG.WEBDATA[item] = []
     global.$GLOBALCONFIG.WEBDATA[item].isclose = false;
     global.$GLOBALCONFIG.WEBDATA[item].value = ''
