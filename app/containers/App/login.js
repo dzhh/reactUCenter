@@ -79,7 +79,12 @@ export default class Login extends Component {
                 sessionStorage.setItem('userName', res.data.ucUser.userName)
                 sessionStorage.setItem('userId', res.data.ucUser.userId)
                 sessionStorage.setItem('menus', JSON.stringify(res.data.menuTrees))
-                this.dealMenu(res.data.menuTrees)
+                //this.dealMenu(res.data.menuTrees)
+                this.props.config.PAGE.map((item)=>{
+                    this.props.config.WEBDATA[item] = []
+                    this.props.config.WEBDATA[item].isclose = false
+                    this.props.config.WEBDATA[item].value = ''
+                })
                 sessionStorage.setItem('token', res.token)
                 sessionStorage.setItem('isLeftNavMini', false)
                 //this.props.config.WEBDATA.login=true

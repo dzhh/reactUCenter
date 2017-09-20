@@ -9,120 +9,16 @@
 <script>
     window.$GLOBALCONFIG = {};
     +function(global){
-        // 本地开发打开的路径以及端口
+//        // 本地开发打开的路径以及端口
         global.$ctx = "http://localhost:8080";
         global.WEBDATA=[];
-        var page = ['homePage','updateUserMessage','updatePassword','myPermissions','userList','onlineUser',
+        global.PAGE = ['homePage','updateUserMessage','updatePassword','myPermissions','userLists','onlineUser',
             'menuList','roleList','roleAllocation','permissionList','permissionAllocation']
-        page.map((item)=>{
+        global.PAGE.map((item)=>{
             global.WEBDATA[item] = []
             global.WEBDATA[item].isclose = false;
             global.WEBDATA[item].value = ''
         })
-        global.PERMISSIONS =[
-            {
-                id:1,
-                name:'管理员',
-                count:6,
-                children:[
-                    {
-                        id:1,
-                        value:'权限列表'
-                    },
-                    {
-                        id:2,
-                        value:'权限添加'
-                    },
-                    {
-                        id:3,
-                        value:'权限删除'
-                    },
-                    {
-                        id:4,
-                        value:'用户列表'
-                    },
-                    {
-                        id:5,
-                        value:'在线用户'
-                    },
-                    {
-                        id:6,
-                        value:'用户删除'
-                    },]
-            }, {
-                id:2,
-                name:'系统管理员',
-                count:3,
-                children:[
-                    {
-                        id:1,
-                        value:'权限列表'
-                    },
-                    {
-                        id:2,
-                        value:'权限添加'
-                    },
-                    {
-                        id:3,
-                        value:'权限删除'
-                    },
-                    ]
-            }
-              ]
-
-
-        // 系统一二级菜单
-        global.NAVIGATION = [
-            {
-                "id":600110230,
-                "name":"个人中心",
-                "icon": "user",
-                "url":"",
-                "children":[
-//            { "id": 600110232, "name":"二级菜单11", "url":"houseManage", "icon": "user"},
-//            { "id": 600110233, "name":"二级菜单12", "url":"test", "icon": "like"},
-                    { "id": 600110234, "name":"个人资料", "url":"homePage", "icon": "home"},
-                    { "id": 600110235, "name":"资料修改", "url":"updateUserMessage", "icon": "tags"},
-                    { "id": 600110236, "name":"密码修改", "url":"updatePassword", "icon": "save"},
-                    { "id": 600110237, "name":"我的权限", "url":"myPermissions", "icon": "user"},
-
-                ]
-            },
-
-            {
-                "id":600110430,
-                "name":"用户中心",
-                "icon": "calculator",
-                "url":"",
-                "children":[
-                    { "id":600110431, "name":"用户列表", "url":"userList", "icon": "book"},
-                    { "id":600110432, "name":"在线用户", "url":"onlineUser", "icon": "book"},
-
-                ]
-            },
-            {
-                "id":600110630,
-                "name":"菜单管理",
-                "icon": "other",
-                "url":"",
-                "children":[
-                    { "id": 600110638, "name":"菜单列表", "url":"menuList", "icon": "api"},
-                ]
-            },
-            {
-                "id":600110830,
-                "name":"权限管理",
-                "icon": "other",
-                "url":"",
-                "children":[
-                    { "id": 600110831, "name":"角色列表", "url":"roleList", "icon": "api"},
-                    { "id": 600110832, "name":"角色分配", "url":"roleAllocation", "icon": "api"},
-                    { "id": 600110833, "name":"权限列表", "url":"permissionList", "icon": "api"},
-                    { "id": 600110834, "name":"权限分配", "url":"permissionAllocation", "icon": "api"},
-                ]
-            },
-        ];
-
     }(window.$GLOBALCONFIG);
 </script>
 

@@ -92,7 +92,7 @@ export default class user_list extends Component {
             };
             this.props.config.WEBDATA['userLists'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
         }
 
     }

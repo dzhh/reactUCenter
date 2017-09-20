@@ -73,7 +73,7 @@ export default class online_user extends Component {
             };
             this.props.config.WEBDATA['onlineUser'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
         }
 
     }

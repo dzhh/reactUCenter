@@ -101,7 +101,7 @@ export default class role_allocation extends Component {
             };
             this.props.config.WEBDATA['roleAllocation'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
         }
 
     }

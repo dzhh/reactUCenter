@@ -114,7 +114,7 @@ export default class update_user_message extends Component {
             };
             this.props.config.WEBDATA['updateUserMessage'].value = JSON.stringify(data);
         }else {
-            this.props.config.WEBDATA = '';
+            this.props.config.WEBDATA = [];
             user_EmailTemp='';
         }
     }

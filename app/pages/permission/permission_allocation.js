@@ -98,7 +98,7 @@ export default class permission_allocation extends Component {
             };
             this.props.config.WEBDATA['permissionAllocation'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
         }
 
     }

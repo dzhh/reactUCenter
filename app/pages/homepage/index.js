@@ -68,7 +68,7 @@ export default class homepage extends Component {
             };
             this.props.config.WEBDATA['homePage'].value = JSON.stringify(data);
         }else {
-            this.props.config.WEBDATA = '';
+            this.props.config.WEBDATA = [];
         }
     }
 

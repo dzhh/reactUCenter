@@ -84,7 +84,7 @@ export default class update_password extends Component {
             };
             this.props.config.WEBDATA['updatePassword'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
             old_pas=''
             new_pas=''
             new_pas_too=''

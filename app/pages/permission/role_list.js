@@ -103,7 +103,7 @@ export default class role_list extends Component {
             };
             this.props.config.WEBDATA['roleList'].value = JSON.stringify(data);
         } else {
-            this.props.config.WEBDATA='';
+            this.props.config.WEBDATA=[];
         }
 
     }

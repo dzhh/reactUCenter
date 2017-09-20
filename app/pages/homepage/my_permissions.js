@@ -70,7 +70,7 @@ export default class my_permissions extends Component {
             };
             this.props.config.WEBDATA['myPermissions'].value = JSON.stringify(data);
         }else {
-            this.props.config.WEBDATA = '';
+            this.props.config.WEBDATA = [];
         }
     }
      // getPermissions(children){
