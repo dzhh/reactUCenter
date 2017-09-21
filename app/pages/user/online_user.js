@@ -95,10 +95,7 @@ export default class online_user extends Component {
         this.setState({ visible: false ,auser:{}});
     }
 
-    allowLogin  = (index) => {
-        this.props.config.ONLINEUSER[index].status = 1;
-        this.setState({data:this.props.config.ONLINEUSER}) ;
-    }
+
     deleteLogin  = (index) => {
         let data = {}
             data.ospToken = index;
@@ -239,7 +236,7 @@ export default class online_user extends Component {
                         </Form>
                     </Modal>
                     <Card style={{marginTop:'5px',height:'100%'}}>
-                    <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 3 }} />
+                    <Table  bordered columns={columns} dataSource={this.state.data} pagination={{ pageSize: 8 }} />
                    </Card>
                 </div>
         );
